@@ -1,3 +1,6 @@
+using NeonArenaMvp.Network.Services.Implementations;
+using NeonArenaMvp.Network.Services.Interfaces;
+using NeonArenaMvp.Network.SignalR;
 
 namespace NeonArenaMvp
 {
@@ -10,6 +13,10 @@ namespace NeonArenaMvp
             // Add services to the container.
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSignalR();
+            builder.Services.AddSingleton<ICommunicationService, CommunicationService>();
+            builder.Services.AddSingleton<IUserService, UserService>();
+            builder.Services.AddSingleton<ILobbyService, LobbyService>();
 
             var app = builder.Build();
 
@@ -28,6 +35,8 @@ namespace NeonArenaMvp
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller}/{action=Index}/{id?}");
+
+            app.MapHub<GameHub>("/gameHub");
 
             app.MapFallbackToFile("index.html");
 
