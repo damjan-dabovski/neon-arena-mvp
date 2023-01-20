@@ -1,8 +1,12 @@
-﻿namespace NeonArenaMvp.Network.Models
+﻿using System.Text.Json.Serialization;
+
+namespace NeonArenaMvp.Network.Models
 {
     public class User
     {
+        [JsonInclude]
         public string Id;
+        [JsonInclude]
         public string Name;
 
         public User(string id, string name)

@@ -8,6 +8,6 @@ namespace NeonArenaMvp.Network.Services.Interfaces
 
         public Task PromptUserForInput(string connectionId);
 
-        public Task SendIdentityDataToNewUser(string connectionId, User newIdentity);
+        public Task SendIdentityDataToUser(string connectionId, User newIdentity);
     }
 }

@@ -30,7 +30,7 @@ namespace NeonArenaMvp.Network.Services.Implementations
 
             UserIdToConnectionIdMap.Add(newUser.Id, connectionId);
 
-            _commService.SendIdentityDataToNewUser(connectionId, newUser);
+            _commService.SendIdentityDataToUser(connectionId, newUser);
             // TODO WIP
         }
 

@@ -18,6 +18,17 @@ namespace NeonArenaMvp
             builder.Services.AddSingleton<IUserService, UserService>();
             builder.Services.AddSingleton<ILobbyService, LobbyService>();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("ClientPermissions", policy =>
+                {
+                    policy.AllowAnyMethod();
+                    policy.AllowAnyHeader();
+                    policy.AllowCredentials();
+                    policy.WithOrigins("https://localhost:1337");
+                });
+            });
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -29,6 +40,9 @@ namespace NeonArenaMvp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseCors("ClientPermissions");
+
             app.UseRouting();
 
 

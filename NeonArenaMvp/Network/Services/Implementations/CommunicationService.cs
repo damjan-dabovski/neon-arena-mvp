@@ -24,9 +24,9 @@ namespace NeonArenaMvp.Network.Services.Implementations
             await _hubContext.Clients.Client(connectionId).ReceiveMessage(message);
         }
 
-        public async Task SendIdentityDataToNewUser(string connectionId, User newIdentity)
+        public async Task SendIdentityDataToUser(string connectionId, User identity)
         {
-            await _hubContext.Clients.Client(connectionId).ReceiveIdentityData(newIdentity);
+            await _hubContext.Clients.Client(connectionId).ReceiveIdentityData(identity);
         }
     }
 }
