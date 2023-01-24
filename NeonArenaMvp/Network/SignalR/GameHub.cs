@@ -5,9 +5,9 @@ namespace NeonArenaMvp.Network.SignalR
 {
     public class GameHub : Hub<IGameHubClient>
     {
-        private IHubContext<GameHub, IGameHubClient> _hubContext;
-        private IUserService _userService;
-        private ILobbyService _lobbyService;
+        private readonly IHubContext<GameHub, IGameHubClient> _hubContext;
+        private readonly IUserService _userService;
+        private readonly ILobbyService _lobbyService;
 
         public GameHub(IHubContext<GameHub, IGameHubClient> hubContext, ILobbyService lobbyService, IUserService userService)
         {
@@ -29,7 +29,15 @@ namespace NeonArenaMvp.Network.SignalR
                 this._userService.AddUser(this.Context.ConnectionId, "TestUser");
             }
 
+            this.Clients.Caller.ReceiveLobbyList(this._lobbyService.GetLobbies());
+
             return base.OnConnectedAsync();
+        }
+
+        public override Task OnDisconnectedAsync(Exception? exception)
+        {
+            // TODO determine what logic would need to be executed
+            return base.OnDisconnectedAsync(exception);
         }
 
         public async Task Broadcast(string message)
@@ -37,9 +45,34 @@ namespace NeonArenaMvp.Network.SignalR
             await this._hubContext.Clients.All.ReceiveMessage(message);
         }
 
-        public void CreateLobby(string hostId)
+        public async Task CreateLobby(string hostId)
         {
-            this._lobbyService.CreateLobby(hostId);
+            await this._lobbyService.CreateLobby(hostId);
+        }
+
+        public async Task RemoveLobby(string lobbyId)
+        {
+            await this._lobbyService.RemoveLobby(lobbyId);
+        }
+
+        public async Task JoinLobby(string userId, string lobbyId)
+        {
+            await this._lobbyService.AddUserToLobby(userId, lobbyId);
+        }
+
+        public async Task LeaveLobby(string userId, string lobbyId)
+        {
+            await this._lobbyService.RemoveUserFromLobby(userId, lobbyId);
+        }
+
+        public void RunMatchInLobby(string lobbyId)
+        {
+            this._lobbyService.RunMatch(lobbyId);
+        }
+
+        public void SendInputToLobby(string lobbyId, string userId, string input)
+        {
+            this._lobbyService.PassUserInputToLobby(lobbyId, userId, input);
         }
     }
 }

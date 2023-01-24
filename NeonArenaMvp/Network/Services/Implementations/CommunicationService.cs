@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using NeonArenaMvp.Network.Models;
+using NeonArenaMvp.Network.Models.Dto;
 using NeonArenaMvp.Network.Services.Interfaces;
 using NeonArenaMvp.Network.SignalR;
 
@@ -27,6 +28,26 @@ namespace NeonArenaMvp.Network.Services.Implementations
         public async Task SendIdentityDataToUser(string connectionId, User identity)
         {
             await _hubContext.Clients.Client(connectionId).ReceiveIdentityData(identity);
+        }
+
+        public async Task SendLobbyData(string lobbyId, LobbyDto lobbyData)
+        {
+            await _hubContext.Clients.Group(lobbyId).ReceiveLobbyData(lobbyData);
+        }
+
+        public async Task AssignUserToLobbyGroup(string lobbyId, string userConnectionId)
+        {
+            await this._hubContext.Groups.AddToGroupAsync(userConnectionId, lobbyId);
+        }
+
+        public async Task UnassignUserFromLobbyGroup(string lobbyId, string userConnectionId)
+        {
+            await this._hubContext.Groups.RemoveFromGroupAsync(userConnectionId, lobbyId);
+        }
+
+        public async Task SendLobbyList(List<string> lobbyList)
+        {
+            await this._hubContext.Clients.All.ReceiveLobbyList(lobbyList);
         }
     }
 }

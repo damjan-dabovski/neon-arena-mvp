@@ -1,4 +1,5 @@
 ﻿using NeonArenaMvp.Network.Models;
+using NeonArenaMvp.Network.Models.Dto;
 
 namespace NeonArenaMvp.Network.SignalR
 {
@@ -9,5 +10,9 @@ namespace NeonArenaMvp.Network.SignalR
         public Task PromptInput();
 
         public Task ReceiveIdentityData(User newIdentity);
+
+        public Task ReceiveLobbyData(LobbyDto lobbyData);
+
+        public Task ReceiveLobbyList(List<string> lobbies);
     }
 }

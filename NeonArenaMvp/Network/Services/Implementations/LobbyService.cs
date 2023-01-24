@@ -1,15 +1,15 @@
 ﻿using NeonArenaMvp.Network.Models;
+using NeonArenaMvp.Network.Models.Dto;
 using NeonArenaMvp.Network.Services.Interfaces;
+using System.Collections.Concurrent;
 
 namespace NeonArenaMvp.Network.Services.Implementations
 {
     public class LobbyService : ILobbyService
     {
-        // TODO replace with ConcurrentDictionary if multiple threads would need to access it at once(?)
-        // this can happen iff we allow multiple simultaneous SignalR hub connections
-        private Dictionary<Guid, Lobby> Lobbies;
-        private ICommunicationService _commService;
-        private IUserService _userService;
+        private readonly ConcurrentDictionary<Guid, Lobby> Lobbies;
+        private readonly ICommunicationService _commService;
+        private readonly IUserService _userService;
 
         public LobbyService(ICommunicationService commService, IUserService userService)
         {
@@ -19,15 +19,41 @@ namespace NeonArenaMvp.Network.Services.Implementations
             Lobbies = new();
         }
 
-        public void AddUserToLobby(string userId, string lobbyId)
+        public async Task AddUserToLobby(string userId, string lobbyId)
         {
             if (Lobbies.TryGetValue(Guid.Parse(lobbyId), out var lobby))
             {
-                // TODO lobby add user
+                var user = this._userService.GetUserById(userId);
+
+                if (user is not null)
+                {
+                    lobby.AddUser(user);
+
+                    var userConnectionId = this._userService.GetConnectionIdByUserId(user.Id);
+                    await this._commService.AssignUserToLobbyGroup(lobbyId, userConnectionId);
+                    await this._commService.SendLobbyData(lobbyId, lobby.ToDto());
+                }
             }
         }
 
-        public string CreateLobby(string hostId)
+        public async Task RemoveUserFromLobby(string userId, string lobbyId)
+        {
+            if (Lobbies.TryGetValue(Guid.Parse(lobbyId), out var lobby))
+            {
+                var user = this._userService.GetUserById(userId);
+
+                if (user is not null)
+                {
+                    lobby.RemoveUser(user);
+
+                    var userConnectionId = this._userService.GetConnectionIdByUserId(user.Id);
+                    await this._commService.AssignUserToLobbyGroup(lobbyId, userConnectionId);
+                    await this._commService.SendLobbyData(lobbyId, lobby.ToDto());
+                }
+            }
+        }
+
+        public async Task<string> CreateLobby(string hostId)
         {
             var lobbyHost = _userService.GetUserById(hostId);
             var lobbyId = Guid.NewGuid();
@@ -37,10 +63,16 @@ namespace NeonArenaMvp.Network.Services.Implementations
                 throw new Exception("Error finding the host user for the new lobby");
             }
 
-            var newLobby = new Lobby(lobbyHost, lobbyId);
+            var newLobby = new Lobby(lobbyHost, lobbyId, this._commService);
 
             if (Lobbies.TryAdd(lobbyId, newLobby))
             {
+                await this._commService.SendLobbyList(this.GetLobbies());
+
+                var userConnectionId = this._userService.GetConnectionIdByUserId(lobbyHost.Id);
+                await this._commService.AssignUserToLobbyGroup(lobbyId.ToString(), userConnectionId);
+                await this._commService.SendLobbyData(lobbyId.ToString(), newLobby.ToDto());
+
                 return lobbyId.ToString();
             }
             else
@@ -49,20 +81,40 @@ namespace NeonArenaMvp.Network.Services.Implementations
             }
         }
 
+        public async Task<bool> RemoveLobby(string lobbyId)
+        {
+            if (this.Lobbies.TryGetValue(Guid.Parse(lobbyId), out var targetLobby))
+            {
+                foreach (var user in targetLobby.Users)
+                {
+                    targetLobby.RemoveUser(user);
+
+                    var userConnectionId = this._userService.GetConnectionIdByUserId(user.Id);
+                    await this._commService.UnassignUserFromLobbyGroup(lobbyId, userConnectionId);
+                }
+            }
+
+            var isLobbyRemoved = this.Lobbies.TryRemove(Guid.Parse(lobbyId), out _);
+
+            if (isLobbyRemoved)
+            {
+                await this._commService.SendLobbyList(this.GetLobbies());
+            }
+
+            return isLobbyRemoved;
+        }
+
         public List<string> GetLobbies()
         {
             return Lobbies.Values.Select(lobby => lobby.Id.ToString())
                 .ToList();
         }
 
-        public bool RemoveLobby(string lobbyId)
+        public LobbyDto GetLobby(string lobbyId)
         {
-            return Lobbies.Remove(Guid.Parse(lobbyId));
-        }
-
-        public void RemoveUserFromLobby(string userId, string lobbyId)
-        {
-            // TODO lobby remove user
+            // TODO implement DTO
+            var targetLobby = this.Lobbies[Guid.Parse(lobbyId)];
+            return targetLobby.ToDto();
         }
 
         public void RunMatch(string lobbyId)
@@ -70,7 +122,7 @@ namespace NeonArenaMvp.Network.Services.Implementations
             // TODO lobby run match
         }
 
-        public void SendInputForUserToLobby(string lobbyId, string userId, string input)
+        public void PassUserInputToLobby(string lobbyId, string userId, string input)
         {
             // TODO lobby set input for user
         }

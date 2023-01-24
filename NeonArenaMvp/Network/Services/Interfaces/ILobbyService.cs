@@ -2,17 +2,17 @@
 {
     public interface ILobbyService
     {
-        public string CreateLobby(string hostId);
+        public Task<string> CreateLobby(string hostId);
 
-        public bool RemoveLobby(string lobbyId);
+        public Task<bool> RemoveLobby(string lobbyId);
 
-        public void AddUserToLobby(string userId, string lobbyId);
+        public Task AddUserToLobby(string userId, string lobbyId);
 
-        public void RemoveUserFromLobby(string userId, string lobbyId);
+        public Task RemoveUserFromLobby(string userId, string lobbyId);
 
         public void RunMatch(string lobbyId);
 
-        public void SendInputForUserToLobby(string lobbyId, string userId, string input);
+        public void PassUserInputToLobby(string lobbyId, string userId, string input);
 
         public List<string> GetLobbies();
     }

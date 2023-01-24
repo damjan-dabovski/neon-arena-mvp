@@ -18,6 +18,13 @@ namespace NeonArenaMvp.Network.Helpers
             White, // Spectator
         }
 
+        public enum LobbyState
+        {
+            Open,
+            WaitingInput,
+            Processing
+        }
+
 
     }
 }

@@ -3,6 +3,7 @@ using NeonArenaMvp.Game.Models.Maps;
 using NeonArenaMvp.Game.Models.Matches;
 using NeonArenaMvp.Game.Models.Players;
 using NeonArenaMvp.Network.Models.Dto;
+using NeonArenaMvp.Network.Services.Interfaces;
 using Newtonsoft.Json;
 using static NeonArenaMvp.Game.Helpers.Models.Directions;
 using static NeonArenaMvp.Network.Helpers.Constants;
@@ -12,6 +13,7 @@ namespace NeonArenaMvp.Network.Models
     public class Lobby
     {
         public readonly Guid Id;
+        public LobbyState State;
         public User Host;
         public List<User> Users;
 
@@ -32,10 +34,16 @@ namespace NeonArenaMvp.Network.Models
         public int CurrentGameModeIndex;
         public Match? ActiveMatch;
 
-        public Lobby(User host, Guid lobbyId)
+        private readonly ICommunicationService CommService;
+
+        public Lobby(User host, Guid lobbyId, ICommunicationService commService)
         {
             this.Id = lobbyId;
+            this.State = LobbyState.Open;
             this.Host = host;
+
+            this.CommService = commService;
+
             this.Users = new() { host };
 
             this.Seats = new();
@@ -174,6 +182,8 @@ namespace NeonArenaMvp.Network.Models
             }
         }
 
+        // TODO rework to accept a list of players to take input from,
+        // and take the input from the network
         public List<string> GetPlayerInputs()
         {
             var commandList = new List<string>();
@@ -266,6 +276,19 @@ namespace NeonArenaMvp.Network.Models
             {
                 writer.WriteLine(JsonConvert.SerializeObject(stepDto));
             }
+        }
+
+        public LobbyDto ToDto()
+        {
+            return new LobbyDto
+            (
+                id: this.Id.ToString(),
+                hostName: this.Host.Name,
+                users: this.Users.Select(user => user.Name).ToList(),
+                characters: this.Characters.Select(character => character.Name).ToList(),
+                characterSelections: this.UserIdToCharacterId.Values.ToList(),
+                teamSelections: this.UserIdToTeamId.Values.ToList()
+            );
         }
 
     }

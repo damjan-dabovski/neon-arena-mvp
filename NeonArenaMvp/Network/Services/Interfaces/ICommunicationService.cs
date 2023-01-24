@@ -1,4 +1,5 @@
 ﻿using NeonArenaMvp.Network.Models;
+using NeonArenaMvp.Network.Models.Dto;
 
 namespace NeonArenaMvp.Network.Services.Interfaces
 {
@@ -9,5 +10,13 @@ namespace NeonArenaMvp.Network.Services.Interfaces
         public Task PromptUserForInput(string connectionId);
 
         public Task SendIdentityDataToUser(string connectionId, User newIdentity);
+
+        public Task SendLobbyData(string lobbyId, LobbyDto lobbyData);
+
+        public Task SendLobbyList(List<string> lobbyList);
+
+        public Task AssignUserToLobbyGroup(string lobbyId, string userConnectionId);
+
+        public Task UnassignUserFromLobbyGroup(string lobbyId, string userConnectionId);
     }
 }
