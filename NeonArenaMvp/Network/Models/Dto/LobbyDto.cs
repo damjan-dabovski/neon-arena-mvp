@@ -18,8 +18,11 @@ namespace NeonArenaMvp.Network.Models.Dto
         public List<int> CharacterSelections;
         [JsonInclude]
         public List<int> TeamSelections;
+        [JsonInclude]
+        public Dictionary<int, int> SeatSelections;
 
-        public LobbyDto(string id, string hostName,  List<string> users, List<string> characters, List<int> characterSelections, List<int> teamSelections)
+        public LobbyDto(string id, string hostName,  List<string> users, List<string> characters,
+            List<int> characterSelections, List<int> teamSelections, Dictionary<int, int> seatSelections)
         {
             this.Id = id;
             this.HostName = hostName;
@@ -27,6 +30,7 @@ namespace NeonArenaMvp.Network.Models.Dto
             this.Characters = characters;
             this.CharacterSelections = characterSelections;
             this.TeamSelections = teamSelections;
+            this.SeatSelections = seatSelections;
         }
     }
 }

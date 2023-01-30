@@ -10,6 +10,8 @@
 
         public Task RemoveUserFromLobby(string userId, string lobbyId);
 
+        public Task JoinSeat(string userId, string lobbyId, int seatIndex);
+
         public void RunMatch(string lobbyId);
 
         public void PassUserInputToLobby(string lobbyId, string userId, string input);

@@ -65,6 +65,11 @@ namespace NeonArenaMvp.Network.SignalR
             await this._lobbyService.RemoveUserFromLobby(userId, lobbyId);
         }
 
+        public void JoinSeat(string userId, string lobbyId, int seatIndex)
+        {
+            this._lobbyService.JoinSeat(userId, lobbyId, seatIndex);
+        }
+
         public void RunMatchInLobby(string lobbyId)
         {
             this._lobbyService.RunMatch(lobbyId);

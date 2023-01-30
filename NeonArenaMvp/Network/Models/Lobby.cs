@@ -106,9 +106,10 @@ namespace NeonArenaMvp.Network.Models
             // has no players left in it, and remove it from the lobby list if that's the case
         }
 
-        public void AssignPlayerToSeat(string playerId, Color seatColor)
+        public void AssignUserToSeat(string userId, int seatIndex)
         {
-            this.Seats[seatColor] = this.Users.FirstOrDefault(player => player.Id == playerId);
+            var seatColor = (Color)seatIndex;
+            this.Seats[seatColor] = this.Users.FirstOrDefault(player => player.Id == userId);
         }
 
         public void UnassignSeat(Color seatColor)
@@ -280,6 +281,18 @@ namespace NeonArenaMvp.Network.Models
 
         public LobbyDto ToDto()
         {
+            Dictionary<int, int> seatSelections = new();
+
+            for (int i = 0; i < this.Seats.Count; i++)
+            {
+                var currentSeat = this.Seats.ElementAt(i);
+                if (currentSeat.Value is not null)
+                {
+                    var userInCurrentSeatIndex = this.Users.FindIndex(user => user.Equals(currentSeat.Value));
+                    seatSelections.Add(i, userInCurrentSeatIndex);
+                }
+            }
+
             return new LobbyDto
             (
                 id: this.Id.ToString(),
@@ -287,7 +300,8 @@ namespace NeonArenaMvp.Network.Models
                 users: this.Users.Select(user => user.Name).ToList(),
                 characters: this.Characters.Select(character => character.Name).ToList(),
                 characterSelections: this.UserIdToCharacterId.Values.ToList(),
-                teamSelections: this.UserIdToTeamId.Values.ToList()
+                teamSelections: this.UserIdToTeamId.Values.ToList(),
+                seatSelections: seatSelections
             );
         }
 

@@ -104,6 +104,21 @@ namespace NeonArenaMvp.Network.Services.Implementations
             return isLobbyRemoved;
         }
 
+        public async Task JoinSeat(string userId, string lobbyId, int seatIndex)
+        {
+            if (this.Lobbies.TryGetValue(Guid.Parse(lobbyId), out var targetLobby))
+            {
+                var user = this._userService.GetUserById(userId);
+
+                if (user is not null)
+                {
+                    targetLobby.AssignUserToSeat(userId, seatIndex);
+                }
+
+                await this._commService.SendLobbyData(targetLobby.Id.ToString(), targetLobby.ToDto());
+            }
+        }
+
         public List<string> GetLobbies()
         {
             return Lobbies.Values.Select(lobby => lobby.Id.ToString())
@@ -126,5 +141,6 @@ namespace NeonArenaMvp.Network.Services.Implementations
         {
             // TODO lobby set input for user
         }
+
     }
 }

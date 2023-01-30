@@ -1,16 +1,19 @@
-import { React, useState, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import AppRoutes from './AppRoutes';
+import { React, useState, useEffect, createContext, useContext } from 'react';
 import { Layout } from './components/Layout';
 import './custom.css';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import SignalRTest from './components/SignalRTest';
+import LobbyList from './components/LobbyList';
+import LobbyView from './components/LobbyView';
+
+export const AppContext = createContext();
 
 function App(){
   const [connection, setConnection] = useState(null);
   const [messages, setMessages] = useState([]);
   const [playerId, setPlayerId] = useState("");
   const [lobbies, setLobbies] = useState([]);
+  const [currentLobby, setCurrentLobby] = useState(null);
 
   useEffect(() =>{
     let cookies = document.cookie.split(';');
@@ -44,11 +47,12 @@ function App(){
           });
 
           connection.on('ReceiveLobbyData', lobbyDto => {
+            setCurrentLobby(lobbyDto);
             console.log(lobbyDto);
           })
 
           connection.on('ReceiveIdentityData', data => {
-            console.log(data);
+            // console.log(data);
             document.cookie = `playerId = ${data.id}`
             setPlayerId(data.id);
           })
@@ -90,18 +94,24 @@ function App(){
     }
   }
 
+  const joinSeat = async (seatIndex) => {
+    if(connection){
+      try{
+        await connection.send('JoinSeat', playerId, currentLobby.id, seatIndex);
+      }
+      catch(exception){
+        console.error(exception);
+      }
+    }
+  }
+
     return (
       <Layout>
-        <SignalRTest sendMessage={sendMessage}/>
-        <button onClick={createLobby}>Create Lobby</button>
-        <div>{lobbies.map((lobby, index) => {
-          return (
-            <div key={index} style={{border: "1px solid black", cursor:"pointer"}} onClick={joinLobby}>
-              {lobby}
-            </div>
-          );
-        })}
-        </div>
+        <AppContext.Provider value={{lobbies: lobbies, currentLobby: currentLobby}}>
+          <SignalRTest sendMessage={sendMessage}/>
+          <LobbyList joinLobby={joinLobby} createLobby={createLobby}/>
+          <LobbyView joinSeat={joinSeat}/>
+        </AppContext.Provider>
       </Layout>
     );
 
