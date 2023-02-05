@@ -2,7 +2,8 @@
 using NeonArenaMvp.Game.Models.Maps;
 using NeonArenaMvp.Game.Models.Matches;
 using NeonArenaMvp.Game.Models.Players;
-using NeonArenaMvp.Network.Models.Dto;
+using NeonArenaMvp.Network.Models.Dto.Lobby;
+using NeonArenaMvp.Network.Models.Dto.Step;
 using NeonArenaMvp.Network.Services.Interfaces;
 using Newtonsoft.Json;
 using static NeonArenaMvp.Game.Helpers.Models.Directions;
@@ -76,6 +77,11 @@ namespace NeonArenaMvp.Network.Models
 
         public void AddUser(User user)
         {
+            if (this.Users.Contains(user))
+            {
+                return;
+            }
+
             this.Users.Add(user);
             this.UserIdToCharacterId.Add(user.Id, 0);
             this.UserIdToTeamId.Add(user.Id, 0);
@@ -109,6 +115,15 @@ namespace NeonArenaMvp.Network.Models
         public void AssignUserToSeat(string userId, int seatIndex)
         {
             var seatColor = (Color)seatIndex;
+
+            // if the user is already seated in another seat
+            var existingSeatForUser = this.Seats.FirstOrDefault(kvp => kvp.Value?.Id == userId);
+            if (existingSeatForUser.Value is not null)
+            {
+                // first unassign the user from the existing seat
+                this.UnassignSeat(existingSeatForUser.Key);
+            }
+
             this.Seats[seatColor] = this.Users.FirstOrDefault(player => player.Id == userId);
         }
 
@@ -281,28 +296,65 @@ namespace NeonArenaMvp.Network.Models
 
         public LobbyDto ToDto()
         {
-            Dictionary<int, int> seatSelections = new();
-
-            for (int i = 0; i < this.Seats.Count; i++)
-            {
-                var currentSeat = this.Seats.ElementAt(i);
-                if (currentSeat.Value is not null)
-                {
-                    var userInCurrentSeatIndex = this.Users.FindIndex(user => user.Equals(currentSeat.Value));
-                    seatSelections.Add(i, userInCurrentSeatIndex);
-                }
-            }
-
-            return new LobbyDto
+            var lobbyDto = new LobbyDto
             (
                 id: this.Id.ToString(),
                 hostName: this.Host.Name,
-                users: this.Users.Select(user => user.Name).ToList(),
                 characters: this.Characters.Select(character => character.Name).ToList(),
-                characterSelections: this.UserIdToCharacterId.Values.ToList(),
-                teamSelections: this.UserIdToTeamId.Values.ToList(),
-                seatSelections: seatSelections
+                users: this.MapUsersToDtos()
             );
+
+            return lobbyDto;
+        }
+
+        private List<LobbyUserDto> MapUsersToDtos()
+        {
+            return this.Users.Select((user, index) =>
+            {
+                return new LobbyUserDto
+                (
+                    name: user.Name,
+                    selectedSeatIndex: this.GetSeatIndexForUser(user),
+                    selectedTeamIndex: this.GetTeamIndexForUser(user, index),
+                    selectedCharacterIndex: this.GetCharacterIndexForUser(user)
+                );
+            })
+            .ToList();
+        }
+
+        private int? GetSeatIndexForUser(User user)
+        {
+            for (int i = 0; i < this.Seats.Count; i++)
+            {
+                if (this.Seats.ElementAt(i).Value == user)
+                {
+                    return i;
+                }
+            }
+
+            return null;
+        }
+
+        private int GetCharacterIndexForUser(User user)
+        {
+            if (this.UserIdToCharacterId.ContainsKey(user.Id))
+            {
+                return this.UserIdToCharacterId[user.Id];
+            }
+
+            return 0;
+
+        }
+
+        private int GetTeamIndexForUser(User user, int userIndex)
+        {
+            if (this.UserIdToTeamId.ContainsKey(user.Id))
+            {
+                return this.UserIdToTeamId[user.Id];
+            }
+
+            return userIndex;
+
         }
 
     }

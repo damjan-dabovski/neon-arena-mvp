@@ -12,6 +12,8 @@
 
         public Task JoinSeat(string userId, string lobbyId, int seatIndex);
 
+        public Task SelectCharacter(string userId, string lobbyId, int characterIndex);
+
         public void RunMatch(string lobbyId);
 
         public void PassUserInputToLobby(string lobbyId, string userId, string input);

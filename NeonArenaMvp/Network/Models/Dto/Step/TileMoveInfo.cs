@@ -1,7 +1,7 @@
 ﻿using NeonArenaMvp.Game.Models.Maps;
 using NeonArenaMvp.Game.Models.Players;
 
-namespace NeonArenaMvp.Network.Models.Dto
+namespace NeonArenaMvp.Network.Models.Dto.Step
 {
     public class TileMoveInfo
     {
@@ -10,8 +10,8 @@ namespace NeonArenaMvp.Network.Models.Dto
 
         public TileMoveInfo(Player player, List<Coords> allTilesForMove)
         {
-            this.Player = player;
-            this.AllTilesForMove = allTilesForMove;
+            Player = player;
+            AllTilesForMove = allTilesForMove;
         }
     }
 }

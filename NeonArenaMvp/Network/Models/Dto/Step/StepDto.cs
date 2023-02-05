@@ -1,6 +1,6 @@
 ﻿using NeonArenaMvp.Game.Models.Maps;
 
-namespace NeonArenaMvp.Network.Models.Dto
+namespace NeonArenaMvp.Network.Models.Dto.Step
 {
     public class StepDto
     {
@@ -18,12 +18,12 @@ namespace NeonArenaMvp.Network.Models.Dto
 
         public StepDto()
         {
-            this.CommandStrings = new();
-            this.MapString = "";
-            this.PlayerMovements = new();
-            this.MarkedTiles = new();
-            this.Characters = new();
-            this.GameModeInfo = "";
+            CommandStrings = new();
+            MapString = "";
+            PlayerMovements = new();
+            MarkedTiles = new();
+            Characters = new();
+            GameModeInfo = "";
         }
     }
 }

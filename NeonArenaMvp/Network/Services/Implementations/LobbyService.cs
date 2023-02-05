@@ -1,5 +1,5 @@
 ﻿using NeonArenaMvp.Network.Models;
-using NeonArenaMvp.Network.Models.Dto;
+using NeonArenaMvp.Network.Models.Dto.Lobby;
 using NeonArenaMvp.Network.Services.Interfaces;
 using System.Collections.Concurrent;
 
@@ -113,6 +113,21 @@ namespace NeonArenaMvp.Network.Services.Implementations
                 if (user is not null)
                 {
                     targetLobby.AssignUserToSeat(userId, seatIndex);
+                }
+
+                await this._commService.SendLobbyData(targetLobby.Id.ToString(), targetLobby.ToDto());
+            }
+        }
+
+        public async Task SelectCharacter(string userId, string lobbyId, int characterIndex)
+        {
+            if (this.Lobbies.TryGetValue(Guid.Parse(lobbyId), out var targetLobby))
+            {
+                var user = this._userService.GetUserById(userId);
+
+                if (user is not null)
+                {
+                    targetLobby.SetCharacterForUser(userId, characterIndex);
                 }
 
                 await this._commService.SendLobbyData(targetLobby.Id.ToString(), targetLobby.ToDto());

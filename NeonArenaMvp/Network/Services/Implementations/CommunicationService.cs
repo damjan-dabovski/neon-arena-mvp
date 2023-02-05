@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using NeonArenaMvp.Network.Models;
-using NeonArenaMvp.Network.Models.Dto;
+using NeonArenaMvp.Network.Models.Dto.Lobby;
 using NeonArenaMvp.Network.Services.Interfaces;
 using NeonArenaMvp.Network.SignalR;
 

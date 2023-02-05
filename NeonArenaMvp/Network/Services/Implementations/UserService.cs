@@ -14,7 +14,7 @@ namespace NeonArenaMvp.Network.Services.Implementations
         {
             _commService = commService;
 
-            Users = new();
+            this.Users = new();
             UserIdToConnectionIdMap = new();
         }
 
@@ -26,7 +26,7 @@ namespace NeonArenaMvp.Network.Services.Implementations
                 name: name
             );
 
-            Users.Add(newUser);
+            this.Users.Add(newUser);
 
             UserIdToConnectionIdMap.Add(newUser.Id, connectionId);
 
@@ -54,12 +54,12 @@ namespace NeonArenaMvp.Network.Services.Implementations
 
         public User? GetUserById(string userId)
         {
-            return Users.FirstOrDefault(user => user.Id == userId);
+            return this.Users.FirstOrDefault(user => user.Id == userId);
         }
 
         public bool RemoveUserById(string userId)
         {
-            return Users.RemoveAll(user => user.Id == userId) is not 0;
+            return this.Users.RemoveAll(user => user.Id == userId) is not 0;
         }
     }
 }

@@ -5,7 +5,6 @@ using NeonArenaMvp.Network.Models;
 using NeonArenaMvp.Game.Models.Maps;
 using NeonArenaMvp.Game.Models.Players;
 using NeonArenaMvp.Game.Helpers.Builders;
-using NeonArenaMvp.Network.Models.Dto;
 using NeonArenaMvp.Game.Systems;
 
 using static NeonArenaMvp.Game.Models.Events.MatchEventHandler;
@@ -13,6 +12,7 @@ using static NeonArenaMvp.Game.Helpers.Builders.TileBuilders;
 using static NeonArenaMvp.Game.Models.Events.MatchEvent;
 using static NeonArenaMvp.Game.Helpers.Models.Constants;
 using static NeonArenaMvp.Game.Systems.Helpers.SystemHelpers;
+using NeonArenaMvp.Network.Models.Dto.Step;
 
 namespace NeonArenaMvp.Game.Models.Matches
 {

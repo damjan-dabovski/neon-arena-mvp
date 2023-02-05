@@ -1,5 +1,5 @@
 ﻿using NeonArenaMvp.Network.Models;
-using NeonArenaMvp.Network.Models.Dto;
+using NeonArenaMvp.Network.Models.Dto.Lobby;
 
 namespace NeonArenaMvp.Network.Services.Interfaces
 {

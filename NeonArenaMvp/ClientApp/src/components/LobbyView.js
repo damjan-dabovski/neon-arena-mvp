@@ -5,14 +5,23 @@ const LobbyView = (props) => {
     var context = useContext(AppContext);
 
     const seats = [
-        {color: "red", userName: ""},
-        {color: "orange", userName: ""},
-        {color: "yellow", userName: ""},
-        {color: "lime", userName: ""},
-        {color: "cyan", userName: ""},
-        {color: "blue", userName: ""},
-        {color: "purple", userName: ""},
+        "red",
+        "orange",
+        "yellow",
+        "lime",
+        "cyan",
+        "blue",
+        "purple",
     ]
+
+    const seatsMappedToPlayers = {}; 
+    
+    if (context.currentLobby){
+        for (let user of context.currentLobby?.users.filter(user => user.selectedSeatIndex !== null))
+        {
+            seatsMappedToPlayers[seats[user.selectedSeatIndex]] = user;
+        }
+    }
 
     return(
         <div>
@@ -22,16 +31,27 @@ const LobbyView = (props) => {
                     {seats.map((seat, index) => {
                         return(
                             <div key={index}>
-                                <div style={{display: "inline-block", width: "20px", height:"20px", borderRadius:"50%", backgroundColor:`${seat.color}`}}></div>
-                                {context.currentLobby.seatSelections.hasOwnProperty(index)
-                                ?   <div>
-                                        <span>{context.currentLobby.userNames[context.currentLobby.seatSelections[index]]}</span>
-                                    </div>
-                                :   <div>
-                                        <span>{"empty"}</span>
-                                        <button onClick={() => props.joinSeat(index)}>Join Seat</button>
-                                    </div>
-                                }
+                                <div style={{display: "inline-block", width: "20px", height:"20px", borderRadius:"50%", backgroundColor:`${seat}`}}></div>
+                                <div style={{display: "inline-block"}}>
+                                    {
+                                        seatsMappedToPlayers.hasOwnProperty(seat)
+                                        ?   <span>
+                                                {seatsMappedToPlayers[seat].name}
+                                                <select value={seatsMappedToPlayers[seat].selectedCharacterIndex} onChange={props.selectCharacter}>
+                                                    {context.currentLobby.characters.map((character, idx) =>
+                                                        {
+                                                            return (
+                                                                <option key={idx} value={idx}>{character}</option>
+                                                            )   
+                                                        })}
+                                                </select>
+                                            </span>
+                                        :   <span>
+                                                <span>{"empty"}</span>
+                                                <button onClick={() => props.joinSeat(index)}>Join Seat</button>
+                                            </span>
+                                    }
+                                </div>
                             </div>
                         );
                     })}

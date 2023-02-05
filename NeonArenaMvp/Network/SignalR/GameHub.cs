@@ -26,7 +26,7 @@ namespace NeonArenaMvp.Network.SignalR
             }
             else
             {
-                this._userService.AddUser(this.Context.ConnectionId, "TestUser");
+                this._userService.AddUser(this.Context.ConnectionId, this.Context.ConnectionId);
             }
 
             this.Clients.Caller.ReceiveLobbyList(this._lobbyService.GetLobbies());
@@ -68,6 +68,11 @@ namespace NeonArenaMvp.Network.SignalR
         public void JoinSeat(string userId, string lobbyId, int seatIndex)
         {
             this._lobbyService.JoinSeat(userId, lobbyId, seatIndex);
+        }
+
+        public void SelectCharacter(string userId, string lobbyId, int characterIndex)
+        {
+            this._lobbyService.SelectCharacter(userId, lobbyId, characterIndex);
         }
 
         public void RunMatchInLobby(string lobbyId)

@@ -1,4 +1,4 @@
-import { React, useState, useEffect, createContext, useContext } from 'react';
+import { React, useState, useEffect, createContext } from 'react';
 import { Layout } from './components/Layout';
 import './custom.css';
 import { HubConnectionBuilder } from '@microsoft/signalr';
@@ -105,12 +105,24 @@ function App(){
     }
   }
 
+  const selectCharacter = async (e) => {
+    if(connection){
+      try{
+        let characterIndex = e.target.value;
+        await connection.send('SelectCharacter', playerId, currentLobby.id, +characterIndex);
+      }
+      catch(exception){
+        console.error(exception);
+      }
+    }
+  }
+
     return (
       <Layout>
         <AppContext.Provider value={{lobbies: lobbies, currentLobby: currentLobby}}>
           <SignalRTest sendMessage={sendMessage}/>
           <LobbyList joinLobby={joinLobby} createLobby={createLobby}/>
-          <LobbyView joinSeat={joinSeat}/>
+          <LobbyView joinSeat={joinSeat} selectCharacter={selectCharacter}/>
         </AppContext.Provider>
       </Layout>
     );
