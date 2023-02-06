@@ -15,9 +15,11 @@ const LobbyView = (props) => {
     ]
 
     const seatsMappedToPlayers = {}; 
+    let seatedUsers = [];
     
     if (context.currentLobby){
-        for (let user of context.currentLobby?.users.filter(user => user.selectedSeatIndex !== null))
+        seatedUsers = context.currentLobby.users.filter(user => user.selectedSeatIndex !== null);
+        for (let user of seatedUsers)
         {
             seatsMappedToPlayers[seats[user.selectedSeatIndex]] = user;
         }
@@ -42,8 +44,15 @@ const LobbyView = (props) => {
                                                         {
                                                             return (
                                                                 <option key={idx} value={idx}>{character}</option>
-                                                            )   
+                                                            );
                                                         })}
+                                                </select>
+                                                <select value={seatsMappedToPlayers[seat].selectedTeamIndex} onChange={props.selectTeam}>
+                                                    {[...Array(seatedUsers.length).keys()].map(item => {
+                                                        return (
+                                                            <option key={item} value={item + 1}>Team {item + 1}</option>
+                                                        );
+                                                    })}
                                                 </select>
                                             </span>
                                         :   <span>

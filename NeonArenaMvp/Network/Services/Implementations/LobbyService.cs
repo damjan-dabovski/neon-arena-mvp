@@ -133,6 +133,21 @@ namespace NeonArenaMvp.Network.Services.Implementations
                 await this._commService.SendLobbyData(targetLobby.Id.ToString(), targetLobby.ToDto());
             }
         }
+        
+        public async Task SelectTeam(string userId, string lobbyId, int teamIndex)
+        {
+            if (this.Lobbies.TryGetValue(Guid.Parse(lobbyId), out var targetLobby))
+            {
+                var user = this._userService.GetUserById(userId);
+
+                if (user is not null)
+                {
+                    targetLobby.SetTeamForUser(userId, teamIndex);
+                }
+
+                await this._commService.SendLobbyData(targetLobby.Id.ToString(), targetLobby.ToDto());
+            }
+        }
 
         public List<string> GetLobbies()
         {

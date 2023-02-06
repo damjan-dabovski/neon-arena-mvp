@@ -75,6 +75,11 @@ namespace NeonArenaMvp.Network.SignalR
             this._lobbyService.SelectCharacter(userId, lobbyId, characterIndex);
         }
 
+        public void SelectTeam(string userId, string lobbyId, int teamIndex)
+        {
+            this._lobbyService.SelectTeam(userId, lobbyId, teamIndex);
+        }
+
         public void RunMatchInLobby(string lobbyId)
         {
             this._lobbyService.RunMatch(lobbyId);

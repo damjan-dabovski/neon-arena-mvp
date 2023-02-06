@@ -117,12 +117,24 @@ function App(){
     }
   }
 
+  const selectTeam = async (e) => {
+    if(connection){
+      try{
+        let teamIndex = e.target.value;
+        await connection.send('SelectTeam', playerId, currentLobby.id, +teamIndex);
+      }
+      catch(exception){
+        console.error(exception);
+      }
+    }
+  }
+
     return (
       <Layout>
         <AppContext.Provider value={{lobbies: lobbies, currentLobby: currentLobby}}>
           <SignalRTest sendMessage={sendMessage}/>
           <LobbyList joinLobby={joinLobby} createLobby={createLobby}/>
-          <LobbyView joinSeat={joinSeat} selectCharacter={selectCharacter}/>
+          <LobbyView joinSeat={joinSeat} selectCharacter={selectCharacter} selectTeam={selectTeam}/>
         </AppContext.Provider>
       </Layout>
     );

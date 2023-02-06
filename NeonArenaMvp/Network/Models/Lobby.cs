@@ -5,7 +5,9 @@ using NeonArenaMvp.Game.Models.Players;
 using NeonArenaMvp.Network.Models.Dto.Lobby;
 using NeonArenaMvp.Network.Models.Dto.Step;
 using NeonArenaMvp.Network.Services.Interfaces;
+
 using Newtonsoft.Json;
+
 using static NeonArenaMvp.Game.Helpers.Models.Directions;
 using static NeonArenaMvp.Network.Helpers.Constants;
 
@@ -35,7 +37,7 @@ namespace NeonArenaMvp.Network.Models
         public int CurrentGameModeIndex;
         public Match? ActiveMatch;
 
-        private readonly ICommunicationService CommService;
+        private readonly ICommunicationService _commService;
 
         public Lobby(User host, Guid lobbyId, ICommunicationService commService)
         {
@@ -43,9 +45,11 @@ namespace NeonArenaMvp.Network.Models
             this.State = LobbyState.Open;
             this.Host = host;
 
-            this.CommService = commService;
+            this._commService = commService;
 
-            this.Users = new() { host };
+            this.Users = new();
+
+            this.AddUser(host);
 
             this.Seats = new();
             foreach (var color in Enum.GetValues<Color>()[..^1])
@@ -64,8 +68,8 @@ namespace NeonArenaMvp.Network.Models
                 CharacterBuilders.Val
             };
 
-            this.UserIdToCharacterId = new() { { host.Id, 0 } };
-            this.UserIdToTeamId = new() { { host.Id, 0 } };
+            this.UserIdToCharacterId = new();
+            this.UserIdToTeamId = new();
 
             // TODO add methods for adding/removing maps and gamemodes
             this.Maps = new();
@@ -83,8 +87,6 @@ namespace NeonArenaMvp.Network.Models
             }
 
             this.Users.Add(user);
-            this.UserIdToCharacterId.Add(user.Id, 0);
-            this.UserIdToTeamId.Add(user.Id, 0);
         }
 
         public void RemoveUser(User user)
@@ -105,9 +107,6 @@ namespace NeonArenaMvp.Network.Models
 
             this.Users.RemoveAll(u => u.Id == user.Id);
 
-            this.UserIdToCharacterId.Remove(user.Id);
-            this.UserIdToTeamId.Remove(user.Id);
-
             // TODO in the lobby service, after calling this method, check if the lobby
             // has no players left in it, and remove it from the lobby list if that's the case
         }
@@ -121,24 +120,54 @@ namespace NeonArenaMvp.Network.Models
             if (existingSeatForUser.Value is not null)
             {
                 // first unassign the user from the existing seat
+                // TODO NOW: figure out a way to do a 'reassign/swap' instead of unassigning,
+                // since it removes the user's cached team/character index
                 this.UnassignSeat(existingSeatForUser.Key);
             }
 
-            this.Seats[seatColor] = this.Users.FirstOrDefault(player => player.Id == userId);
+            var targetUser = this.Users.FirstOrDefault(user => user.Id == userId);
+
+            if (targetUser is null)
+            {
+                throw new Exception("The user you're trying to unassign doesn't exist in this lobby!");
+            }
+
+            this.Seats[seatColor] = targetUser;
+            this.UserIdToCharacterId.Add(targetUser.Id, 0);
+            this.UserIdToTeamId.Add(targetUser.Id, this.GetTeamIndexForUser(targetUser));
         }
 
         public void UnassignSeat(Color seatColor)
         {
+            this.Seats.TryGetValue(seatColor, out var targetUser);
+
+            if (targetUser is null)
+            {
+                throw new Exception("The user you're trying to unassign doesn't exist in this lobby!");
+            }
+
+            this.UserIdToCharacterId.Remove(targetUser.Id);
+            this.UserIdToTeamId.Remove(targetUser.Id);
             this.Seats[seatColor] = null;
         }
 
         public void SetCharacterForUser(string userId, int characterIndex)
         {
+            if (characterIndex > (this.Characters.Count - 1))
+            {
+                // TODO this should either throw an exception or 
+                // just an error message to the client (depends on how we handle errors in communication)
+                return;
+            }
+
             this.UserIdToCharacterId[userId] = characterIndex;
         }
 
         public void SetTeamForUser(string userId, int teamIndex)
         {
+            // TODO do we need some kind of index validation for teams?
+            // maybe as a way to keep the max team value tidy?
+            // or is that already achieved by how the client and server work together?
             this.UserIdToTeamId[userId] = teamIndex;
         }
 
@@ -309,13 +338,13 @@ namespace NeonArenaMvp.Network.Models
 
         private List<LobbyUserDto> MapUsersToDtos()
         {
-            return this.Users.Select((user, index) =>
+            return this.Users.Select(user =>
             {
                 return new LobbyUserDto
                 (
                     name: user.Name,
                     selectedSeatIndex: this.GetSeatIndexForUser(user),
-                    selectedTeamIndex: this.GetTeamIndexForUser(user, index),
+                    selectedTeamIndex: this.GetTeamIndexForUser(user),
                     selectedCharacterIndex: this.GetCharacterIndexForUser(user)
                 );
             })
@@ -346,14 +375,21 @@ namespace NeonArenaMvp.Network.Models
 
         }
 
-        private int GetTeamIndexForUser(User user, int userIndex)
+        private int GetTeamIndexForUser(User user)
         {
             if (this.UserIdToTeamId.ContainsKey(user.Id))
             {
                 return this.UserIdToTeamId[user.Id];
             }
 
-            return userIndex;
+            if (this.UserIdToTeamId.Count == 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return this.UserIdToTeamId.Values.Max() + 1;
+            }
 
         }
 

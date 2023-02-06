@@ -14,6 +14,8 @@
 
         public Task SelectCharacter(string userId, string lobbyId, int characterIndex);
 
+        public Task SelectTeam(string userId, string lobbyId, int characterIndex);
+
         public void RunMatch(string lobbyId);
 
         public void PassUserInputToLobby(string lobbyId, string userId, string input);
