@@ -113,28 +113,34 @@ namespace NeonArenaMvp.Network.Models
 
         public void AssignUserToSeat(string userId, int seatIndex)
         {
-            var seatColor = (Color)seatIndex;
+            var targetSeatColor = (Color)seatIndex;
 
             // if the user is already seated in another seat
             var existingSeatForUser = this.Seats.FirstOrDefault(kvp => kvp.Value?.Id == userId);
             if (existingSeatForUser.Value is not null)
             {
-                // first unassign the user from the existing seat
-                // TODO NOW: figure out a way to do a 'reassign/swap' instead of unassigning,
-                // since it removes the user's cached team/character index
-                this.UnassignSeat(existingSeatForUser.Key);
+                this.SwapSeats(existingSeatForUser.Key, targetSeatColor);
+                return;
             }
 
             var targetUser = this.Users.FirstOrDefault(user => user.Id == userId);
 
             if (targetUser is null)
             {
-                throw new Exception("The user you're trying to unassign doesn't exist in this lobby!");
+                throw new Exception("The user you're trying to assign doesn't exist in this lobby!");
             }
 
-            this.Seats[seatColor] = targetUser;
+            this.Seats[targetSeatColor] = targetUser;
             this.UserIdToCharacterId.Add(targetUser.Id, 0);
             this.UserIdToTeamId.Add(targetUser.Id, this.GetTeamIndexForUser(targetUser));
+        }
+
+        public void SwapSeats(Color sourceSeatColor, Color destinationSeatColor)
+        {
+            User? temp = this.Seats[sourceSeatColor];
+
+            this.Seats[sourceSeatColor] = this.Seats[destinationSeatColor];
+            this.Seats[destinationSeatColor] = temp;
         }
 
         public void UnassignSeat(Color seatColor)
