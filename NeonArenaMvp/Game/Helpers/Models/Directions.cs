@@ -1,12 +1,10 @@
-﻿using NeonArenaMvp.Game.Models.Maps;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System.Text.Json.Serialization;
 
 namespace NeonArenaMvp.Game.Helpers.Models
 {
     public static class Directions
     {
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum Direction
         {
             Up,

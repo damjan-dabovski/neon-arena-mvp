@@ -30,6 +30,7 @@ const LobbyView = (props) => {
             {context.currentLobby !== null || <h2>You haven't joined any lobby!</h2>}
             {context.currentLobby !== null &&
                 <div>
+                    <button onClick={props.runMatch}>Run Match!</button>
                     {seats.map((seat, index) => {
                         return(
                             <div key={index}>

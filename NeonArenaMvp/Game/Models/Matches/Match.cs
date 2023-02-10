@@ -114,10 +114,18 @@ namespace NeonArenaMvp.Game.Models.Matches
 
         public void ExecuteStep(List<Command> currentStepCommands)
         {
-            var stepDto = new StepDto();
-
-            stepDto.MapString = Map.ToRawString();
-            stepDto.Characters = Players.Select(player => player.Character.ToString()).ToList();
+            var stepDto = new StepDto
+            {
+                MapString = this.Map.ToString(),
+                PlayerDtos = this.Players.Select(player =>
+                    new MatchPlayerDto {
+                        Name = player.Name,
+                        TeamIndex = player.Team,
+                        // TODO there's gotta be a better way of connecting the character in the match to the one in the lobby
+                        CharacterIndex = this.Lobby.Characters.FindIndex(character => character.Name == player.Character.Name),
+                        SeatIndex = this.Lobby.Seats.Keys.ToList().IndexOf(player.Color)
+                    }).ToList()
+            };
 
             ExecuteCommandPhase(currentStepCommands, stepDto);
 
@@ -153,7 +161,7 @@ namespace NeonArenaMvp.Game.Models.Matches
                     ShotItems.Add(shotItem);
                 }
 
-                stepDto.CommandStrings.Add(currentCommand.ToString());
+                stepDto.PlayerDtos[i].StepCommand = currentCommand.ToString();
 
             }
         }
@@ -185,7 +193,15 @@ namespace NeonArenaMvp.Game.Models.Matches
 
                     this.HandleEvent(EventType.MoveEvent.ToString(), moveEvent, currentPlayer);
 
-                    stepDto.PlayerMovements.Add(new(currentPlayer, allCoordsForMove));
+                    var currentPlayerDto = stepDto.PlayerDtos.FirstOrDefault(dto => dto.Name == currentPlayer.Name);
+
+                    if (currentPlayerDto is not null)
+                    {
+                        // TODO do we need this deep copy for safety?
+                        currentPlayerDto.TilesMoved = allCoordsForMove
+                            .Select(coords => new Coords(coords.Row, coords.Col, coords.PartialDirection))
+                            .ToList();
+                    }
                 }
 
             }
@@ -195,8 +211,9 @@ namespace NeonArenaMvp.Game.Models.Matches
         {
             var markedTiles = new List<TileMark>();
 
-            foreach (var currentPlayer in Players)
+            for (int i = 0; i < Players.Count; i++)
             {
+                Player currentPlayer = this.Players[i];
                 var currentPlayerShots = ShotItems.Where(shotItem => shotItem.Player == currentPlayer).ToList();
 
                 if (currentPlayerShots.Count == 0)
@@ -219,9 +236,9 @@ namespace NeonArenaMvp.Game.Models.Matches
                 var shootEvent = EventSnapshotBuilders.ShootEvent(CurrentStepNumber, currentPlayer, markedTiles);
 
                 this.HandleEvent(EventType.ShootEvent.ToString(), shootEvent, currentPlayer);
-            }
 
-            stepDto.MarkedTiles.AddRange(markedTiles);
+                stepDto.PlayerDtos[i].ShotMarks.AddRange(markedTiles);
+            }
 
             return markedTiles;
         }

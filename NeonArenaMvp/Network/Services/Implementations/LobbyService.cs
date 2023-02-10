@@ -165,6 +165,10 @@ namespace NeonArenaMvp.Network.Services.Implementations
         public void RunMatch(string lobbyId)
         {
             // TODO lobby run match
+            if (this.Lobbies.TryGetValue(Guid.Parse(lobbyId), out var targetLobby))
+            {
+                targetLobby.RunMatch();
+            }
         }
 
         public void PassUserInputToLobby(string lobbyId, string userId, string input)

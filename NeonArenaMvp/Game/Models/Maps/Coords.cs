@@ -1,15 +1,17 @@
-﻿using NeonArenaMvp.Network.Helpers;
-using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 using static NeonArenaMvp.Game.Helpers.Models.Directions;
 
 namespace NeonArenaMvp.Game.Models.Maps
 {
-    [JsonConverter(typeof(ToStringJsonConverter))]
+    //[JsonConverter(typeof(ToStringJsonConverter))]
     public readonly struct Coords
     {
+        [JsonInclude]
         public int Row { get; }
+        [JsonInclude]
         public int Col { get; }
+        [JsonInclude]
         public Direction PartialDirection { get; }
 
         public Coords(int row, int col, Direction direction = Direction.Center)

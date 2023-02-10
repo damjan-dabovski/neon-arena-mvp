@@ -84,7 +84,7 @@ namespace NeonArenaMvp.Game.Behaviours.GameModes
                 var team = score.Team;
                 var points = (int)score.Score;
 
-                sb.Append($"{team}: {points} |");
+                sb.Append($"Team {team}: {points} |");
             }
 
             return sb.ToString();

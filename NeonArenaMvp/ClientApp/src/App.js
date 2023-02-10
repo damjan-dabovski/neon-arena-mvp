@@ -56,6 +56,10 @@ function App(){
             document.cookie = `playerId = ${data.id}`
             setPlayerId(data.id);
           })
+
+          connection.on('ReceiveStepData', data => {
+            console.log(data);
+          })
         });
     }
   }, [connection]);
@@ -129,12 +133,23 @@ function App(){
     }
   }
 
+  const runMatch = async () => {
+    if(connection){
+      try{
+        await connection.send('RunMatchInLobby', currentLobby.id);
+      }
+      catch(exception){
+        console.error(exception);
+      }
+    }
+  }
+
     return (
       <Layout>
         <AppContext.Provider value={{lobbies: lobbies, currentLobby: currentLobby}}>
           <SignalRTest sendMessage={sendMessage}/>
           <LobbyList joinLobby={joinLobby} createLobby={createLobby}/>
-          <LobbyView joinSeat={joinSeat} selectCharacter={selectCharacter} selectTeam={selectTeam}/>
+          <LobbyView joinSeat={joinSeat} selectCharacter={selectCharacter} selectTeam={selectTeam} runMatch={runMatch}/>
         </AppContext.Provider>
       </Layout>
     );

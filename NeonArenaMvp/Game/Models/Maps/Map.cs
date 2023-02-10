@@ -30,25 +30,25 @@ namespace NeonArenaMvp.Game.Models.Maps
             return this;
         }
 
+        //public override string ToString()
+        //{
+        //    StringBuilder sb = new();
+
+        //    for (int i = 0; i < this.RowSize; i++)
+        //    {
+        //        sb.Append('|');
+        //        for (int j = 0; j < this.ColSize; j++)
+        //        {
+        //            sb.Append($"{this.Tiles[i, j]}|");
+        //        }
+        //        sb.AppendLine();
+        //        sb.Append('-', this.ColSize * 2);
+        //        sb.AppendLine();
+        //    }
+        //    return sb.ToString();
+        //}
+
         public override string ToString()
-        {
-            StringBuilder sb = new();
-
-            for (int i = 0; i < this.RowSize; i++)
-            {
-                sb.Append('|');
-                for (int j = 0; j < this.ColSize; j++)
-                {
-                    sb.Append($"{this.Tiles[i, j]}|");
-                }
-                sb.AppendLine();
-                sb.Append('-', this.ColSize * 2);
-                sb.AppendLine();
-            }
-            return sb.ToString();
-        }
-
-        public string ToRawString()
         {
             StringBuilder sb = new($"{this.RowSize}x{this.ColSize}|");
 

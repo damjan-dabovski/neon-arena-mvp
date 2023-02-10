@@ -1,4 +1,5 @@
-﻿using NeonArenaMvp.Game.Helpers.Builders;
+﻿using NeonArenaMvp.Game.Behaviours.GameModes;
+using NeonArenaMvp.Game.Helpers.Builders;
 using NeonArenaMvp.Game.Models.Maps;
 using NeonArenaMvp.Game.Models.Matches;
 using NeonArenaMvp.Game.Models.Players;
@@ -29,8 +30,8 @@ namespace NeonArenaMvp.Network.Models
 
         public List<Map> Maps;
         public List<GameMode> GameModes;
-        public Map? CurrentMap => this.Maps.ElementAtOrDefault(0);
-        public GameMode? CurrentGameMode => this.GameModes.ElementAtOrDefault(0);
+        public Map? CurrentMap => this.Maps.ElementAtOrDefault(CurrentMapIndex);
+        public GameMode? CurrentGameMode => this.GameModes.ElementAtOrDefault(CurrentGameModeIndex);
         public List<User?> Spectators => this.Users.Except(this.Seats.Values).ToList();
 
         public int CurrentMapIndex;
@@ -72,8 +73,22 @@ namespace NeonArenaMvp.Network.Models
             this.UserIdToTeamId = new();
 
             // TODO add methods for adding/removing maps and gamemodes
-            this.Maps = new();
-            this.GameModes = new();
+            // TODO hardcoded workarounds for MVP
+            var tempMap = new Map(5, 5, new() { new Coords(1, 1), new Coords(2, 2), new Coords(3, 3) }).FillEmpty();
+            this.Maps = new() { tempMap };
+
+            var deathmatch = new GameMode
+            (
+                name: "Deathmatch",
+                initMethods: new List<Action<Match>>
+                {
+                    Deathmatch.DeathmatchInit
+                },
+                winQuery: Deathmatch.DeathmatchWinQuery,
+                infoQuery: Deathmatch.DeathmatchInfo
+            );
+
+            this.GameModes = new() { deathmatch };
             this.CurrentMapIndex = 0;
             this.CurrentGameModeIndex = 0;
             this.ActiveMatch = null;
@@ -199,13 +214,13 @@ namespace NeonArenaMvp.Network.Models
 
                 var userIdToColorReverseMap = usersToTake.ToDictionary(user => user.Id, user => this.Seats.First(seat => seat.Value?.Id == user?.Id).Key);
 
-                List<Player> mapPlayers = new();
+                List<Player> matchPlayers = new();
 
                 for (int i = 0; i < usersToTake.Count; i++)
                 {
                     var currentUser = usersToTake[i];
 
-                    mapPlayers.Add(new Player
+                    matchPlayers.Add(new Player
                     (
                         color: userIdToColorReverseMap[currentUser.Id],
                         name: currentUser.Name,
@@ -218,7 +233,7 @@ namespace NeonArenaMvp.Network.Models
                     ));
                 }
 
-                this.ActiveMatch = new(this, this.CurrentMap, mapPlayers, this.CurrentGameMode);
+                this.ActiveMatch = new(this, this.CurrentMap, matchPlayers, this.CurrentGameMode);
 
                 while (!this.ActiveMatch.HasWinner)
                 {
@@ -323,10 +338,7 @@ namespace NeonArenaMvp.Network.Models
 
         public void SendStep(StepDto stepDto)
         {
-            using (StreamWriter writer = new(@".\RoundOutput.txt", true))
-            {
-                writer.WriteLine(JsonConvert.SerializeObject(stepDto));
-            }
+            this._commService.SendStepData(this.Id.ToString(), stepDto);
         }
 
         public LobbyDto ToDto()

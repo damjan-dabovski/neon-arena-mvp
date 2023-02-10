@@ -1,13 +1,17 @@
 ﻿using NeonArenaMvp.Game.Models.Actions;
 using NeonArenaMvp.Game.Models.Players;
+using System.Text.Json.Serialization;
 using static NeonArenaMvp.Game.Helpers.Models.Directions;
 
 namespace NeonArenaMvp.Game.Models.Maps
 {
     public class TileMark
     {
+        [JsonInclude]
         public Coords Coords { get; }
+        [JsonInclude]
         public Direction Direction { get; }
+        [JsonIgnore]
         public Player OriginPlayer { get; set; }
 
         public TileMark(Coords coords, Direction direction, Player originPlayer)
