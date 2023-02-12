@@ -235,6 +235,8 @@ namespace NeonArenaMvp.Network.Models
 
                 this.ActiveMatch = new(this, this.CurrentMap, matchPlayers, this.CurrentGameMode);
 
+                this.SendLatestStep();
+
                 while (!this.ActiveMatch.HasWinner)
                 {
                     var playerInputs = this.GetPlayerInputs();
@@ -336,9 +338,12 @@ namespace NeonArenaMvp.Network.Models
             };
         }
 
-        public void SendStep(StepDto stepDto)
+        // TODO should this be a generic 'SendStep' method that sends any Step DTO?
+        // If there is a MatchService, should it be responsible for either calling this or
+        // just providing the right/latest DTO?
+        public void SendLatestStep()
         {
-            this._commService.SendStepData(this.Id.ToString(), stepDto);
+            this._commService.SendStepData(this.Id.ToString(), this.ActiveMatch.LastStepDto);
         }
 
         public LobbyDto ToDto()

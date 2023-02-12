@@ -38,6 +38,11 @@ namespace NeonArenaMvp.Game.Models.Matches
 
         public Dictionary<string, List<ExpandoObject>> MatchData;
 
+        // TODO should this be cached on the Match itself, or somewhere else?
+        // should there be a MatchService or something that modifies the matches,
+        // leaving the Match class to be just the model?
+        public StepDto LastStepDto;
+
         public Match(Lobby lobby, Map map, List<Player> players, GameMode gameMode)
         {
             Lobby = lobby;
@@ -62,6 +67,22 @@ namespace NeonArenaMvp.Game.Models.Matches
             InitMap();
             InitGameMode();
             InitCharacters();
+
+            this.LastStepDto = new()
+            {
+                MapString = this.Map.ToString(),
+                GameModeInfo = this.GameMode.InfoQuery(this),
+                PlayerDtos = this.Players.Select(player => new MatchPlayerDto
+                (
+                    name: player.Name,
+                    stepCommand: string.Empty,
+                    characterIndex: this.Lobby.Characters.FindIndex(character => character.Name == player.Character.Name),
+                    seatIndex: this.Lobby.Seats.Keys.ToList().IndexOf(player.Color),
+                    teamIndex: player.Team,
+                    tilesMoved: new List<Coords> { player.Coords },
+                    shotMarks: new List<TileMark>()
+                )).ToList()
+            };
         }
 
         private void InitMap()
@@ -141,7 +162,9 @@ namespace NeonArenaMvp.Game.Models.Matches
 
             HandleEndStep(stepDto);
 
-            Lobby.SendStep(stepDto);
+            this.LastStepDto = stepDto;
+
+            Lobby.SendLatestStep();
         }
 
         public void ExecuteCommandPhase(List<Command> currentStepCommands, StepDto stepDto)
@@ -287,13 +310,13 @@ namespace NeonArenaMvp.Game.Models.Matches
 
             Console.WriteLine($"Step {CurrentStepNumber} Done!\r\n");
 
-            stepDto.GameModeInfo = GameMode.InfoQuery(this);
+            stepDto.GameModeInfo = this.GameMode.InfoQuery(this);
 
-            var newWinningTeam = GameMode.VictoryQuery(this);
+            var newWinningTeam = this.GameMode.VictoryQuery(this);
 
-            WinningTeam = newWinningTeam;
+            this.WinningTeam = newWinningTeam;
 
-            CurrentStepNumber++;
+            this.CurrentStepNumber++;
         }
 
         public void HandleEvent(string eventType, MatchEvent eventSnapshot, Player player)
@@ -516,9 +539,10 @@ namespace NeonArenaMvp.Game.Models.Matches
             return 0;
         }
 
-        internal void RemoveMatchingDataItem(object bLINKWALLS, Func<dynamic, bool> p)
-        {
-            throw new NotImplementedException();
-        }
+        // TODO what is this supposed to be? implement or remove
+        //internal void RemoveMatchingDataItem(object bLINKWALLS, Func<dynamic, bool> p)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
