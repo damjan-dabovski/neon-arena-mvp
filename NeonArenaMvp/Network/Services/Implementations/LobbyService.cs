@@ -2,6 +2,7 @@
 using NeonArenaMvp.Network.Models.Dto.Lobby;
 using NeonArenaMvp.Network.Services.Interfaces;
 using System.Collections.Concurrent;
+using static NeonArenaMvp.Network.Helpers.Constants;
 
 namespace NeonArenaMvp.Network.Services.Implementations
 {
@@ -47,7 +48,7 @@ namespace NeonArenaMvp.Network.Services.Implementations
                     lobby.RemoveUser(user);
 
                     var userConnectionId = this._userService.GetConnectionIdByUserId(user.Id);
-                    await this._commService.AssignUserToLobbyGroup(lobbyId, userConnectionId);
+                    await this._commService.UnassignUserFromLobbyGroup(lobbyId, userConnectionId);
                     await this._commService.SendLobbyData(lobbyId, lobby.ToDto());
                 }
             }
@@ -113,6 +114,21 @@ namespace NeonArenaMvp.Network.Services.Implementations
                 if (user is not null)
                 {
                     targetLobby.AssignUserToSeat(userId, seatIndex);
+                }
+
+                await this._commService.SendLobbyData(targetLobby.Id.ToString(), targetLobby.ToDto());
+            }
+        }
+
+        public async Task LeaveSeat(string userId, string lobbyId, int seatIndex)
+        {
+            if (this.Lobbies.TryGetValue(Guid.Parse(lobbyId), out var targetLobby))
+            {
+                var user = this._userService.GetUserById(userId);
+
+                if (user is not null)
+                {
+                    targetLobby.UnassignSeat((Color)seatIndex);
                 }
 
                 await this._commService.SendLobbyData(targetLobby.Id.ToString(), targetLobby.ToDto());

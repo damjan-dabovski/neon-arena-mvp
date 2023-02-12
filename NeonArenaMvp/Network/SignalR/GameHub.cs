@@ -70,6 +70,11 @@ namespace NeonArenaMvp.Network.SignalR
             this._lobbyService.JoinSeat(userId, lobbyId, seatIndex);
         }
 
+        public void LeaveSeat(string userId, string lobbyId, int seatIndex)
+        {
+            this._lobbyService.LeaveSeat(userId, lobbyId, seatIndex);
+        }
+
         public void SelectCharacter(string userId, string lobbyId, int characterIndex)
         {
             this._lobbyService.SelectCharacter(userId, lobbyId, characterIndex);

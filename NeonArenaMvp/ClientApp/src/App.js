@@ -98,10 +98,33 @@ function App(){
     }
   }
 
+  const leaveLobby = async () => {
+    if(connection){
+      try{
+        await connection.send('LeaveLobby', playerId, currentLobby.id);
+        setCurrentLobby(null);
+      }
+      catch(exception){
+        console.error(exception);
+      }
+    }
+  }
+
   const joinSeat = async (seatIndex) => {
     if(connection){
       try{
         await connection.send('JoinSeat', playerId, currentLobby.id, seatIndex);
+      }
+      catch(exception){
+        console.error(exception);
+      }
+    }
+  }
+
+  const leaveSeat = async (seatIndex) => {
+    if(connection){
+      try{
+        await connection.send('LeaveSeat', playerId, currentLobby.id, seatIndex);
       }
       catch(exception){
         console.error(exception);
@@ -149,7 +172,13 @@ function App(){
         <AppContext.Provider value={{lobbies: lobbies, currentLobby: currentLobby}}>
           <SignalRTest sendMessage={sendMessage}/>
           <LobbyList joinLobby={joinLobby} createLobby={createLobby}/>
-          <LobbyView joinSeat={joinSeat} selectCharacter={selectCharacter} selectTeam={selectTeam} runMatch={runMatch}/>
+          <LobbyView 
+            joinSeat={joinSeat}
+            selectCharacter={selectCharacter}
+            selectTeam={selectTeam}
+            runMatch={runMatch}
+            leaveLobby={leaveLobby}
+            leaveSeat={leaveSeat}/>
         </AppContext.Provider>
       </Layout>
     );

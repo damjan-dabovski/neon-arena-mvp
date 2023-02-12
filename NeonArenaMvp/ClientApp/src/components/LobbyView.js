@@ -31,6 +31,7 @@ const LobbyView = (props) => {
             {context.currentLobby !== null &&
                 <div>
                     <button onClick={props.runMatch}>Run Match!</button>
+                    <button onClick={props.leaveLobby} style={{color:"red", fontWeight:"bold"}}>Leave</button>
                     {seats.map((seat, index) => {
                         return(
                             <div key={index}>
@@ -55,6 +56,7 @@ const LobbyView = (props) => {
                                                         );
                                                     })}
                                                 </select>
+                                                <button onClick={() => props.leaveSeat(index)} style={{color:"red", fontWeight:"bold"}}>Leave Seat</button>
                                             </span>
                                         :   <span>
                                                 <span>{"empty"}</span>

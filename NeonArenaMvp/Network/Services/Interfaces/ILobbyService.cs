@@ -12,6 +12,8 @@
 
         public Task JoinSeat(string userId, string lobbyId, int seatIndex);
 
+        public Task LeaveSeat(string userId, string lobbyId, int seatIndex);
+
         public Task SelectCharacter(string userId, string lobbyId, int characterIndex);
 
         public Task SelectTeam(string userId, string lobbyId, int characterIndex);

@@ -107,15 +107,19 @@ namespace NeonArenaMvp.Network.Models
         public void RemoveUser(User user)
         {
             var targetUserSeatColor = Color.White;
+
             foreach (var color in this.Seats.Keys)
             {
-                if (this.Seats[color]?.Id == user.Id)
+                if (this.Seats[color] is User usr
+                    && usr.Equals(user))
                 {
                     targetUserSeatColor = color;
                 }
             }
 
-            if (targetUserSeatColor != Color.White)
+            var isUserSeated = targetUserSeatColor != Color.White;
+
+            if (isUserSeated)
             {
                 UnassignSeat(targetUserSeatColor);
             }
