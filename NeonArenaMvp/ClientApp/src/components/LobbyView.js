@@ -1,18 +1,9 @@
 import {React, useContext} from 'react';
 import {AppContext} from '../App';
+import {seats} from '../helpers/Enums'
 
 const LobbyView = (props) => {
     var context = useContext(AppContext);
-
-    const seats = [
-        "red",
-        "orange",
-        "yellow",
-        "lime",
-        "cyan",
-        "blue",
-        "purple",
-    ]
 
     const seatsMappedToPlayers = {}; 
     let seatedUsers = [];

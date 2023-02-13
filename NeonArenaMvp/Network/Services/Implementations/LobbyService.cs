@@ -187,9 +187,13 @@ namespace NeonArenaMvp.Network.Services.Implementations
             }
         }
 
-        public void PassUserInputToLobby(string lobbyId, string userId, string input)
+        public void PassUserInputToLobby(string userId, string lobbyId, string input)
         {
             // TODO lobby set input for user
+            if (this.Lobbies.TryGetValue(Guid.Parse(lobbyId), out var targetLobby))
+            {
+                Console.WriteLine($"Command for user {userId}: {input}");
+            }
         }
 
     }

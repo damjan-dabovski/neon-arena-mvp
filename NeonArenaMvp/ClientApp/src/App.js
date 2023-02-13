@@ -5,6 +5,7 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import SignalRTest from './components/SignalRTest';
 import LobbyList from './components/LobbyList';
 import LobbyView from './components/LobbyView';
+import MatchView from './components/MatchView';
 
 export const AppContext = createContext();
 
@@ -14,6 +15,7 @@ function App(){
   const [playerId, setPlayerId] = useState("");
   const [lobbies, setLobbies] = useState([]);
   const [currentLobby, setCurrentLobby] = useState(null);
+  const [currentStep, setCurrentStep] = useState(null);
 
   useEffect(() =>{
     let cookies = document.cookie.split(';');
@@ -52,13 +54,13 @@ function App(){
           })
 
           connection.on('ReceiveIdentityData', data => {
-            // console.log(data);
             document.cookie = `playerId = ${data.id}`
             setPlayerId(data.id);
           })
 
           connection.on('ReceiveStepData', data => {
             console.log(data);
+            setCurrentStep(data);
           })
         });
     }
@@ -167,9 +169,20 @@ function App(){
     }
   }
 
+  const sendCommand = async (commandString) => {
+    if(connection){
+      try{
+        await connection.send('SendInputToLobby', playerId, currentLobby.id, commandString);
+      }
+      catch(exception){
+        console.error(exception);
+      }
+    }
+  }
+
     return (
       <Layout>
-        <AppContext.Provider value={{lobbies: lobbies, currentLobby: currentLobby}}>
+        <AppContext.Provider value={{lobbies: lobbies, currentLobby: currentLobby, currentStep: currentStep}}>
           <SignalRTest sendMessage={sendMessage}/>
           <LobbyList joinLobby={joinLobby} createLobby={createLobby}/>
           <LobbyView 
@@ -179,6 +192,7 @@ function App(){
             runMatch={runMatch}
             leaveLobby={leaveLobby}
             leaveSeat={leaveSeat}/>
+          <MatchView sendCommand={sendCommand}/>
         </AppContext.Provider>
       </Layout>
     );

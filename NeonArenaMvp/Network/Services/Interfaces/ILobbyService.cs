@@ -20,7 +20,7 @@
 
         public void RunMatch(string lobbyId);
 
-        public void PassUserInputToLobby(string lobbyId, string userId, string input);
+        public void PassUserInputToLobby(string userId, string lobbyId, string input);
 
         public List<string> GetLobbies();
     }

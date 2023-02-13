@@ -90,9 +90,9 @@ namespace NeonArenaMvp.Network.SignalR
             this._lobbyService.RunMatch(lobbyId);
         }
 
-        public void SendInputToLobby(string lobbyId, string userId, string input)
+        public void SendInputToLobby(string userId, string lobbyId, string input)
         {
-            this._lobbyService.PassUserInputToLobby(lobbyId, userId, input);
+            this._lobbyService.PassUserInputToLobby(userId, lobbyId, input);
         }
     }
 }
