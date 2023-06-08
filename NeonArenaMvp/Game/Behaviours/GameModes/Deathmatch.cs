@@ -20,7 +20,7 @@ namespace NeonArenaMvp.Game.Behaviours.GameModes
             {
                 dynamic playerScore = new ExpandoObject();
 
-                playerScore.Team = player.Team;
+                playerScore.Team = player.TeamIndex;
                 playerScore.Score = 0;
 
                 match.AddDataItem(SCORES, playerScore);
@@ -40,7 +40,7 @@ namespace NeonArenaMvp.Game.Behaviours.GameModes
 
             var attacker = (Player)markEventData.Attacker;
 
-            dynamic? attackerScore = match.GetDataItem(SCORES, (score) => score.Team == attacker.Team);
+            dynamic? attackerScore = match.GetDataItem(SCORES, (score) => score.Team == attacker.TeamIndex);
 
             if (attackerScore is not null)
             {

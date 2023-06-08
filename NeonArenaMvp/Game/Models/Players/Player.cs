@@ -1,4 +1,5 @@
 ﻿using NeonArenaMvp.Game.Models.Maps;
+using NeonArenaMvp.Network.Models;
 using Newtonsoft.Json;
 using static NeonArenaMvp.Network.Helpers.Constants;
 
@@ -8,27 +9,31 @@ namespace NeonArenaMvp.Game.Models.Players
     public class Player
     {
         [JsonProperty]
-        public Color Color { get; set; }
+        public Color Color;
         [JsonProperty]
-        public int Team { get; set; }
-        public Coords Coords { get; set; }
-        public string Name { get; set; }
-        public Character Character { get; set; }
-        public bool HasEnergy { get; set; }
+        public int TeamIndex;
 
-        public Player(Color color, string name, Coords coords, Character character, int team = 0, bool hasEnergy = true)
+        public readonly int SeatIndex; 
+        public readonly User UserData;
+
+        public Coords Coords;
+        public Character Character;
+        public bool HasEnergy;
+
+        public Player(Color color, User userData, int seatIndex, Coords coords, Character character, int teamIndex, bool hasEnergy = true)
         {
-            Color = color;
-            Name = name;
-            Coords = coords;
-            Character = character;
-            Team = team;
-            HasEnergy = hasEnergy;
+            this.Color = color;
+            this.UserData = userData;
+            this.SeatIndex = seatIndex;
+            this.Coords = coords;
+            this.Character = character;
+            this.TeamIndex = teamIndex;
+            this.HasEnergy = hasEnergy;
         }
 
         public override string ToString()
         {
-            return $"[({Color.ToString()[0]}:{Team}){Name} {Coords}]";
+            return $"[({Color.ToString()[0]}:{TeamIndex}){UserData} {Coords}]";
         }
 
         public override bool Equals(object? obj)

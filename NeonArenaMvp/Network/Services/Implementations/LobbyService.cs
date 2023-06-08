@@ -64,7 +64,7 @@ namespace NeonArenaMvp.Network.Services.Implementations
                 throw new Exception("Error finding the host user for the new lobby");
             }
 
-            var newLobby = new Lobby(lobbyHost, lobbyId, this._commService);
+            var newLobby = new Lobby(lobbyHost, lobbyId, this._commService, this._userService);
 
             if (Lobbies.TryAdd(lobbyId, newLobby))
             {

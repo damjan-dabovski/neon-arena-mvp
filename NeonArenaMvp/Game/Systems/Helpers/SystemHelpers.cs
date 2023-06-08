@@ -7,6 +7,7 @@ using static NeonArenaMvp.Game.Behaviours.Effects.MoveEffects;
 using NeonArenaMvp.Game.Behaviours.Characters.Abilities.Active;
 using NeonArenaMvp.Game.Behaviours.Characters;
 using static NeonArenaMvp.Network.Helpers.Constants;
+using NeonArenaMvp.Network.Models;
 
 namespace NeonArenaMvp.Game.Systems.Helpers
 {
@@ -22,11 +23,14 @@ namespace NeonArenaMvp.Game.Systems.Helpers
             public const int Adjacent = 2;
         }
 
+        public static readonly User DefaultUser = new(Guid.Empty.ToString(), "Default");
+
         public static readonly Player DefaultPlayer = new
         (
             color: Color.White,
-            team: UnassignedTeam,
-            name: "Default",
+            teamIndex: UnassignedTeam,
+            seatIndex: 0,
+            userData: DefaultUser,
             coords: new Coords(-1, -1),
             character: new("N/A", ActiveAbilities.None, CharacterCreateBehaviours.None, CharacterRemoveBehaviours.None)
         );

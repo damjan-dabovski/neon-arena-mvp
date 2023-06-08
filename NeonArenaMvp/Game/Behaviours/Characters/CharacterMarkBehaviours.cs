@@ -48,7 +48,7 @@ namespace NeonArenaMvp.Game.Behaviours.Characters
         public static List<Player> IgnoreAndShootTowards(Match match, Player controller,
             List<IGrouping<Player, TileMark>> potentialHits)
         {
-            var otherPlayerHits = potentialHits.Where(group => group.Key.Team != controller.Team);
+            var otherPlayerHits = potentialHits.Where(group => group.Key.TeamIndex != controller.TeamIndex);
 
             var hitDirections = otherPlayerHits.SelectMany(group => group).Select(tileMark => tileMark.Direction).Distinct();
 

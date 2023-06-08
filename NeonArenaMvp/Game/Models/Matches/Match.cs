@@ -13,15 +13,17 @@ using static NeonArenaMvp.Game.Models.Events.MatchEvent;
 using static NeonArenaMvp.Game.Helpers.Models.Constants;
 using static NeonArenaMvp.Game.Systems.Helpers.SystemHelpers;
 using NeonArenaMvp.Network.Models.Dto.Step;
+using NeonArenaMvp.Network.Services.Interfaces;
+using static NeonArenaMvp.Game.Helpers.Models.Directions;
 
 namespace NeonArenaMvp.Game.Models.Matches
 {
     public class Match
     {
-        public Lobby Lobby;
+        public string ParentLobbyId;
         public Map Map;
         public List<Player> Players;
-        public int PlayerCount;
+        public List<Character> Characters;
         public GameMode GameMode;
 
         public int WinningTeam = NeutralTeam;
@@ -43,49 +45,38 @@ namespace NeonArenaMvp.Game.Models.Matches
         // leaving the Match class to be just the model?
         public StepDto LastStepDto;
 
-        public Match(Lobby lobby, Map map, List<Player> players, GameMode gameMode)
-        {
-            Lobby = lobby;
-            Map = map;
-            Players = players;
-            PlayerCount = players.Count;
-            GameMode = gameMode;
-            MoveItems = new();
-            ShotItems = new();
-            CurrentStepNumber = 1;
-            CurrentRoundNumber = 0;
-            EventsByRound = new();
-            MatchData = new();
+        private readonly ICommunicationService _commService;
+        private readonly IUserService _userService;
 
-            EventHandlers = new()
+        public Match(string parentLobbyId, Map map, List<Player> players, List<Character> characters,
+            GameMode gameMode, ICommunicationService commService, IUserService userService)
+        {
+            this.ParentLobbyId = parentLobbyId;
+            this.Map = map;
+            this.Players = players;
+            this.Characters = characters;
+            this.GameMode = gameMode;
+            this.MoveItems = new();
+            this.ShotItems = new();
+            this.CurrentStepNumber = 1;
+            this.CurrentRoundNumber = 0;
+            this.EventsByRound = new();
+            this.MatchData = new();
+
+            this.EventHandlers = new()
             {
                 { INIT, new() },
                 { STEP_END, new() },
                 { ROUND_END, new() }
             };
 
-            InitMap();
-            InitGameMode();
-            InitCharacters();
+            this.LastStepDto = new();
 
-            this.LastStepDto = new()
-            {
-                MapString = this.Map.ToString(),
-                GameModeInfo = this.GameMode.InfoQuery(this),
-                PlayerDtos = this.Players.Select(player => new MatchPlayerDto
-                (
-                    name: player.Name,
-                    stepCommand: string.Empty,
-                    characterIndex: this.Lobby.Characters.FindIndex(character => character.Name == player.Character.Name),
-                    seatIndex: this.Lobby.Seats.Keys.ToList().IndexOf(player.Color),
-                    teamIndex: player.Team,
-                    tilesMoved: new List<Coords> { player.Coords },
-                    shotMarks: new List<TileMark>()
-                )).ToList()
-            };
+            this._commService = commService;
+            this._userService = userService;
         }
 
-        private void InitMap()
+        public void InitMap()
         {
             for (int i = 0; i < Map.Tiles.GetLength(0); i++)
             {
@@ -97,7 +88,7 @@ namespace NeonArenaMvp.Game.Models.Matches
 
         }
 
-        private void InitGameMode()
+        public void InitGameMode()
         {
             foreach (var initHandler in GameMode.InitMethods)
             {
@@ -105,7 +96,7 @@ namespace NeonArenaMvp.Game.Models.Matches
             }
         }
 
-        private void InitCharacters()
+        public void InitCharacters()
         {
             foreach (var player in Players)
             {
@@ -113,9 +104,32 @@ namespace NeonArenaMvp.Game.Models.Matches
             }
         }
 
-        public void ExecuteRound(List<List<Command>> commandsForRound)
+        public async void InitAndSendInitialStep()
+        {
+            this.LastStepDto = new()
+            {
+                MapString = this.Map.ToString(),
+                GameModeInfo = this.GameMode.InfoQuery(this),
+                PlayerDtos = this.Players.Select(player => new MatchPlayerDto
+                (
+                    name: player.UserData.Name,
+                    stepCommand: string.Empty,
+                    characterIndex: this.Characters.FindIndex(character => character.Name == player.Character.Name),
+                    seatIndex: player.SeatIndex,
+                    teamIndex: player.TeamIndex,
+                    tilesMoved: new List<Coords> { player.Coords },
+                    shotMarks: new List<TileMark>()
+                )).ToList()
+            };
+
+            await this._commService.SendStepData(this.ParentLobbyId, this.LastStepDto);
+        }
+
+        public void ExecuteRound()
         {
             EventsByRound.Add(new());
+
+            var commandsForRound = this.GetPlayerInputs(this.Players);
 
             for (int i = 0; i < 3; i++)
             {
@@ -140,11 +154,11 @@ namespace NeonArenaMvp.Game.Models.Matches
                 MapString = this.Map.ToString(),
                 PlayerDtos = this.Players.Select(player =>
                     new MatchPlayerDto {
-                        Name = player.Name,
-                        TeamIndex = player.Team,
+                        Name = player.UserData.Name,
+                        TeamIndex = player.TeamIndex,
                         // TODO there's gotta be a better way of connecting the character in the match to the one in the lobby
-                        CharacterIndex = this.Lobby.Characters.FindIndex(character => character.Name == player.Character.Name),
-                        SeatIndex = this.Lobby.Seats.Keys.ToList().IndexOf(player.Color)
+                        CharacterIndex = this.Characters.FindIndex(character => character.Name == player.Character.Name),
+                        SeatIndex = player.SeatIndex
                     }).ToList()
             };
 
@@ -164,7 +178,7 @@ namespace NeonArenaMvp.Game.Models.Matches
 
             this.LastStepDto = stepDto;
 
-            Lobby.SendLatestStep();
+            this._commService.SendStepData(this.ParentLobbyId, stepDto);
         }
 
         public void ExecuteCommandPhase(List<Command> currentStepCommands, StepDto stepDto)
@@ -216,7 +230,7 @@ namespace NeonArenaMvp.Game.Models.Matches
 
                     this.HandleEvent(EventType.MoveEvent.ToString(), moveEvent, currentPlayer);
 
-                    var currentPlayerDto = stepDto.PlayerDtos.FirstOrDefault(dto => dto.Name == currentPlayer.Name);
+                    var currentPlayerDto = stepDto.PlayerDtos.FirstOrDefault(dto => dto.Name == currentPlayer.UserData.Name);
 
                     if (currentPlayerDto is not null)
                     {
@@ -276,7 +290,7 @@ namespace NeonArenaMvp.Game.Models.Matches
                     .ToList();
 
                 var playersThatHit = currentPlayer.Character.MarkBehaviour(this, currentPlayer, potentialHitsPerTeam)
-                    .Where(pl => pl.Team != currentPlayer.Team);
+                    .Where(pl => pl.TeamIndex != currentPlayer.TeamIndex);
 
                 foreach (var playerThatHit in playersThatHit)
                 {
@@ -544,5 +558,93 @@ namespace NeonArenaMvp.Game.Models.Matches
         //{
         //    throw new NotImplementedException();
         //}
+
+        private async Task PromptUsersForInput(List<Player> players)
+        {
+            Task[] inputPromptTasks = new Task[players.Count];
+
+            for (int i = 0; i < players.Count; i++)
+            {
+                Player currentPlayer = players[i];
+                var connectionString = this._userService.GetConnectionIdByUserId(currentPlayer.UserData.Id);
+
+                inputPromptTasks[i] = this._commService.PromptUserForInput(connectionString);
+            }
+
+            await Task.WhenAll(inputPromptTasks);
+        }
+
+        private List<List<Command>> ParseCommandStrings(List<string> commandStrings)
+        {
+            var parsedCommandsPerPlayer = new List<List<Command>>();
+
+            for (int i = 0; i < commandStrings.Count; i++)
+            {
+                parsedCommandsPerPlayer.Add(new());
+
+                if (AreCommandsValid(commandStrings[i]))
+                {
+                    for (int idx = 0; idx < 3; idx++)
+                    {
+                        parsedCommandsPerPlayer[i].Add(ParseCommandFromString(commandStrings[i].Substring(2 * idx, 2), this.Players[i]));
+                    }
+                }
+                else
+                {
+                    for (int idx = 0; idx < 3; idx++)
+                    {
+                        parsedCommandsPerPlayer[i].Add(CommandBuilders.InvalidMoveCommand(this, Direction.Center, this.Players[i]));
+                    }
+                }
+            }
+
+            var parsedCommandsPerStep = new List<List<Command>>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                parsedCommandsPerStep.Add(new());
+
+                var currentStepCommands = parsedCommandsPerStep[i];
+
+                for (int idx = 0; idx < this.Players.Count; idx++)
+                {
+                    Player? player = this.Players[idx];
+
+                    currentStepCommands.Add(parsedCommandsPerPlayer[idx][i]);
+                }
+            }
+
+            return parsedCommandsPerStep;
+
+        }
+
+        private static bool AreCommandsValid(string commandString)
+        {
+            return commandString.Count(c => c.Equals('S')) < 2
+                && commandString.Count(c => c.Equals('A')) < 2;
+        }
+
+        private Command ParseCommandFromString(string commandString, Player player)
+        {
+            char commandType = commandString[0];
+            char direction = commandString[1];
+
+            Direction dir = direction switch
+            {
+                'U' => Direction.Up,
+                'R' => Direction.Right,
+                'D' => Direction.Down,
+                'L' => Direction.Left,
+                _ => Direction.Up,
+            };
+
+            return commandType switch
+            {
+                'M' => CommandBuilders.MoveCommand(this, dir, player),
+                'S' => CommandBuilders.ShootCommand(this, dir, player),
+                'A' => CommandBuilders.AbilityCommand(this, dir, player),
+                _ => CommandBuilders.InvalidMoveCommand(this, dir, player)
+            };
+        }
     }
 }

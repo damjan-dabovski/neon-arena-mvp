@@ -87,7 +87,7 @@ namespace NeonArenaMvp.Network.SignalR
 
         public void RunMatchInLobby(string lobbyId)
         {
-            this._lobbyService.RunMatch(lobbyId);
+            Task.Run(() => this._lobbyService.RunMatch(lobbyId));
         }
 
         public void SendInputToLobby(string userId, string lobbyId, string input)

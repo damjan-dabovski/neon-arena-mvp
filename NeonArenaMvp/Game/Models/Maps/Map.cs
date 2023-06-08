@@ -1,21 +1,26 @@
 ﻿using NeonArenaMvp.Game.Helpers.Builders;
+using NeonArenaMvp.Game.Models.Matches;
 using System.Text;
 
 namespace NeonArenaMvp.Game.Models.Maps
 {
     public class Map
     {
-        public Tile[,] Tiles { get; }
-        public int RowSize { get; }
-        public int ColSize { get; }
-        public List<Coords> StartingPositions { get; }
+        public Tile[,] Tiles;
+        public int RowSize;
+        public int ColSize;
+        public List<Coords> StartingPositions;
+        // TODO same dynamic linking stuff as all the other dynamic things really
+        // link the game mode to the map via ID? some other way? TBD either way.
+        public readonly GameMode GameMode;
 
-        public Map(int rowSize, int colSize, List<Coords> startingPositions)
+        public Map(int rowSize, int colSize, List<Coords> startingPositions, GameMode gameMode)
         {
             this.RowSize = rowSize;
             this.ColSize = colSize;
             this.Tiles = new Tile[RowSize, ColSize];
             this.StartingPositions = startingPositions;
+            this.GameMode = gameMode;
         }
 
         public Map FillEmpty()

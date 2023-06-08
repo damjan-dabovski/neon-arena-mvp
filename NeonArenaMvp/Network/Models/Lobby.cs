@@ -29,9 +29,7 @@ namespace NeonArenaMvp.Network.Models
         public List<Character> Characters;
 
         public List<Map> Maps;
-        public List<GameMode> GameModes;
         public Map? CurrentMap => this.Maps.ElementAtOrDefault(CurrentMapIndex);
-        public GameMode? CurrentGameMode => this.GameModes.ElementAtOrDefault(CurrentGameModeIndex);
         public List<User?> Spectators => this.Users.Except(this.Seats.Values).ToList();
 
         public int CurrentMapIndex;
@@ -39,14 +37,16 @@ namespace NeonArenaMvp.Network.Models
         public Match? ActiveMatch;
 
         private readonly ICommunicationService _commService;
+        private readonly IUserService _userService;
 
-        public Lobby(User host, Guid lobbyId, ICommunicationService commService)
+        public Lobby(User host, Guid lobbyId, ICommunicationService commService, IUserService userService)
         {
             this.Id = lobbyId;
             this.State = LobbyState.Open;
             this.Host = host;
 
             this._commService = commService;
+            this._userService= userService;
 
             this.Users = new();
 
@@ -72,10 +72,6 @@ namespace NeonArenaMvp.Network.Models
             this.UserIdToCharacterId = new();
             this.UserIdToTeamId = new();
 
-            // TODO add methods for adding/removing maps and gamemodes
-            // TODO hardcoded workarounds for MVP
-            var tempMap = new Map(5, 5, new() { new Coords(1, 1), new Coords(2, 2), new Coords(3, 3) }).FillEmpty();
-            this.Maps = new() { tempMap };
 
             var deathmatch = new GameMode
             (
@@ -88,7 +84,17 @@ namespace NeonArenaMvp.Network.Models
                 infoQuery: Deathmatch.DeathmatchInfo
             );
 
-            this.GameModes = new() { deathmatch };
+            // TODO add methods for adding/removing maps and gamemodes
+            // TODO hardcoded workarounds for MVP
+            var tempMap = new Map
+            (
+                rowSize: 5,
+                colSize: 5,
+                startingPositions: new() { new Coords(1, 1), new Coords(2, 2), new Coords(3, 3) },
+                gameMode: deathmatch
+            ).FillEmpty();
+            this.Maps = new() { tempMap };
+
             this.CurrentMapIndex = 0;
             this.CurrentGameModeIndex = 0;
             this.ActiveMatch = null;
@@ -198,8 +204,7 @@ namespace NeonArenaMvp.Network.Models
 
         public void RunMatch()
         {
-            if (this.CurrentMap is not null
-                && this.CurrentGameMode is not null)
+            if (this.CurrentMap is not null)
             {
                 var currentlySeatedUsers = this.Seats.Where(kvp => kvp.Value is not null).ToList();
 
@@ -227,119 +232,42 @@ namespace NeonArenaMvp.Network.Models
                     matchPlayers.Add(new Player
                     (
                         color: userIdToColorReverseMap[currentUser.Id],
-                        name: currentUser.Name,
+                        userData: currentUser,
+                        seatIndex: this.Seats.Values.ToList().IndexOf(currentUser),
                         coords: this.CurrentMap.StartingPositions[i],
                         // TODO call into some service that would manage the currently loaded characters
                         // or keep the currently loaded characters in the lobby itself?
                         // the latter implies a generic solution for mods, which is out of MVP scope
                         character: this.Characters[this.UserIdToCharacterId[currentUser.Id]],
-                        team: this.UserIdToTeamId[currentUser.Id]
+                        teamIndex: this.UserIdToTeamId[currentUser.Id]
                     ));
                 }
 
-                this.ActiveMatch = new(this, this.CurrentMap, matchPlayers, this.CurrentGameMode);
+                this.ActiveMatch = new
+                (
+                    parentLobbyId: this.Id.ToString(),
+                    map: this.CurrentMap,
+                    players: matchPlayers,
+                    characters: this.Characters,
+                    gameMode: this.CurrentMap.GameMode,
+                    commService: this._commService,
+                    userService: this._userService
+                );
+
+                this.ActiveMatch.InitMap();
+                this.ActiveMatch.InitGameMode();
+                this.ActiveMatch.InitCharacters();
+                this.ActiveMatch.InitAndSendInitialStep();
 
                 this.SendLatestStep();
 
                 while (!this.ActiveMatch.HasWinner)
                 {
-                    var playerInputs = this.GetPlayerInputs();
-
-                    var playerCommands = this.ParseCommandStrings(playerInputs);
-
-                    this.ActiveMatch.ExecuteRound(playerCommands);
+                    this.ActiveMatch.ExecuteRound();
                 }
 
                 Console.WriteLine($"Team {this.ActiveMatch.WinningTeam} wins!");
             }
-        }
-
-        // TODO rework to accept a list of players to take input from,
-        // and take the input from the network
-        public List<string> GetPlayerInputs()
-        {
-            var commandList = new List<string>();
-
-            foreach (var player in this.ActiveMatch.Players)
-            {
-                Console.WriteLine($"Input command string for player {player}:");
-                commandList.Add(Console.ReadLine());
-            }
-
-            return commandList;
-        }
-
-        private List<List<Command>> ParseCommandStrings(List<string> commandStrings)
-        {
-            var parsedCommandsPerPlayer = new List<List<Command>>();
-
-            for (int i = 0; i < commandStrings.Count; i++)
-            {
-                parsedCommandsPerPlayer.Add(new());
-
-                if (AreCommandsValid(commandStrings[i]))
-                {
-                    for (int idx = 0; idx < 3; idx++)
-                    {
-                        parsedCommandsPerPlayer[i].Add(ParseCommandFromString(commandStrings[i].Substring(2 * idx, 2), this.ActiveMatch.Players[i]));
-                    }
-                }
-                else
-                {
-                    for (int idx = 0; idx < 3; idx++)
-                    {
-                        parsedCommandsPerPlayer[i].Add(CommandBuilders.InvalidMoveCommand(this.ActiveMatch, Direction.Center, this.ActiveMatch.Players[i]));
-                    }
-                }
-            }
-
-            var parsedCommandsPerStep = new List<List<Command>>();
-
-            for (int i = 0; i < 3; i++)
-            {
-                parsedCommandsPerStep.Add(new());
-
-                var currentStepCommands = parsedCommandsPerStep[i];
-
-                for (int idx = 0; idx < Users.Count; idx++)
-                {
-                    Player? player = this.ActiveMatch.Players[idx];
-
-                    currentStepCommands.Add(parsedCommandsPerPlayer[idx][i]);
-                }
-            }
-
-            return parsedCommandsPerStep;
-
-        }
-
-        private static bool AreCommandsValid(string commandString)
-        {
-            return commandString.Count(c => c.Equals('S')) < 2
-                && commandString.Count(c => c.Equals('A')) < 2;
-        }
-
-        private Command ParseCommandFromString(string commandString, Player player)
-        {
-            char commandType = commandString[0];
-            char direction = commandString[1];
-
-            Direction dir = direction switch
-            {
-                'U' => Direction.Up,
-                'R' => Direction.Right,
-                'D' => Direction.Down,
-                'L' => Direction.Left,
-                _ => Direction.Up,
-            };
-
-            return commandType switch
-            {
-                'M' => CommandBuilders.MoveCommand(this.ActiveMatch, dir, player),
-                'S' => CommandBuilders.ShootCommand(this.ActiveMatch, dir, player),
-                'A' => CommandBuilders.AbilityCommand(this.ActiveMatch, dir, player),
-                _ => CommandBuilders.InvalidMoveCommand(this.ActiveMatch, dir, player)
-            };
         }
 
         // TODO should this be a generic 'SendStep' method that sends any Step DTO?
