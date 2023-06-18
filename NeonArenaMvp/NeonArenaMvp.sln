@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.4.33205.214
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeonArenaMvp", "NeonArenaMvp.csproj", "{DF5B5355-63AD-4481-9945-7C165CEE0664}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeonArenaMvp", "NeonArenaMvp.csproj", "{C888AB31-5576-4E31-9C14-A6C7139DECA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DF5B5355-63AD-4481-9945-7C165CEE0664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF5B5355-63AD-4481-9945-7C165CEE0664}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF5B5355-63AD-4481-9945-7C165CEE0664}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF5B5355-63AD-4481-9945-7C165CEE0664}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C888AB31-5576-4E31-9C14-A6C7139DECA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C888AB31-5576-4E31-9C14-A6C7139DECA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C888AB31-5576-4E31-9C14-A6C7139DECA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C888AB31-5576-4E31-9C14-A6C7139DECA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {86B67544-A3A3-4197-BFC8-85F258E4EAC3}
+		SolutionGuid = {77AC0E4E-EFD1-4A67-ACAB-DC20010E4033}
 	EndGlobalSection
 EndGlobal

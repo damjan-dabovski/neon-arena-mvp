@@ -1,6 +1,3 @@
-using NeonArenaMvp.Network.Services.Implementations;
-using NeonArenaMvp.Network.Services.Interfaces;
-using NeonArenaMvp.Network.SignalR;
 
 namespace NeonArenaMvp
 {
@@ -14,10 +11,7 @@ namespace NeonArenaMvp
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddSignalR();
-            builder.Services.AddSingleton<ICommunicationService, CommunicationService>();
-            builder.Services.AddSingleton<IUserService, UserService>();
-            builder.Services.AddSingleton<ILobbyService, LobbyService>();
-
+            
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("ClientPermissions", policy =>
@@ -28,7 +22,7 @@ namespace NeonArenaMvp
                     policy.WithOrigins("https://localhost:1337");
                 });
             });
-            
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -49,8 +43,6 @@ namespace NeonArenaMvp
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller}/{action=Index}/{id?}");
-
-            app.MapHub<GameHub>("/gameHub");
 
             app.MapFallbackToFile("index.html");
 
