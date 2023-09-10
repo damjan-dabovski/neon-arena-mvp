@@ -4,7 +4,7 @@
 
     public static class TileMoveBehaviors
     {
-        public delegate MoveAction? TileMoveBehavior(MoveAction moveAction);
+        public delegate MoveAction? TileMoveBehavior(MoveAction currentMoveAction);
 
         public static readonly TileMoveBehavior PassThrough = (currentMoveAction) =>
         {

@@ -8,7 +8,7 @@
     public class TileMoveBehaviorTests
     {
         [TestMethod]
-        public void PassThroughTest()
+        public void PassThroughProducesNextTileInDirection()
         {
             // Arrange
             var startMoveAction = new MoveAction

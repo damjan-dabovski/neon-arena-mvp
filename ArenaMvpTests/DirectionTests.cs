@@ -50,10 +50,26 @@ namespace ArenaMvpTests
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void ThrowsExceptionWhenDirectionInvalid()
+        public void ThrowsExceptionWhenRelativeRightDirectionInvalid()
         {
             // Act & Assert
             Direction.Center.RelativeRight();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ThrowsExceptionWhenRelativeLeftDirectionInvalid()
+        {
+            // Act & Assert
+            Direction.Center.RelativeLeft();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ThrowsExceptionWhenReverseDirectionInvalid()
+        {
+            // Act & Assert
+            Direction.Center.Reverse();
         }
     }
 }

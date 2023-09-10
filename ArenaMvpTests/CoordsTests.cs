@@ -11,7 +11,7 @@
         [DataRow(Direction.Down, 1, 0)]
         [DataRow(Direction.Left, 0, -1)]
         [DataRow(Direction.Right, 0, 1)]
-        public void GetsNextCoordsInDirection(Direction dir, int rowDelta, int colDelta)
+        public void GetsNextCoordsInDirection(Direction dir, int expectedRowDelta, int expectedColDelta)
         {
             // Arrange
             var original = new Coords(1, 1, Direction.Up);
@@ -22,8 +22,8 @@
             // Assert
             var actualRowDelta = newCoords.Row - original.Row;
             var actualColDelta = newCoords.Col - original.Col;
-            Assert.AreEqual(rowDelta, actualRowDelta);
-            Assert.AreEqual(colDelta, actualColDelta);
+            Assert.AreEqual(expectedRowDelta, actualRowDelta);
+            Assert.AreEqual(expectedColDelta, actualColDelta);
         }
 
         [TestMethod]
