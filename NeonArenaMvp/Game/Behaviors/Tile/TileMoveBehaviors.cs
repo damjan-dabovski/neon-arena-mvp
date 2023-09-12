@@ -1,6 +1,6 @@
 ﻿namespace NeonArenaMvp.Game.Behaviors.Tile
 {
-    using NeonArenaMvp.Game.Maps;
+    using NeonArenaMvp.Game.Maps.Actions;
 
     public static class TileMoveBehaviors
     {
@@ -12,7 +12,9 @@
             (
                 coords: currentMoveAction.Coords.NextInDirection(currentMoveAction.Direction),
                 direction: currentMoveAction.Direction,
-                remainingRange: currentMoveAction.RemainingRange - 1
+                remainingRange: currentMoveAction.RemainingRange - 1,
+                previousCoords: currentMoveAction.Coords,
+                playerId: 1
             );
         };
     }
