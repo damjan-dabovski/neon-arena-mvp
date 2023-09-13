@@ -20,6 +20,6 @@
             )
         };
 
-        public static readonly TileShotBehavior Blocked = (currentShotAction) => new List<ShotAction>();
+        public static readonly TileShotBehavior Block = (currentShotAction) => new List<ShotAction>();
     }
 }
