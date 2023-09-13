@@ -52,9 +52,6 @@
 
             // Assert
             Assert.AreEqual(0, result.Count);
-
-            var resultShotAction = result[0];
-            Assert.IsNull(resultShotAction);
         }
     }
 }
