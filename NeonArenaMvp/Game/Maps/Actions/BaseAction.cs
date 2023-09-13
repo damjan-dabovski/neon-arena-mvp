@@ -12,7 +12,7 @@
 
         public readonly Coords PreviousCoords;
 
-        private readonly int PlayerId;
+        public readonly int PlayerId;
 
         protected BaseAction(Coords coords, Direction direction, int remainingRange, Coords previousCoords, int playerId)
         {

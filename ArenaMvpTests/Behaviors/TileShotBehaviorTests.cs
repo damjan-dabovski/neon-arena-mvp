@@ -33,5 +33,28 @@
             Assert.AreEqual(startShotAction.Direction, resultShotAction.Direction);
             Assert.AreEqual(0, resultShotAction.RemainingRange);
         }
+        
+        [TestMethod]
+        public void BlockedProducesEmptyList()
+        {
+            // Arrange
+            var startShotAction = new ShotAction
+            (
+                coords: new(1, 1, Direction.Up),
+                direction: Direction.Right,
+                remainingRange: 1,
+                previousCoords: new(1, 1, Direction.Up),
+                playerId: 1
+            );
+
+            // Act
+            var result = TileShotBehaviors.Block(startShotAction);
+
+            // Assert
+            Assert.AreEqual(0, result.Count);
+
+            var resultShotAction = result[0];
+            Assert.IsNull(resultShotAction);
+        }
     }
 }
