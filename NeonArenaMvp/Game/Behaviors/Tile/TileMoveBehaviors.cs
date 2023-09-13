@@ -15,6 +15,6 @@
             playerId: currentMoveAction.PlayerId
         );
 
-        public static readonly TileMoveBehavior Blocked = (currentMoveAction) => null;
+        public static readonly TileMoveBehavior Block = (currentMoveAction) => null;
     }
 }
