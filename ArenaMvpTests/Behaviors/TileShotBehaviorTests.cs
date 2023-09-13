@@ -48,7 +48,7 @@
             );
 
             // Act
-            var result = TileShotBehaviors.Blocked(startShotAction);
+            var result = TileShotBehaviors.Block(startShotAction);
 
             // Assert
             Assert.AreEqual(0, result.Count);

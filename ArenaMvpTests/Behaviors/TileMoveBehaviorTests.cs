@@ -45,7 +45,7 @@
             );
 
             // Act
-            var newMoveAction = TileMoveBehaviors.Blocked(startMoveAction);
+            var newMoveAction = TileMoveBehaviors.Block(startMoveAction);
 
             // Assert
             Assert.IsNull(newMoveAction);
