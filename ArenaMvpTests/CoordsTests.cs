@@ -33,5 +33,20 @@
             // Act & Assert
             new Coords(1, 1, Direction.Up).NextInDirection(Direction.Center);
         }
+
+        [TestMethod]
+        public void CreatesCoordsFromDelta()
+        {
+            // Arrange
+            var original = new Coords(0, 0, Direction.Up);
+
+            // Act
+            var newCoords = original.FromDelta(+1, +1);
+
+            // Assert
+            Assert.AreEqual(original.Row + 1, newCoords.Row);
+            Assert.AreEqual(original.Col + 1, newCoords.Col);
+            Assert.AreEqual(original.PartialDirection, newCoords.PartialDirection);
+        }
     }
 }

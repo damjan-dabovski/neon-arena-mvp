@@ -2,7 +2,7 @@
 {
     public class Map
     {
-        public Tile[,] Tiles;
+        public readonly Tile[,] Tiles;
 
         public int RowCount => this.Tiles.GetLength(0);
 

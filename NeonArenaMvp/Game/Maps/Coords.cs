@@ -10,21 +10,29 @@
 
         public readonly Direction PartialDirection;
 
-        public Coords(int row, int col, Direction direction)
+        public Coords(int row, int col, Direction direction = Direction.Center)
         {
             this.Row = row;
             this.Col = col;
             this.PartialDirection = direction;
         }
 
+        public Coords FromDelta(int deltaRow, int deltaCol, Direction? newDirection = null)
+        {
+            return new(
+                row: this.Row + deltaRow,
+                col: this.Col + deltaCol,
+                direction: newDirection ?? this.PartialDirection);
+        }
+
         public Coords NextInDirection(Direction dir)
         {
             return dir switch
             {
-                Direction.Up => new(this.Row - 1, this.Col, this.PartialDirection),
-                Direction.Down => new(this.Row + 1, this.Col, this.PartialDirection),
-                Direction.Left => new(this.Row, this.Col - 1, this.PartialDirection),
-                Direction.Right => new(this.Row, this.Col + 1, this.PartialDirection),
+                Direction.Up => this.FromDelta(-1, 0),
+                Direction.Down => this.FromDelta(+1, 0),
+                Direction.Left => this.FromDelta(0, -1),
+                Direction.Right => this.FromDelta(0, +1),
                 _ => throw new InvalidOperationException("Invalid direction")
             };
         }
