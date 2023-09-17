@@ -1,5 +1,6 @@
 ﻿namespace NeonArenaMvp.Game.Maps
 {
+    using NeonArenaMvp.Game.Maps.Actions;
     using static NeonArenaMvp.Game.Maps.Enums;
 
     public readonly struct Coords
@@ -16,6 +17,18 @@
             this.Row = row;
             this.Col = col;
             this.PartialDirection = direction;
+        }
+
+        public Coords(BaseAction action)
+        {
+            this.Row = action.Coords.Row;
+            this.Col = action.Coords.Col;
+            // TODO this doesn't make complete sense at least yet
+            // we can set the direction of the Coords as either the
+            // direction of the action's Coords, or the direction of the
+            // action itself; is there a need for Coords themselves to be
+            // subclassed into Coords (base) and PartialCoords (derived)?
+            this.PartialDirection = action.Direction;
         }
 
         public override bool Equals(object? obj)

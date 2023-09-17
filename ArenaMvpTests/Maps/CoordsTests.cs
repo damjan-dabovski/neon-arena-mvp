@@ -1,11 +1,32 @@
 ﻿namespace ArenaMvpTests.Maps
 {
     using NeonArenaMvp.Game.Maps;
+    using NeonArenaMvp.Game.Maps.Actions;
     using static NeonArenaMvp.Game.Maps.Enums;
 
     [TestClass]
     public class CoordsTests
     {
+        [TestMethod]
+        public void CreatesCoordsFromAction()
+        {
+            // Arrange
+            var moveAction = new MoveAction(
+                coords: new(1, 1),
+                direction: Direction.Up,
+                remainingRange: 1,
+                previousCoords: new(1, 1),
+                playerId: 1);
+
+            // Act
+            var coords = new Coords(moveAction);
+
+            // Assert
+            Assert.AreEqual(moveAction.Coords.Row, coords.Row);
+            Assert.AreEqual(moveAction.Coords.Col, coords.Col);
+            Assert.AreEqual(moveAction.Direction, coords.PartialDirection);
+        }
+
         [TestMethod]
         [DataRow(Direction.Up, -1, 0)]
         [DataRow(Direction.Down, 1, 0)]

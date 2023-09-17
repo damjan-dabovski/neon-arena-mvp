@@ -19,5 +19,10 @@
         {
             return null;
         };
+
+        public static readonly TileMoveBehavior ReturnsItself = (currentMoveAction) =>
+        {
+            return currentMoveAction;
+        };
     }
 }

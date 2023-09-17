@@ -2,21 +2,24 @@
 {
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
+    using NeonArenaMvp.Shared;
 
     public static class MoveSystem
     {
         public static List<Coords> ProcessMovement(Map map, MoveAction startMoveAction)
         {
-            var resultCoords = new List<Coords>();
+            var resultCoords = new OrderedSet<Coords>();
 
             var currentMoveAction = startMoveAction;
 
             while (true)
             {
-                resultCoords.Add(new(
-                        row: currentMoveAction.Coords.Row,
-                        col: currentMoveAction.Coords.Col,
-                        direction: currentMoveAction.Direction));
+                var firstTimeVisitingTile = resultCoords.Add(new(currentMoveAction));
+
+                if (firstTimeVisitingTile is false)
+                {
+                    return new List<Coords> { new(startMoveAction) };
+                }
 
                 var tile = map.Tiles[currentMoveAction.Coords.Row, currentMoveAction.Coords.Col];
 
@@ -33,7 +36,8 @@
 
             // TODO infinite loop detection
 
-            return resultCoords;
+            return resultCoords
+                .ToList();
         }
     }
 }

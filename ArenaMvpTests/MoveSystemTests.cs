@@ -65,6 +65,30 @@
         }
 
         [TestMethod]
+        public void ReturnsOnlyOriginCoordsWhenLoopDetected()
+        {
+            // Arrange
+            this.Map = new(new Tile[1, 1]
+            {
+                { new Tile(new(1,0), "", MockBehaviors.ReturnsItself, TileShotBehaviors.PassThrough) }
+            });
+
+            var startMoveAction = new MoveAction(
+                coords: new(0, 0),
+                direction: Direction.Down,
+                remainingRange: 1,
+                previousCoords: new(0, 0),
+                playerId: 1);
+
+            // Act
+            var coordsVisited = MoveSystem.ProcessMovement(this.Map, startMoveAction);
+
+            // Assert
+            Assert.AreEqual(1, coordsVisited.Count);
+            Assert.AreEqual(new(0, 0, Direction.Down), coordsVisited[0]);
+        }
+
+        [TestMethod]
         public void SuccessfullyReturnsMoveList()
         {
             // Arrange
