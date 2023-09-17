@@ -1,4 +1,4 @@
-namespace ArenaMvpTests
+namespace ArenaMvpTests.Maps
 {
     using NeonArenaMvp.Game.Maps;
     using static NeonArenaMvp.Game.Maps.Enums;

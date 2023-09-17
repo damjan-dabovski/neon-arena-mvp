@@ -3,6 +3,7 @@
     using static NeonArenaMvp.Game.Maps.Enums;
 
     public readonly struct Coords
+        : IEquatable<Coords>
     {
         public readonly int Row;
 
@@ -15,6 +16,29 @@
             this.Row = row;
             this.Col = col;
             this.PartialDirection = direction;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Coords coords && this.Equals(coords);
+        }
+
+        public bool Equals(Coords other)
+        {
+            return this.Row == other.Row
+                && this.Col == other.Col
+                && this.PartialDirection == other.PartialDirection;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Row, Col, PartialDirection);
+        }
+
+        public bool EqualsWithoutDirection(Coords other)
+        {
+            return this.Row == other.Row
+                && this.Col == other.Col;
         }
 
         public Coords FromDelta(int deltaRow, int deltaCol, Direction? newDirection = null)
@@ -35,6 +59,16 @@
                 Direction.Right => this.FromDelta(0, +1),
                 _ => throw new InvalidOperationException("Invalid direction")
             };
+        }
+
+        public static bool operator ==(Coords left, Coords right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Coords left, Coords right)
+        {
+            return !(left == right);
         }
     }
 }

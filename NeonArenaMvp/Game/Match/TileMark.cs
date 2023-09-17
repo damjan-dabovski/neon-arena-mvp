@@ -2,7 +2,7 @@
 {
     using static NeonArenaMvp.Game.Maps.Enums;
 
-    public struct TileMark
+    public readonly struct TileMark
     {
         public readonly int PlayerId;
 

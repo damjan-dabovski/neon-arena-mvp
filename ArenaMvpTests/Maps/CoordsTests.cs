@@ -1,4 +1,4 @@
-﻿namespace ArenaMvpTests
+﻿namespace ArenaMvpTests.Maps
 {
     using NeonArenaMvp.Game.Maps;
     using static NeonArenaMvp.Game.Maps.Enums;
@@ -47,6 +47,20 @@
             Assert.AreEqual(original.Row + 1, newCoords.Row);
             Assert.AreEqual(original.Col + 1, newCoords.Col);
             Assert.AreEqual(original.PartialDirection, newCoords.PartialDirection);
+        }
+
+        [TestMethod]
+        public void EqualsWithoutDirection()
+        {
+            // Arrange
+            var coords = new Coords(1, 1, Direction.Up);
+            var other = new Coords(1, 1, Direction.Down);
+
+            // Act
+            var result = coords.EqualsWithoutDirection(other);
+
+            // Assert
+            Assert.IsTrue(result);
         }
     }
 }
