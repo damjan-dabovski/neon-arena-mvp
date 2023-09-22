@@ -1,4 +1,4 @@
-﻿namespace ArenaMvpTests
+﻿namespace ArenaMvpTests.Maps
 {
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
@@ -21,7 +21,7 @@
                 direction: Direction.Up,
                 remainingRange: 1,
                 previousCoords: isOutgoing
-                    ? new(coords.Row, coords.Col, coords.PartialDirection)
+                    ? coords
                     : new(0, 0, Direction.Up),
                 playerId: 0
             );

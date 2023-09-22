@@ -2,7 +2,7 @@
 {
     public class Map
     {
-        public Tile[,] Tiles;
+        public readonly Tile[,] Tiles;
 
         public int RowCount => this.Tiles.GetLength(0);
 
@@ -11,6 +11,14 @@
         public Map(Tile[,] tiles)
         {
             this.Tiles = tiles;
+        }
+
+        public bool IsOutOfBounds(Coords coords)
+        {
+            return coords.Row >= this.RowCount
+                || coords.Col >= this.ColCount
+                || coords.Row < 0
+                || coords.Col < 0;
         }
     }
 }

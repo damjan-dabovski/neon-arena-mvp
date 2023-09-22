@@ -1,6 +1,9 @@
-﻿namespace NeonArenaMvp.Game.Maps
+﻿using NeonArenaMvp.Game.Maps.Actions;
+
+namespace NeonArenaMvp.Game.Maps
 {
     using static NeonArenaMvp.Game.Behaviors.Tile.TileMoveBehaviors;
+    using static NeonArenaMvp.Game.Behaviors.Tile.TileShotBehaviors;
     using static NeonArenaMvp.Game.Maps.Enums;
 
     public class Tile
@@ -11,14 +14,22 @@
 
         public readonly string Symbol;
 
-        public readonly TileMoveBehavior MoveBehavior;
+        private readonly TileMoveBehavior MoveBehavior;
 
-        public Tile(Coords coords, string symbol, TileMoveBehavior moveBehavior, Direction direction = Direction.Up)
+        public readonly TileShotBehavior ShotBehavior;
+
+        public Tile(Coords coords, string symbol, TileMoveBehavior moveBehavior, TileShotBehavior shotBehavior, Direction direction = Direction.Up)
         {
             this.Coords = coords;
             this.Direction = direction;
             this.Symbol = symbol;
             this.MoveBehavior = moveBehavior;
+            this.ShotBehavior = shotBehavior;
+        }
+
+        public MoveAction? GetNextMove(MoveAction currentMoveAction)
+        {
+            return this.MoveBehavior(this, currentMoveAction);
         }
     }
 }
