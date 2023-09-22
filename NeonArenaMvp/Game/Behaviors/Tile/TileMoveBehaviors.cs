@@ -1,6 +1,4 @@
-﻿using NeonArenaMvp.Game.Match;
-
-namespace NeonArenaMvp.Game.Behaviors.Tile
+﻿namespace NeonArenaMvp.Game.Behaviors.Tile
 {
     using Maps.Actions;
     using Tile = Maps.Tile;
@@ -20,13 +18,23 @@ namespace NeonArenaMvp.Game.Behaviors.Tile
 
         public static readonly TileMoveBehavior Block = (_, currentMoveAction) => null;
 
-        public static readonly TileMoveBehavior Redirect = (tile, currentMoveAction) => new MoveAction
-        (
-            coords: currentMoveAction.Coords.NextInDirection(tile.Direction),
-            direction: tile.Direction,
-            remainingRange: currentMoveAction.RemainingRange,
-            previousCoords: currentMoveAction.PreviousCoords,
-            playerId: currentMoveAction.PlayerId
-        );
+        public static readonly TileMoveBehavior Redirect = (tile, currentMoveAction) =>
+        {
+            if (currentMoveAction.IsOutgoing())
+            {
+                return PassThrough(tile, currentMoveAction);
+            }
+            else
+            {
+                return new MoveAction
+                (
+                    coords: currentMoveAction.Coords.NextInDirection(tile.Direction),
+                    direction: tile.Direction,
+                    remainingRange: currentMoveAction.RemainingRange,
+                    previousCoords: currentMoveAction.PreviousCoords,
+                    playerId: currentMoveAction.PlayerId
+                );
+            }
+        };
     }
 }

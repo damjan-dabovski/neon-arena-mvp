@@ -61,7 +61,31 @@ namespace ArenaMvpTests.Behaviors
         }
 
         [TestMethod]
-        public void RedirectChangesDirection()
+        public void RedirectPassesThroughWhenOutgoing()
+        {
+            // Arrange
+            var startMoveAction = new MoveAction
+            (
+                coords: new(1, 1),
+                direction: Direction.Right,
+                remainingRange: 1,
+                previousCoords: new(1, 1),
+                playerId: 1
+            );
+
+            // Act
+            var newMoveAction = TileMoveBehaviors.Redirect(this.tile, startMoveAction);
+
+            // Assert
+            Assert.IsNotNull(newMoveAction);
+            Assert.AreEqual(1, newMoveAction.Coords.Row);
+            Assert.AreEqual(2, newMoveAction.Coords.Col);
+            Assert.AreEqual(startMoveAction.Direction, newMoveAction.Direction);
+            Assert.AreEqual(startMoveAction.RemainingRange - 1, newMoveAction.RemainingRange);
+        }
+
+        [TestMethod]
+        public void RedirectChangesDirectionWhenIncoming()
         {
             // Arrange
             var startMoveAction = new MoveAction
@@ -69,7 +93,7 @@ namespace ArenaMvpTests.Behaviors
                 coords: new(1, 1, Direction.Up),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1, Direction.Up),
+                previousCoords: new(0, 0, Direction.Up),
                 playerId: 1
             );
             
