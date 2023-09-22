@@ -1,4 +1,6 @@
-﻿namespace NeonArenaMvp.Game.Maps
+﻿using NeonArenaMvp.Game.Maps.Actions;
+
+namespace NeonArenaMvp.Game.Maps
 {
     using static NeonArenaMvp.Game.Behaviors.Tile.TileMoveBehaviors;
     using static NeonArenaMvp.Game.Behaviors.Tile.TileShotBehaviors;
@@ -12,7 +14,7 @@
 
         public readonly string Symbol;
 
-        public readonly TileMoveBehavior MoveBehavior;
+        private readonly TileMoveBehavior MoveBehavior;
 
         public readonly TileShotBehavior ShotBehavior;
 
@@ -23,6 +25,11 @@
             this.Symbol = symbol;
             this.MoveBehavior = moveBehavior;
             this.ShotBehavior = shotBehavior;
+        }
+
+        public MoveAction? GetNextMove(MoveAction currentMoveAction)
+        {
+            return this.MoveBehavior(this, currentMoveAction);
         }
     }
 }

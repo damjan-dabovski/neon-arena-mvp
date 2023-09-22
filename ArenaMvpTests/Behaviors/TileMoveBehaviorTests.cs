@@ -1,4 +1,6 @@
-﻿namespace ArenaMvpTests.Behaviors
+﻿using NeonArenaMvp.Game.Maps;
+
+namespace ArenaMvpTests.Behaviors
 {
     using NeonArenaMvp.Game.Behaviors.Tile;
     using NeonArenaMvp.Game.Maps.Actions;
@@ -7,6 +9,13 @@
     [TestClass]
     public class TileMoveBehaviorTests
     {
+        private Tile tile = new(
+            coords: new(1, 1),
+            symbol: "",
+            moveBehavior: TileMoveBehaviors.PassThrough,
+            shotBehavior: TileShotBehaviors.PassThrough,
+            direction: Direction.Up);
+
         [TestMethod]
         public void PassThroughProducesNextTileInDirection()
         {
@@ -21,7 +30,7 @@
             );
 
             // Act
-            var newMoveAction = TileMoveBehaviors.PassThrough(startMoveAction);
+            var newMoveAction = TileMoveBehaviors.PassThrough(this.tile, startMoveAction);
 
             // Assert
             Assert.IsNotNull(newMoveAction);
@@ -45,10 +54,34 @@
             );
 
             // Act
-            var newMoveAction = TileMoveBehaviors.Block(startMoveAction);
+            var newMoveAction = TileMoveBehaviors.Block(this.tile, startMoveAction);
 
             // Assert
             Assert.IsNull(newMoveAction);
+        }
+
+        [TestMethod]
+        public void RedirectChangesDirection()
+        {
+            // Arrange
+            var startMoveAction = new MoveAction
+            (
+                coords: new(1, 1, Direction.Up),
+                direction: Direction.Right,
+                remainingRange: 1,
+                previousCoords: new(1, 1, Direction.Up),
+                playerId: 1
+            );
+            
+            // Act
+            var newMoveAction = TileMoveBehaviors.Redirect(this.tile, startMoveAction);
+            
+            // Assert
+            Assert.IsNotNull(newMoveAction);
+            Assert.AreEqual(0, newMoveAction.Coords.Row);
+            Assert.AreEqual(1, newMoveAction.Coords.Col);
+            Assert.AreEqual(tile.Direction, newMoveAction.Direction);
+            Assert.AreEqual(startMoveAction.RemainingRange, newMoveAction.RemainingRange);
         }
     }
 }

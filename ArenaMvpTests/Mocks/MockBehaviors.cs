@@ -5,7 +5,7 @@
 
     public static class MockBehaviors
     {
-        public static readonly TileMoveBehavior ReturnsOneRowDownOneRangeLess = (currentMoveAction) =>
+        public static readonly TileMoveBehavior ReturnsOneRowDownOneRangeLess = (_, currentMoveAction) =>
         {
             return new MoveAction(
                 coords: currentMoveAction.Coords.FromDelta(+1, 0),
@@ -15,14 +15,8 @@
                 playerId: currentMoveAction.PlayerId);
         };
 
-        public static readonly TileMoveBehavior ReturnsNull = (currentMoveAction) =>
-        {
-            return null;
-        };
+        public static readonly TileMoveBehavior ReturnsNull = (_, currentMoveAction) => null;
 
-        public static readonly TileMoveBehavior ReturnsItself = (currentMoveAction) =>
-        {
-            return currentMoveAction;
-        };
+        public static readonly TileMoveBehavior ReturnsItself = (_, currentMoveAction) => currentMoveAction;
     }
 }

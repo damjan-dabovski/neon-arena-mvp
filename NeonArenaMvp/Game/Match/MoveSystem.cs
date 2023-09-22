@@ -26,7 +26,7 @@
 
                 var tile = map.Tiles[currentMoveAction.Coords.Row, currentMoveAction.Coords.Col];
 
-                var nextMoveAction = tile.MoveBehavior(currentMoveAction);
+                var nextMoveAction = tile.GetNextMove(currentMoveAction);
 
                 if (nextMoveAction is null
                     || currentMoveAction.RemainingRange == 0)
