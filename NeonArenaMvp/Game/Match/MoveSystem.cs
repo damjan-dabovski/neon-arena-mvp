@@ -29,7 +29,8 @@
                 var nextMoveAction = tile.GetNextMove(currentMoveAction);
 
                 if (nextMoveAction is null
-                    || currentMoveAction.RemainingRange == 0)
+                    || currentMoveAction.RemainingRange == 0
+                    || map.IsOutOfBounds(nextMoveAction.Coords))
                 {
                     break;
                 }

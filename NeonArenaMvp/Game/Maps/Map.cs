@@ -12,5 +12,13 @@
         {
             this.Tiles = tiles;
         }
+
+        public bool IsOutOfBounds(Coords coords)
+        {
+            return coords.Row >= this.RowCount
+                || coords.Col >= this.ColCount
+                || coords.Row < 0
+                || coords.Col < 0;
+        }
     }
 }

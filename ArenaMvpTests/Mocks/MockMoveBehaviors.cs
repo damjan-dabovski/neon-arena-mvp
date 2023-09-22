@@ -3,7 +3,7 @@
     using NeonArenaMvp.Game.Maps.Actions;
     using static NeonArenaMvp.Game.Behaviors.Tile.TileMoveBehaviors;
 
-    public static class MockBehaviors
+    public static class MockMoveBehaviors
     {
         public static readonly TileMoveBehavior ReturnsOneRowDownOneRangeLess = (_, currentMoveAction) =>
         {
