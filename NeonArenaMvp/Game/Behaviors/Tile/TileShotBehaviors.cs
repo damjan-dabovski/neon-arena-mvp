@@ -4,9 +4,6 @@
 
     public static class TileShotBehaviors
     {
-        // TODO see if a set would work better, especially later on for
-        // infinite loop detection when resolving shots; also, should the set
-        // preserve order of insertion? (for reconstructing the paths on the client side)
         public delegate List<ShotAction> TileShotBehavior(ShotAction currentShotAction);
 
         public static readonly TileShotBehavior PassThrough = (currentShotAction) => new List<ShotAction> {

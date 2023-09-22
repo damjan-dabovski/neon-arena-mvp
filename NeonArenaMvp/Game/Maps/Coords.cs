@@ -10,6 +10,8 @@
 
         public readonly int Col;
 
+        // TODO should this be refactored into 2 separate classes:
+        // one 'base' Coords class, and one derived PartialCoords
         public readonly Direction PartialDirection;
 
         public Coords(int row, int col, Direction direction = Direction.Center)
@@ -23,12 +25,7 @@
         {
             this.Row = action.Coords.Row;
             this.Col = action.Coords.Col;
-            // TODO this doesn't make complete sense at least yet
-            // we can set the direction of the Coords as either the
-            // direction of the action's Coords, or the direction of the
-            // action itself; is there a need for Coords themselves to be
-            // subclassed into Coords (base) and PartialCoords (derived)?
-            this.PartialDirection = action.Direction;
+            this.PartialDirection = action.Coords.PartialDirection;
         }
 
         public override bool Equals(object? obj)

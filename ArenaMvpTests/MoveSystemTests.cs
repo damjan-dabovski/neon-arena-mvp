@@ -37,7 +37,7 @@
 
             // Assert
             Assert.AreEqual(1, coordsVisited.Count);
-            Assert.AreEqual(new(0, 0, Direction.Down), coordsVisited[0]);
+            Assert.IsTrue(coordsVisited[0].EqualsWithoutDirection(startMoveAction.Coords));
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@
 
             // Assert
             Assert.AreEqual(1, coordsVisited.Count);
-            Assert.AreEqual(new(0, 0, Direction.Down), coordsVisited[0]);
+            Assert.IsTrue(coordsVisited[0].EqualsWithoutDirection(startMoveAction.Coords));
         }
 
         [TestMethod]
@@ -85,7 +85,7 @@
 
             // Assert
             Assert.AreEqual(1, coordsVisited.Count);
-            Assert.AreEqual(new(0, 0, Direction.Down), coordsVisited[0]);
+            Assert.IsTrue(coordsVisited[0].EqualsWithoutDirection(startMoveAction.Coords));
         }
 
         [TestMethod]
@@ -104,8 +104,8 @@
 
             // Assert
             Assert.AreEqual(2, coordsVisited.Count);
-            Assert.AreEqual(new(0, 0, Direction.Down), coordsVisited[0]);
-            Assert.AreEqual(new(1, 0, Direction.Down), coordsVisited[1]);
+            Assert.IsTrue(coordsVisited[0].EqualsWithoutDirection(startMoveAction.Coords));
+            Assert.IsTrue(coordsVisited[1].EqualsWithoutDirection(startMoveAction.Coords.FromDelta(+1, 0)));
         }
 
         [TestMethod]
@@ -124,8 +124,8 @@
 
             // Assert
             Assert.AreEqual(2, coordsVisited.Count);
-            Assert.AreEqual(new(0, 0, Direction.Down), coordsVisited[0]);
-            Assert.AreEqual(new(1, 0, Direction.Down), coordsVisited[1]);
+            Assert.IsTrue(coordsVisited[0].EqualsWithoutDirection(startMoveAction.Coords));
+            Assert.IsTrue(coordsVisited[1].EqualsWithoutDirection(startMoveAction.Coords.FromDelta(+1, 0)));
         }
     }
 }

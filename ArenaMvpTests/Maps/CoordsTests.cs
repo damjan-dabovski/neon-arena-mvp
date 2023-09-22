@@ -24,7 +24,7 @@
             // Assert
             Assert.AreEqual(moveAction.Coords.Row, coords.Row);
             Assert.AreEqual(moveAction.Coords.Col, coords.Col);
-            Assert.AreEqual(moveAction.Direction, coords.PartialDirection);
+            Assert.AreEqual(moveAction.Coords.PartialDirection, coords.PartialDirection);
         }
 
         [TestMethod]
