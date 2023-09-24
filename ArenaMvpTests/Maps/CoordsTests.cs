@@ -1,6 +1,5 @@
 ﻿namespace ArenaMvpTests.Maps
 {
-    using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
@@ -34,7 +33,7 @@
         public void GetsNextCoordsInDirection(Direction dir, int expectedRowDelta, int expectedColDelta)
         {
             // Arrange
-            var original = new PartialCoords(1, 1, Direction.Up);
+            var original = new Coords(1, 1);
 
             // Act
             var newCoords = original.NextInDirection(dir);

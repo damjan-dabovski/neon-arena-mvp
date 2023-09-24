@@ -7,6 +7,27 @@
     public class PartialCoordsTests
     {
         [TestMethod]
+        [DataRow(Direction.Up, -1, 0)]
+        [DataRow(Direction.Down, 1, 0)]
+        [DataRow(Direction.Left, 0, -1)]
+        [DataRow(Direction.Right, 0, 1)]
+        // TODO expand this test when adding proper partial NextInDirection logic
+        public void GetsNextCoordsInDirection(Direction dir, int expectedRowDelta, int expectedColDelta)
+        {
+            // Arrange
+            var original = new PartialCoords(1, 1);
+
+            // Act
+            var newCoords = original.NextInDirection(dir);
+
+            // Assert
+            var actualRowDelta = newCoords.Row - original.Row;
+            var actualColDelta = newCoords.Col - original.Col;
+            Assert.AreEqual(expectedRowDelta, actualRowDelta);
+            Assert.AreEqual(expectedColDelta, actualColDelta);
+        }
+
+        [TestMethod]
         public void EqualsWithoutDirection()
         {
             // Arrange

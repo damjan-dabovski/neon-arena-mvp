@@ -31,6 +31,7 @@
             };
         }
 
+        // TODO add partial-specific logic when implementing partials
         public static PartialCoords NextInDirection(this PartialCoords self, Direction dir)
         {
             return dir switch
