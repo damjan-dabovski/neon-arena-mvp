@@ -64,10 +64,10 @@ namespace ArenaMvpTests.Behaviors
             // Arrange
             var startMoveAction = new MoveAction
             (
-                coords: new(1, 1),
+                coords: new(1, 1, Direction.Center),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1)
+                previousCoords: new(1, 1, Direction.Center)
             );
 
             // Act

@@ -12,8 +12,9 @@
 
         public readonly Direction Direction;
 
-        public TileMark(PlayerColor playerColor, Direction direction)
+        public TileMark(Coords coords, PlayerColor playerColor, Direction direction)
         {
+            this.Coords = coords;
             this.PlayerColor = playerColor;
             this.Direction = direction;
         }

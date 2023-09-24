@@ -27,17 +27,17 @@
         {
             // Arrange
             var startMoveAction = new MoveAction(
-                coords: new(0, 0),
+                coords: new(0, 0, Direction.Center),
                 direction: Direction.Down,
                 remainingRange: 0,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0, Direction.Center));
 
             // Act
             var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
 
             // Assert
             Assert.AreEqual(1, coordsVisited.Count);
-            Assert.IsTrue(coordsVisited[0].EqualsWithoutDirection(startMoveAction.Coords));
+            Assert.AreEqual(startMoveAction.Coords, coordsVisited[0]);
         }
 
         [TestMethod]
@@ -50,17 +50,17 @@
             });
 
             var startMoveAction = new MoveAction(
-                coords: new(0, 0),
+                coords: new(0, 0, Direction.Center),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0, Direction.Center));
 
             // Act
             var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
 
             // Assert
             Assert.AreEqual(1, coordsVisited.Count);
-            Assert.IsTrue(coordsVisited[0].EqualsWithoutDirection(startMoveAction.Coords));
+            Assert.AreEqual(startMoveAction.Coords, coordsVisited[0]);
         }
 
         [TestMethod]
@@ -73,17 +73,17 @@
             });
 
             var startMoveAction = new MoveAction(
-                coords: new(0, 0),
+                coords: new(0, 0, Direction.Center),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0, Direction.Center));
 
             // Act
             var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
 
             // Assert
             Assert.AreEqual(1, coordsVisited.Count);
-            Assert.IsTrue(coordsVisited[0].EqualsWithoutDirection(startMoveAction.Coords));
+            Assert.AreEqual(startMoveAction.Coords, coordsVisited[0]);
         }
 
         [TestMethod]
@@ -91,18 +91,18 @@
         {
             // Arrange
             var startMoveAction = new MoveAction(
-                coords: new(0, 0),
+                coords: new(0, 0, Direction.Center),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0, Direction.Center));
 
             // Act
             var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
 
             // Assert
             Assert.AreEqual(2, coordsVisited.Count);
-            Assert.IsTrue(coordsVisited[0].EqualsWithoutDirection(startMoveAction.Coords));
-            Assert.IsTrue(coordsVisited[1].EqualsWithoutDirection(startMoveAction.Coords.FromDelta(+1, 0)));
+            Assert.AreEqual(startMoveAction.Coords, coordsVisited[0]);
+            Assert.AreEqual(startMoveAction.Coords.FromDelta(+1, 0), coordsVisited[1]);
         }
 
         [TestMethod]
@@ -110,18 +110,18 @@
         {
             // Arrange
             var startMoveAction = new MoveAction(
-                coords: new(0, 0),
+                coords: new(0, 0, Direction.Center),
                 direction: Direction.Down,
                 remainingRange: 3,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0, Direction.Center));
 
             // Act
             var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
 
             // Assert
             Assert.AreEqual(2, coordsVisited.Count);
-            Assert.IsTrue(coordsVisited[0].EqualsWithoutDirection(startMoveAction.Coords));
-            Assert.IsTrue(coordsVisited[1].EqualsWithoutDirection(startMoveAction.Coords.FromDelta(+1, 0)));
+            Assert.AreEqual(startMoveAction.Coords, coordsVisited[0]);
+            Assert.AreEqual(startMoveAction.Coords.FromDelta(+1, 0), coordsVisited[1]);
         }
     }
 }

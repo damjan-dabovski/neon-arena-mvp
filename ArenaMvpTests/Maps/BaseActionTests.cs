@@ -1,6 +1,5 @@
 ﻿namespace ArenaMvpTests.Maps
 {
-    using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
@@ -14,7 +13,7 @@
         public void IsOutgoing(bool isOutgoing)
         {
             // Arrange
-            var coords = new Coords(1, 1, Direction.Up);
+            var coords = new PartialCoords(1, 1, Direction.Up);
 
             var moveAction = new MoveAction
             (
