@@ -12,15 +12,12 @@
 
         public readonly Coords PreviousCoords;
 
-        public readonly int PlayerId;
-
-        protected BaseAction(Coords coords, Direction direction, int remainingRange, Coords previousCoords, int playerId)
+        protected BaseAction(Coords coords, Direction direction, int remainingRange, Coords previousCoords)
         {
             this.Coords = coords;
             this.Direction = direction;
             this.RemainingRange = remainingRange;
             this.PreviousCoords = previousCoords;
-            this.PlayerId = playerId;
         }
 
         public bool IsOutgoing() => this.Coords.Equals(this.PreviousCoords);

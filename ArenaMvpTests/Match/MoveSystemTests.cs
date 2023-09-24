@@ -29,8 +29,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 0,
-                previousCoords: new(0, 0),
-                playerId: 1);
+                previousCoords: new(0, 0));
 
             // Act
             var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -53,8 +52,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0),
-                playerId: 1);
+                previousCoords: new(0, 0));
 
             // Act
             var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -77,8 +75,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0),
-                playerId: 1);
+                previousCoords: new(0, 0));
 
             // Act
             var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -96,8 +93,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0),
-                playerId: 1);
+                previousCoords: new(0, 0));
 
             // Act
             var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -116,8 +112,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 3,
-                previousCoords: new(0, 0),
-                playerId: 1);
+                previousCoords: new(0, 0));
 
             // Act
             var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);

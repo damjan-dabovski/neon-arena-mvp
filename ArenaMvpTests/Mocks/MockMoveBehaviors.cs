@@ -11,8 +11,7 @@
                 coords: currentMoveAction.Coords.FromDelta(+1, 0),
                 direction: currentMoveAction.Direction,
                 remainingRange: currentMoveAction.RemainingRange - 1,
-                previousCoords: currentMoveAction.Coords,
-                playerId: currentMoveAction.PlayerId);
+                previousCoords: currentMoveAction.Coords);
         };
 
         public static readonly TileMoveBehavior ReturnsNull = (_, currentMoveAction) => null;

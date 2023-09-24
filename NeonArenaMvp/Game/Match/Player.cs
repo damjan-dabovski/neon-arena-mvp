@@ -1,12 +1,14 @@
 ﻿namespace NeonArenaMvp.Game.Match
 {
+    using static NeonArenaMvp.Game.Match.Enums;
+
     public class Player
     {
-        public readonly int Id;
+        public readonly PlayerColor Color;
 
-        public Player(int id)
+        public Player(PlayerColor color)
         {
-            this.Id = id;
+            this.Color = color;
         }
     }
 }

@@ -5,7 +5,7 @@
     public class MoveAction
         : BaseAction
     {
-        public MoveAction(Coords coords, Direction direction, int remainingRange, Coords previousCoords, int playerId)
-            : base(coords, direction, remainingRange, previousCoords, playerId) { }
+        public MoveAction(Coords coords, Direction direction, int remainingRange, Coords previousCoords)
+            : base(coords, direction, remainingRange, previousCoords) { }
     }
 }

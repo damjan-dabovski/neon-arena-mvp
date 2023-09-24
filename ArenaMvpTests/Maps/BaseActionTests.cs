@@ -22,8 +22,7 @@
                 remainingRange: 1,
                 previousCoords: isOutgoing
                     ? coords
-                    : new(0, 0, Direction.Up),
-                playerId: 0
+                    : new(0, 0, Direction.Up)
             );
 
             // Act

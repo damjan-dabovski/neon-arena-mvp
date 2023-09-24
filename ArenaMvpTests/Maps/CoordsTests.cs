@@ -15,8 +15,7 @@
                 coords: new(1, 1),
                 direction: Direction.Up,
                 remainingRange: 1,
-                previousCoords: new(1, 1),
-                playerId: 1);
+                previousCoords: new(1, 1));
 
             // Act
             var coords = new Coords(moveAction);

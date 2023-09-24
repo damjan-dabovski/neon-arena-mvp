@@ -12,8 +12,7 @@
                 coords: currentShotAction.Coords.NextInDirection(currentShotAction.Direction),
                 direction: currentShotAction.Direction,
                 remainingRange: currentShotAction.RemainingRange - 1,
-                previousCoords: currentShotAction.Coords,
-                playerId: currentShotAction.PlayerId
+                previousCoords: currentShotAction.Coords
             )
         };
 
