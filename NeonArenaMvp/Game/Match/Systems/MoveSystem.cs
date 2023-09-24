@@ -1,4 +1,4 @@
-﻿namespace NeonArenaMvp.Game.Match
+﻿namespace NeonArenaMvp.Game.Match.Systems
 {
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;

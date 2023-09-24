@@ -1,10 +1,10 @@
-﻿namespace ArenaMvpTests
+﻿namespace ArenaMvpTests.Match
 {
     using ArenaMvpTests.Mocks;
     using NeonArenaMvp.Game.Behaviors.Tile;
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
-    using NeonArenaMvp.Game.Match;
+    using NeonArenaMvp.Game.Match.Systems;
     using static NeonArenaMvp.Game.Maps.Enums;
 
     [TestClass]
@@ -14,7 +14,7 @@
 
         public MoveSystemTests()
         {
-            this.Map = new(new Tile[2, 1]
+            Map = new(new Tile[2, 1]
             {
                 { new Tile(new(0,0), "", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList) },
                 { new Tile(new(1,0), "", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList) }
@@ -33,7 +33,7 @@
                 playerId: 1);
 
             // Act
-            var coordsVisited = MoveSystem.ProcessMovement(this.Map, startMoveAction);
+            var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
 
             // Assert
             Assert.AreEqual(1, coordsVisited.Count);
@@ -44,7 +44,7 @@
         public void ReturnsOnlyOriginCoordsWhenOriginReturnsNull()
         {
             // Arrange
-            this.Map = new(new Tile[1, 1]
+            Map = new(new Tile[1, 1]
             {
                 { new Tile(new(1,0), "", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsEmptyList) }
             });
@@ -57,7 +57,7 @@
                 playerId: 1);
 
             // Act
-            var coordsVisited = MoveSystem.ProcessMovement(this.Map, startMoveAction);
+            var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
 
             // Assert
             Assert.AreEqual(1, coordsVisited.Count);
@@ -68,7 +68,7 @@
         public void ReturnsOnlyOriginCoordsWhenLoopDetected()
         {
             // Arrange
-            this.Map = new(new Tile[1, 1]
+            Map = new(new Tile[1, 1]
             {
                 { new Tile(new(1,0), "", MockMoveBehaviors.ReturnsItself, MockShotBehaviors.ReturnsEmptyList) }
             });
@@ -81,7 +81,7 @@
                 playerId: 1);
 
             // Act
-            var coordsVisited = MoveSystem.ProcessMovement(this.Map, startMoveAction);
+            var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
 
             // Assert
             Assert.AreEqual(1, coordsVisited.Count);
@@ -100,7 +100,7 @@
                 playerId: 1);
 
             // Act
-            var coordsVisited = MoveSystem.ProcessMovement(this.Map, startMoveAction);
+            var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
 
             // Assert
             Assert.AreEqual(2, coordsVisited.Count);
@@ -120,7 +120,7 @@
                 playerId: 1);
 
             // Act
-            var coordsVisited = MoveSystem.ProcessMovement(this.Map, startMoveAction);
+            var coordsVisited = MoveSystem.ProcessMovement(Map, startMoveAction);
 
             // Assert
             Assert.AreEqual(2, coordsVisited.Count);
