@@ -1,4 +1,5 @@
 ﻿using NeonArenaMvp.Game.Maps.Actions;
+using NeonArenaMvp.Game.Maps.Coordinates;
 
 namespace NeonArenaMvp.Game.Maps
 {

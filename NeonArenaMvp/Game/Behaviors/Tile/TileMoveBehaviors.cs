@@ -1,6 +1,7 @@
 ﻿namespace NeonArenaMvp.Game.Behaviors.Tile
 {
     using Maps.Actions;
+    using NeonArenaMvp.Game.Maps.Coordinates;
     using Tile = Maps.Tile;
 
     public static class TileMoveBehaviors

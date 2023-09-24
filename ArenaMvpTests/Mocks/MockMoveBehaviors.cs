@@ -1,6 +1,7 @@
 ﻿namespace ArenaMvpTests.Mocks
 {
     using NeonArenaMvp.Game.Maps.Actions;
+    using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Behaviors.Tile.TileMoveBehaviors;
 
     public static class MockMoveBehaviors

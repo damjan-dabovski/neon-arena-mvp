@@ -1,4 +1,6 @@
-﻿namespace NeonArenaMvp.Game.Maps.Actions
+﻿using NeonArenaMvp.Game.Maps.Coordinates;
+
+namespace NeonArenaMvp.Game.Maps.Actions
 {
     public class ShotAction
         : BaseAction

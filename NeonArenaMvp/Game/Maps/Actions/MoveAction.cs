@@ -1,5 +1,6 @@
 ﻿namespace NeonArenaMvp.Game.Maps.Actions
 {
+    using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
 
     public class MoveAction
