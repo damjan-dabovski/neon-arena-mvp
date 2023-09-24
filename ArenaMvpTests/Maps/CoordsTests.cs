@@ -24,7 +24,6 @@
             // Assert
             Assert.AreEqual(moveAction.Coords.Row, coords.Row);
             Assert.AreEqual(moveAction.Coords.Col, coords.Col);
-            Assert.AreEqual(moveAction.Coords.PartialDirection, coords.PartialDirection);
         }
 
         [TestMethod]
@@ -35,7 +34,7 @@
         public void GetsNextCoordsInDirection(Direction dir, int expectedRowDelta, int expectedColDelta)
         {
             // Arrange
-            var original = new Coords(1, 1, Direction.Up);
+            var original = new PartialCoords(1, 1, Direction.Up);
 
             // Act
             var newCoords = original.NextInDirection(dir);
@@ -52,14 +51,14 @@
         public void ThrowsWhenDirectionInvalid()
         {
             // Act & Assert
-            new Coords(1, 1, Direction.Up).NextInDirection(Direction.Center);
+            new Coords(1, 1).NextInDirection(Direction.Center);
         }
 
         [TestMethod]
         public void CreatesCoordsFromDelta()
         {
             // Arrange
-            var original = new Coords(0, 0, Direction.Up);
+            var original = new Coords(0, 0);
 
             // Act
             var newCoords = original.FromDelta(+1, +1);
@@ -67,21 +66,6 @@
             // Assert
             Assert.AreEqual(original.Row + 1, newCoords.Row);
             Assert.AreEqual(original.Col + 1, newCoords.Col);
-            Assert.AreEqual(original.PartialDirection, newCoords.PartialDirection);
-        }
-
-        [TestMethod]
-        public void EqualsWithoutDirection()
-        {
-            // Arrange
-            var coords = new Coords(1, 1, Direction.Up);
-            var other = new Coords(1, 1, Direction.Down);
-
-            // Act
-            var result = coords.EqualsWithoutDirection(other);
-
-            // Assert
-            Assert.IsTrue(result);
         }
     }
 }

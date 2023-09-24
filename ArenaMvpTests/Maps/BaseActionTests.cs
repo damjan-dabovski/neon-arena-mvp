@@ -14,7 +14,7 @@
         public void IsOutgoing(bool isOutgoing)
         {
             // Arrange
-            var coords = new Coords(1, 1, Direction.Up);
+            var coords = new PartialCoords(1, 1, Direction.Up);
 
             var moveAction = new MoveAction
             (

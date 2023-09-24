@@ -21,10 +21,8 @@
                 { new Tile(new(0,0), "", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsEmptyList) }
             });
 
-            var coords = new Coords(coordsRow, coordsCol);
-
             // Act
-            var isOutOfBounds = map.IsOutOfBounds(coords);
+            var isOutOfBounds = map.IsOutOfBounds(coordsRow, coordsCol);
 
             // Assert
             Assert.AreEqual(expectedOutOfBounds, isOutOfBounds);
