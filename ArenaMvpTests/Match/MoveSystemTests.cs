@@ -6,6 +6,7 @@
     using NeonArenaMvp.Game.Maps.Coordinates;
     using NeonArenaMvp.Game.Match.Systems;
     using static NeonArenaMvp.Game.Maps.Enums;
+    using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
     public class MoveSystemTests
@@ -16,8 +17,8 @@
         {
             Map = new(new Tile[2, 1]
             {
-                { new Tile("", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList) },
-                { new Tile("", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList) }
+                { new Tile("", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList, MockMarkBehaviors.ReturnsSingleMarkInDirection) },
+                { new Tile("", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList, MockMarkBehaviors.ReturnsSingleMarkInDirection) }
             });
         }
 
@@ -29,7 +30,8 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 0,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -46,14 +48,15 @@
             // Arrange
             Map = new(new Tile[1, 1]
             {
-                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsEmptyList) }
+                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsEmptyList, MockMarkBehaviors.ReturnsSingleMarkInDirection) }
             });
 
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -70,14 +73,15 @@
             // Arrange
             Map = new(new Tile[1, 1]
             {
-                { new Tile("", MockMoveBehaviors.ReturnsItself, MockShotBehaviors.ReturnsEmptyList) }
+                { new Tile("", MockMoveBehaviors.ReturnsItself, MockShotBehaviors.ReturnsEmptyList, MockMarkBehaviors.ReturnsSingleMarkInDirection) }
             });
 
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -96,7 +100,8 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -119,7 +124,8 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 3,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);

@@ -1,12 +1,21 @@
 ﻿namespace ArenaMvpTests.Behaviors
 {
     using NeonArenaMvp.Game.Behaviors.Tile;
+    using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
     using static NeonArenaMvp.Game.Maps.Enums;
+    using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
     public class TileShotBehaviorTests
     {
+        private Tile tile = new(
+            symbol: "",
+            moveBehavior: TileMoveBehaviors.PassThrough,
+            shotBehavior: TileShotBehaviors.PassThrough,
+            markBehavior: TileMarkBehaviors.MarkInShotDirection,
+            direction: Direction.Up);
+
         [TestMethod]
         public void PassThroughProducesNextTileInDirection()
         {
@@ -16,11 +25,12 @@
                 coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1)
+                previousCoords: new(1, 1),
+                playerColor: PlayerColor.Red
             );
 
             // Act
-            var result = TileShotBehaviors.PassThrough(startShotAction);
+            var result = TileShotBehaviors.PassThrough(tile, startShotAction);
 
             // Assert
             Assert.AreEqual(1, result.Count);
@@ -42,11 +52,12 @@
                 coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1)
+                previousCoords: new(1, 1),
+                playerColor: PlayerColor.Red
             );
 
             // Act
-            var result = TileShotBehaviors.Block(startShotAction);
+            var result = TileShotBehaviors.Block(tile, startShotAction);
 
             // Assert
             Assert.AreEqual(0, result.Count);

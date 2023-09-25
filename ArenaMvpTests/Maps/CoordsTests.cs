@@ -3,6 +3,7 @@
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
+    using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
     public class CoordsTests
@@ -15,7 +16,8 @@
                 coords: new(1, 1),
                 direction: Direction.Up,
                 remainingRange: 1,
-                previousCoords: new(1, 1));
+                previousCoords: new(1, 1),
+                playerColor: PlayerColor.Red);
 
             // Act
             var coords = new Coords(moveAction);
