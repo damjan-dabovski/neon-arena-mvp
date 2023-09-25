@@ -7,24 +7,23 @@
     public class SectorCoordsTests
     {
         [TestMethod]
-        [DataRow(Direction.Up, -1, 0)]
-        [DataRow(Direction.Down, 1, 0)]
-        [DataRow(Direction.Left, 0, -1)]
-        [DataRow(Direction.Right, 0, 1)]
-        // TODO expand this test when adding proper sector NextInDirection logic
-        public void GetsNextCoordsInDirection(Direction dir, int expectedRowDelta, int expectedColDelta)
+        [DataRow(Sector.Up, Direction.Up, 0, 1, Sector.Down)]
+        [DataRow(Sector.Up, Direction.Down, 1, 1, Sector.Center)]
+        [DataRow(Sector.Up, Direction.Left, 1, 1, Sector.Left)]
+        [DataRow(Sector.Up, Direction.Right, 1, 1, Sector.Right)]
+        [DataRow(Sector.Center, Direction.Up, 1, 1, Sector.Up)]
+        public void GetsNextCoordsInDirection(Sector originalSector, Direction direction, int expectedRow, int expectedCol, Sector expectedSector)
         {
             // Arrange
-            var original = new SectorCoords(1, 1);
-
+            var original = new SectorCoords(1, 1, originalSector);
+            
             // Act
-            var newCoords = original.NextInDirection(dir);
+            var newSectorCoords = original.NextInDirection(direction);
 
             // Assert
-            var actualRowDelta = newCoords.Row - original.Row;
-            var actualColDelta = newCoords.Col - original.Col;
-            Assert.AreEqual(expectedRowDelta, actualRowDelta);
-            Assert.AreEqual(expectedColDelta, actualColDelta);
+            Assert.AreEqual(expectedRow, newSectorCoords.Row);
+            Assert.AreEqual(expectedCol, newSectorCoords.Col);
+            Assert.AreEqual(expectedSector, newSectorCoords.Sector);
         }
 
         [TestMethod]
