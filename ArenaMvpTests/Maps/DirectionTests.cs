@@ -6,6 +6,8 @@ namespace ArenaMvpTests.Maps
     [TestClass]
     public class DirectionTests
     {
+        private const Direction INVALID_DIRECTION = (Direction)99;
+
         [TestMethod]
         [DataRow(Direction.Up, Direction.Right)]
         [DataRow(Direction.Right, Direction.Down)]
@@ -53,7 +55,7 @@ namespace ArenaMvpTests.Maps
         public void ThrowsExceptionWhenRelativeRightDirectionInvalid()
         {
             // Act & Assert
-            ((Direction)10).RelativeRight();
+            INVALID_DIRECTION.RelativeRight();
         }
 
         [TestMethod]
@@ -61,7 +63,7 @@ namespace ArenaMvpTests.Maps
         public void ThrowsExceptionWhenRelativeLeftDirectionInvalid()
         {
             // Act & Assert
-            ((Direction)10).RelativeLeft();
+            INVALID_DIRECTION.RelativeLeft();
         }
 
         [TestMethod]
@@ -69,7 +71,7 @@ namespace ArenaMvpTests.Maps
         public void ThrowsExceptionWhenReverseDirectionInvalid()
         {
             // Act & Assert
-            ((Direction)10).Reverse();
+            INVALID_DIRECTION.Reverse();
         }
     }
 }
