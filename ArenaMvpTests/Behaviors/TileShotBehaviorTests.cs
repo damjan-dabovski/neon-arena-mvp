@@ -16,8 +16,7 @@
                 coords: new(1, 1, Direction.Up),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1, Direction.Up),
-                playerId: 1
+                previousCoords: new(1, 1, Direction.Up)
             );
 
             // Act
@@ -43,8 +42,7 @@
                 coords: new(1, 1, Direction.Up),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1, Direction.Up),
-                playerId: 1
+                previousCoords: new(1, 1, Direction.Up)
             );
 
             // Act

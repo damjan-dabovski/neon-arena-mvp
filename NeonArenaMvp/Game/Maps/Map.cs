@@ -1,4 +1,6 @@
-﻿namespace NeonArenaMvp.Game.Maps
+﻿using NeonArenaMvp.Game.Maps.Coordinates;
+
+namespace NeonArenaMvp.Game.Maps
 {
     public class Map
     {

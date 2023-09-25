@@ -1,6 +1,7 @@
 ﻿namespace ArenaMvpTests.Mocks
 {
     using NeonArenaMvp.Game.Maps.Actions;
+    using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Behaviors.Tile.TileMoveBehaviors;
 
     public static class MockMoveBehaviors
@@ -11,8 +12,7 @@
                 coords: currentMoveAction.Coords.FromDelta(+1, 0),
                 direction: currentMoveAction.Direction,
                 remainingRange: currentMoveAction.RemainingRange - 1,
-                previousCoords: currentMoveAction.Coords,
-                playerId: currentMoveAction.PlayerId);
+                previousCoords: currentMoveAction.Coords);
         };
 
         public static readonly TileMoveBehavior ReturnsNull = (_, currentMoveAction) => null;

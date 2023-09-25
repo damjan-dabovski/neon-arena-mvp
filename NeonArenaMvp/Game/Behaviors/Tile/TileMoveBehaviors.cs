@@ -1,6 +1,7 @@
 ﻿namespace NeonArenaMvp.Game.Behaviors.Tile
 {
     using Maps.Actions;
+    using NeonArenaMvp.Game.Maps.Coordinates;
     using Tile = Maps.Tile;
 
     public static class TileMoveBehaviors
@@ -12,8 +13,7 @@
             coords: currentMoveAction.Coords.NextInDirection(currentMoveAction.Direction),
             direction: currentMoveAction.Direction,
             remainingRange: currentMoveAction.RemainingRange - 1,
-            previousCoords: currentMoveAction.Coords,
-            playerId: currentMoveAction.PlayerId
+            previousCoords: currentMoveAction.Coords
         );
 
         public static readonly TileMoveBehavior Block = (_, currentMoveAction) => null;
@@ -31,8 +31,7 @@
                     coords: currentMoveAction.Coords.NextInDirection(tile.Direction),
                     direction: tile.Direction,
                     remainingRange: currentMoveAction.RemainingRange,
-                    previousCoords: currentMoveAction.PreviousCoords,
-                    playerId: currentMoveAction.PlayerId
+                    previousCoords: currentMoveAction.PreviousCoords
                 );
             }
         };

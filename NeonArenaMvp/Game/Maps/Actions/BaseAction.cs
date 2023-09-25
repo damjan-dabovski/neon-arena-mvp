@@ -1,5 +1,6 @@
 ﻿namespace NeonArenaMvp.Game.Maps.Actions
 {
+    using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
 
     public abstract class BaseAction
@@ -12,15 +13,12 @@
 
         public readonly Coords PreviousCoords;
 
-        public readonly int PlayerId;
-
-        protected BaseAction(Coords coords, Direction direction, int remainingRange, Coords previousCoords, int playerId)
+        protected BaseAction(Coords coords, Direction direction, int remainingRange, Coords previousCoords)
         {
             this.Coords = coords;
             this.Direction = direction;
             this.RemainingRange = remainingRange;
             this.PreviousCoords = previousCoords;
-            this.PlayerId = playerId;
         }
 
         public bool IsOutgoing() => this.Coords.Equals(this.PreviousCoords);

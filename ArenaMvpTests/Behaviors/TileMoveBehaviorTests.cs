@@ -25,8 +25,7 @@ namespace ArenaMvpTests.Behaviors
                 coords: new(1, 1, Direction.Up),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1, Direction.Up),
-                playerId: 1
+                previousCoords: new(1, 1, Direction.Up)
             );
 
             // Act
@@ -49,8 +48,7 @@ namespace ArenaMvpTests.Behaviors
                 coords: new(1, 1, Direction.Up),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1, Direction.Up),
-                playerId: 1
+                previousCoords: new(1, 1, Direction.Up)
             );
 
             // Act
@@ -69,8 +67,7 @@ namespace ArenaMvpTests.Behaviors
                 coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1),
-                playerId: 1
+                previousCoords: new(1, 1)
             );
 
             // Act
@@ -93,8 +90,7 @@ namespace ArenaMvpTests.Behaviors
                 coords: new(1, 1, Direction.Up),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(0, 0, Direction.Up),
-                playerId: 1
+                previousCoords: new(0, 0, Direction.Up)
             );
             
             // Act

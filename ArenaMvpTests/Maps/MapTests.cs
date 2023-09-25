@@ -2,6 +2,7 @@
 {
     using ArenaMvpTests.Mocks;
     using NeonArenaMvp.Game.Maps;
+    using NeonArenaMvp.Game.Maps.Coordinates;
 
     [TestClass]
     public class MapTests

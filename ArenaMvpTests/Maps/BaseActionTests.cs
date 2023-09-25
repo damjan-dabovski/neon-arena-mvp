@@ -2,6 +2,7 @@
 {
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
+    using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
 
     [TestClass]
@@ -22,8 +23,7 @@
                 remainingRange: 1,
                 previousCoords: isOutgoing
                     ? coords
-                    : new(0, 0, Direction.Up),
-                playerId: 0
+                    : new(0, 0, Direction.Up)
             );
 
             // Act
