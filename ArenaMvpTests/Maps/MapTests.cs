@@ -2,7 +2,6 @@
 {
     using ArenaMvpTests.Mocks;
     using NeonArenaMvp.Game.Maps;
-    using NeonArenaMvp.Game.Maps.Coordinates;
 
     [TestClass]
     public class MapTests
@@ -18,7 +17,7 @@
             // Arrange
             var map = new Map(new Tile[1, 1]
             {
-                { new Tile(new(0,0), "", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsEmptyList) }
+                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsEmptyList) }
             });
 
             // Act

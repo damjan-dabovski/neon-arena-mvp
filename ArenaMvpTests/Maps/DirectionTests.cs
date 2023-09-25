@@ -53,7 +53,7 @@ namespace ArenaMvpTests.Maps
         public void ThrowsExceptionWhenRelativeRightDirectionInvalid()
         {
             // Act & Assert
-            Direction.Center.RelativeRight();
+            ((Direction)10).RelativeRight();
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@ namespace ArenaMvpTests.Maps
         public void ThrowsExceptionWhenRelativeLeftDirectionInvalid()
         {
             // Act & Assert
-            Direction.Center.RelativeLeft();
+            ((Direction)10).RelativeLeft();
         }
 
         [TestMethod]
@@ -69,7 +69,7 @@ namespace ArenaMvpTests.Maps
         public void ThrowsExceptionWhenReverseDirectionInvalid()
         {
             // Act & Assert
-            Direction.Center.Reverse();
+            ((Direction)10).Reverse();
         }
     }
 }

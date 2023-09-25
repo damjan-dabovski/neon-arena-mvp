@@ -4,18 +4,18 @@
     using static NeonArenaMvp.Game.Maps.Enums;
 
     [TestClass]
-    public class PartialCoordsTests
+    public class SectorCoordsTests
     {
         [TestMethod]
         [DataRow(Direction.Up, -1, 0)]
         [DataRow(Direction.Down, 1, 0)]
         [DataRow(Direction.Left, 0, -1)]
         [DataRow(Direction.Right, 0, 1)]
-        // TODO expand this test when adding proper partial NextInDirection logic
+        // TODO expand this test when adding proper sector NextInDirection logic
         public void GetsNextCoordsInDirection(Direction dir, int expectedRowDelta, int expectedColDelta)
         {
             // Arrange
-            var original = new PartialCoords(1, 1);
+            var original = new SectorCoords(1, 1);
 
             // Act
             var newCoords = original.NextInDirection(dir);
@@ -28,14 +28,14 @@
         }
 
         [TestMethod]
-        public void EqualsWithoutDirection()
+        public void EqualsWithoutSector()
         {
             // Arrange
-            var coords = new PartialCoords(1, 1, Direction.Up);
-            var other = new PartialCoords(1, 1, Direction.Right);
+            var coords = new SectorCoords(1, 1, Sector.Up);
+            var other = new SectorCoords(1, 1, Sector.Right);
 
             // Act
-            var result = coords.EqualsWithoutDirection(other);
+            var result = coords.EqualsWithoutSector(other);
 
             // Assert
             Assert.IsTrue(result);
@@ -45,7 +45,7 @@
         public void CreatesCoordsFromDelta()
         {
             // Arrange
-            var original = new PartialCoords(0, 0);
+            var original = new SectorCoords(0, 0);
 
             // Act
             var newCoords = original.FromDelta(+1, +1);

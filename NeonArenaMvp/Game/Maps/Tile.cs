@@ -9,8 +9,6 @@ namespace NeonArenaMvp.Game.Maps
 
     public class Tile
     {
-        public readonly Coords Coords;
-
         public readonly Direction Direction;
 
         public readonly string Symbol;
@@ -19,9 +17,8 @@ namespace NeonArenaMvp.Game.Maps
 
         public readonly TileShotBehavior ShotBehavior;
 
-        public Tile(Coords coords, string symbol, TileMoveBehavior moveBehavior, TileShotBehavior shotBehavior, Direction direction = Direction.Up)
+        public Tile(string symbol, TileMoveBehavior moveBehavior, TileShotBehavior shotBehavior, Direction direction = Direction.Up)
         {
-            this.Coords = coords;
             this.Direction = direction;
             this.Symbol = symbol;
             this.MoveBehavior = moveBehavior;

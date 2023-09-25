@@ -10,7 +10,6 @@ namespace ArenaMvpTests.Behaviors
     public class TileMoveBehaviorTests
     {
         private Tile tile = new(
-            coords: new(1, 1),
             symbol: "",
             moveBehavior: TileMoveBehaviors.PassThrough,
             shotBehavior: TileShotBehaviors.PassThrough,
@@ -22,10 +21,10 @@ namespace ArenaMvpTests.Behaviors
             // Arrange
             var startMoveAction = new MoveAction
             (
-                coords: new(1, 1, Direction.Up),
+                coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1, Direction.Up)
+                previousCoords: new(1, 1)
             );
 
             // Act
@@ -45,10 +44,10 @@ namespace ArenaMvpTests.Behaviors
             // Arrange
             var startMoveAction = new MoveAction
             (
-                coords: new(1, 1, Direction.Up),
+                coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1, Direction.Up)
+                previousCoords: new(1, 1)
             );
 
             // Act
@@ -87,10 +86,10 @@ namespace ArenaMvpTests.Behaviors
             // Arrange
             var startMoveAction = new MoveAction
             (
-                coords: new(1, 1, Direction.Up),
+                coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(0, 0, Direction.Up)
+                previousCoords: new(0, 0)
             );
             
             // Act

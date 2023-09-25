@@ -12,11 +12,11 @@
                 col: self.Col + deltaCol);
         }
 
-        public static PartialCoords FromDelta(this PartialCoords self, int deltaRow, int deltaCol)
+        public static SectorCoords FromDelta(this SectorCoords self, int deltaRow, int deltaCol)
         {
             return new(
                 coords: self.BaseCoords.FromDelta(deltaRow, deltaCol),
-                partialDirection: self.PartialDirection);
+                sector: self.Sector);
         }
 
         public static Coords NextInDirection(this Coords self, Direction dir)
@@ -31,8 +31,8 @@
             };
         }
 
-        // TODO add partial-specific logic when implementing partials
-        public static PartialCoords NextInDirection(this PartialCoords self, Direction dir)
+        // TODO add partial-specific logic when implementing sectors
+        public static SectorCoords NextInDirection(this SectorCoords self, Direction dir)
         {
             return dir switch
             {
@@ -44,7 +44,7 @@
             };
         }
 
-        public static bool EqualsWithoutDirection(this PartialCoords self, PartialCoords other)
+        public static bool EqualsWithoutSector(this SectorCoords self, SectorCoords other)
         {
             return self.Row == other.Row
                 && self.Col == other.Col;

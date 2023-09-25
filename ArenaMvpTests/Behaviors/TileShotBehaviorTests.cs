@@ -13,10 +13,10 @@
             // Arrange
             var startShotAction = new ShotAction
             (
-                coords: new(1, 1, Direction.Up),
+                coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1, Direction.Up)
+                previousCoords: new(1, 1)
             );
 
             // Act
@@ -39,10 +39,10 @@
             // Arrange
             var startShotAction = new ShotAction
             (
-                coords: new(1, 1, Direction.Up),
+                coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1, Direction.Up)
+                previousCoords: new(1, 1)
             );
 
             // Act

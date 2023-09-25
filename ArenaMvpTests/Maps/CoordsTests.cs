@@ -50,7 +50,7 @@
         public void ThrowsWhenDirectionInvalid()
         {
             // Act & Assert
-            new Coords(1, 1).NextInDirection(Direction.Center);
+            new Coords(1, 1).NextInDirection((Direction)10);
         }
 
         [TestMethod]
