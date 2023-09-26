@@ -15,12 +15,12 @@ namespace NeonArenaMvp.Game.Maps
             this.Tiles = tiles;
         }
 
-        public bool IsOutOfBounds(Coords coords)
+        public bool IsOutOfBounds(int row, int col)
         {
-            return coords.Row >= this.RowCount
-                || coords.Col >= this.ColCount
-                || coords.Row < 0
-                || coords.Col < 0;
+            return row >= this.RowCount
+                || col >= this.ColCount
+                || row < 0
+                || col < 0;
         }
     }
 }

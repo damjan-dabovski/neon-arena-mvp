@@ -6,7 +6,7 @@
     public class MoveAction
         : BaseAction
     {
-        public MoveAction(Coords coords, Direction direction, int remainingRange, Coords previousCoords)
+        public MoveAction(SectorCoords coords, Direction direction, int remainingRange, SectorCoords previousCoords)
             : base(coords, direction, remainingRange, previousCoords) { }
     }
 }
