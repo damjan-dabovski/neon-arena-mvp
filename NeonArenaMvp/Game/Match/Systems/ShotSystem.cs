@@ -21,11 +21,11 @@
 
                 var tile = map.Tiles[currentShotAction.Coords.Row, currentShotAction.Coords.Col];
 
-                var currentTileMarks = tile.GetMark(currentShotAction);
+                var shotResult = tile.GetShotResult(currentShotAction);
 
                 var loopDetected = false;
 
-                foreach (var mark in currentTileMarks)
+                foreach (var mark in shotResult.TileMarks)
                 {
                     if (resultMarks.Contains(mark))
                     {
@@ -42,9 +42,8 @@
                     continue;
                 }
 
-                var resultShotActions = tile.GetNextShots(currentShotAction);
 
-                foreach (var newShotAction in resultShotActions)
+                foreach (var newShotAction in shotResult.ResultActions)
                 {
                     pendingShotActions.Push(newShotAction);
                 }

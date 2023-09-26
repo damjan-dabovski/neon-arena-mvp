@@ -6,22 +6,23 @@
 
     public static class TileShotBehaviors
     {
-        // TODO merge shot and mark behaviors into the shot behavior,
-        // since it makes no sense for the marks to differ from the rest of the
-        // action propagation
-        public delegate List<ShotAction> TileShotBehavior(Tile tile, ShotAction currentShotAction);
+        public delegate ShotBehaviorResult TileShotBehavior(Tile tile, ShotAction currentShotAction);
 
-        public static readonly TileShotBehavior PassThrough = (_, currentShotAction) => new List<ShotAction> {
-            new ShotAction
-            (
+        public static readonly TileShotBehavior PassThrough = (_, currentShotAction) => new(
+            resultActions: new() { new(
                 coords: currentShotAction.Coords.NextInDirection(currentShotAction.Direction),
                 direction: currentShotAction.Direction,
                 remainingRange: currentShotAction.RemainingRange - 1,
                 previousCoords: currentShotAction.Coords,
-                playerColor: currentShotAction.PlayerColor
-            )
-        };
+                playerColor: currentShotAction.PlayerColor)
+            },
+            tileMarks: new() { new(
+                coords: currentShotAction.BaseCoords,
+                playerColor: currentShotAction.PlayerColor,
+                direction: currentShotAction.Direction)
+            }
+        );
 
-        public static readonly TileShotBehavior Block = (_, currentShotAction) => new List<ShotAction>();
+        public static readonly TileShotBehavior Block = (_, currentShotAction) => new();
     }
 }

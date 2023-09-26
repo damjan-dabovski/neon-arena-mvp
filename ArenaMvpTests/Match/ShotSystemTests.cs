@@ -16,8 +16,8 @@
         {
             Map = new(new Tile[2, 1]
             {
-                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsOneRowDownOneRangeLess, MockMarkBehaviors.ReturnsSingleMarkInDirection) },
-                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsOneRowDownOneRangeLess, MockMarkBehaviors.ReturnsSingleMarkInDirection) }
+                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsOneRowDownOneRangeLessMarksInDirection) },
+                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsOneRowDownOneRangeLessMarksInDirection) }
             });
         }
 

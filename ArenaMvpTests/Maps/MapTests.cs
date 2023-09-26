@@ -17,7 +17,7 @@
             // Arrange
             var map = new Map(new Tile[1, 1]
             {
-                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsEmptyList, MockMarkBehaviors.ReturnsSingleMarkInDirection) }
+                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsEmptyList) }
             });
 
             // Act

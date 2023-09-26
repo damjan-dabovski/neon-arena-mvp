@@ -17,8 +17,8 @@
         {
             Map = new(new Tile[2, 1]
             {
-                { new Tile("", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList, MockMarkBehaviors.ReturnsSingleMarkInDirection) },
-                { new Tile("", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList, MockMarkBehaviors.ReturnsSingleMarkInDirection) }
+                { new Tile("", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList) },
+                { new Tile("", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList) }
             });
         }
 
@@ -48,7 +48,7 @@
             // Arrange
             Map = new(new Tile[1, 1]
             {
-                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsEmptyList, MockMarkBehaviors.ReturnsSingleMarkInDirection) }
+                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsEmptyList) }
             });
 
             var startMoveAction = new MoveAction(
@@ -73,7 +73,7 @@
             // Arrange
             Map = new(new Tile[1, 1]
             {
-                { new Tile("", MockMoveBehaviors.ReturnsItself, MockShotBehaviors.ReturnsEmptyList, MockMarkBehaviors.ReturnsSingleMarkInDirection) }
+                { new Tile("", MockMoveBehaviors.ReturnsItself, MockShotBehaviors.ReturnsEmptyList) }
             });
 
             var startMoveAction = new MoveAction(

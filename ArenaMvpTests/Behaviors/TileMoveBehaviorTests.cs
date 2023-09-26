@@ -15,7 +15,6 @@ namespace ArenaMvpTests.Behaviors
             symbol: "",
             moveBehavior: TileMoveBehaviors.PassThrough,
             shotBehavior: TileShotBehaviors.PassThrough,
-            markBehavior: TileMarkBehaviors.MarkInShotDirection,
             direction: Direction.Up);
 
         [TestMethod]
