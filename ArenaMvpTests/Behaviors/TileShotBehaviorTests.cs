@@ -2,6 +2,7 @@
 {
     using NeonArenaMvp.Game.Behaviors.Tile;
     using NeonArenaMvp.Game.Maps.Actions;
+    using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
 
     [TestClass]
@@ -27,8 +28,10 @@
 
             var resultShotAction = result[0];
             Assert.IsNotNull(resultShotAction);
-            Assert.AreEqual(1, resultShotAction.Coords.Row);
-            Assert.AreEqual(2, resultShotAction.Coords.Col);
+
+            var expectedCoords = startShotAction.Coords.NextInDirection(startShotAction.Direction);
+            Assert.AreEqual(expectedCoords, resultShotAction.Coords);
+
             Assert.AreEqual(startShotAction.Direction, resultShotAction.Direction);
             Assert.AreEqual(0, resultShotAction.RemainingRange);
         }
