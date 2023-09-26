@@ -1,7 +1,7 @@
 ﻿namespace NeonArenaMvp.Game.Maps.Coordinates
 {
     using static NeonArenaMvp.Game.Maps.Enums;
-    using static Maps.Extensions;
+    using static Maps.DirectionExtensions;
 
     public static class CoordsExtensions
     {

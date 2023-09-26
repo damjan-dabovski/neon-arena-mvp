@@ -2,7 +2,7 @@
 {
     using static NeonArenaMvp.Game.Maps.Enums;
 
-    public static class Extensions
+    public static class DirectionExtensions
     {
         public static Direction RelativeLeft(this Direction direction)
         {
