@@ -33,22 +33,22 @@
         
         public static SectorCoords NextInDirection(this SectorCoords self, Direction dir)
         {
-            if( IsSameDirection(dir, self.Sector) )
+            // if on a sector and moving in the same direction,
+            // reuturn the opposite sector from the next tile in the direction
+            if (self.Sector == dir.ToSector())
             {
-                return new (self.BaseCoords.NextInDirection(dir), dir.ToSector().Reverse()); 
+                return new (self.BaseCoords.NextInDirection(dir), dir.Reverse().ToSector()); 
             }
             
-            if ( IsOppositeDirection(dir, self.Sector) )
+            // if moving back from a sector, return the current tile's center
+            if (self.Sector == dir.Reverse().ToSector())
             {
                 return new(self.BaseCoords);
             }
-            
-            if ( IsRelativeLeftDirection(dir, self.Sector) 
-                 || IsRelativeRightDirection(dir, self.Sector) )
-            {
-                return new(self.BaseCoords, dir.ToSector());
-            }
-            
+
+            // the remaining 2 cases are: 1) we're either on the center sector
+            // or 2) the input direction is the relative left/right
+            // direction for that sector
             return new(self.BaseCoords, dir.ToSector());
         }
 

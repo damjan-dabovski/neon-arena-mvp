@@ -39,18 +39,6 @@
                 _ => throw new InvalidOperationException("Invalid direction.")
             };
         }
-        
-        public static Sector Reverse(this Sector sector)
-        {
-            return sector switch
-            {
-                Sector.Up => Sector.Down,
-                Sector.Right => Sector.Left,
-                Sector.Down => Sector.Up,
-                Sector.Left => Sector.Right,
-                _ => throw new InvalidOperationException("Invalid direction.")
-            };
-        }
 
         public static Sector ToSector(this Direction direction)
         {
@@ -62,26 +50,6 @@
                 Direction.Left => Sector.Left,
                 _ => throw new InvalidOperationException("Invalid direction.")
             };
-        }
-        
-        public static bool IsSameDirection(Direction direction, Sector sector)
-        {
-            return sector == direction.ToSector();
-        }
-        
-        public static bool IsOppositeDirection(Direction direction, Sector sector)
-        {
-            return sector == direction.ToSector().Reverse();
-        }
-        
-        public static bool IsRelativeLeftDirection(Direction direction, Sector sector)
-        {
-            return sector == direction.RelativeLeft().ToSector();
-        }
-        
-        public static bool IsRelativeRightDirection(Direction direction, Sector sector)
-        {
-            return sector == direction.RelativeRight().ToSector();
         }
     }
 }
