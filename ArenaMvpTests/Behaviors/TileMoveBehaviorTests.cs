@@ -4,6 +4,7 @@ namespace ArenaMvpTests.Behaviors
 {
     using NeonArenaMvp.Game.Behaviors.Tile;
     using NeonArenaMvp.Game.Maps.Actions;
+    using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
     using static NeonArenaMvp.Game.Match.Enums;
 
@@ -31,14 +32,16 @@ namespace ArenaMvpTests.Behaviors
             );
 
             // Act
-            var newMoveAction = TileMoveBehaviors.PassThrough(this.tile, startMoveAction);
+            var resultMoveAction = TileMoveBehaviors.PassThrough(this.tile, startMoveAction);
 
             // Assert
-            Assert.IsNotNull(newMoveAction);
-            Assert.AreEqual(1, newMoveAction.Coords.Row);
-            Assert.AreEqual(2, newMoveAction.Coords.Col);
-            Assert.AreEqual(startMoveAction.Direction, newMoveAction.Direction);
-            Assert.AreEqual(0, newMoveAction.RemainingRange);
+            Assert.IsNotNull(resultMoveAction);
+
+            var expectedCoords = startMoveAction.Coords.NextInDirection(startMoveAction.Direction);
+            Assert.AreEqual(expectedCoords, resultMoveAction.Coords);
+
+            Assert.AreEqual(startMoveAction.Direction, resultMoveAction.Direction);
+            Assert.AreEqual(0, resultMoveAction.RemainingRange);
         }
         
         [TestMethod]
@@ -55,10 +58,10 @@ namespace ArenaMvpTests.Behaviors
             );
 
             // Act
-            var newMoveAction = TileMoveBehaviors.Block(this.tile, startMoveAction);
+            var resultMoveAction = TileMoveBehaviors.Block(this.tile, startMoveAction);
 
             // Assert
-            Assert.IsNull(newMoveAction);
+            Assert.IsNull(resultMoveAction);
         }
 
         [TestMethod]
@@ -75,14 +78,15 @@ namespace ArenaMvpTests.Behaviors
             );
 
             // Act
-            var newMoveAction = TileMoveBehaviors.Redirect(this.tile, startMoveAction);
+            var resultMoveAction = TileMoveBehaviors.Redirect(this.tile, startMoveAction);
 
             // Assert
-            Assert.IsNotNull(newMoveAction);
-            Assert.AreEqual(1, newMoveAction.Coords.Row);
-            Assert.AreEqual(2, newMoveAction.Coords.Col);
-            Assert.AreEqual(startMoveAction.Direction, newMoveAction.Direction);
-            Assert.AreEqual(startMoveAction.RemainingRange - 1, newMoveAction.RemainingRange);
+            Assert.IsNotNull(resultMoveAction);
+
+            var expectedCoords = startMoveAction.Coords.NextInDirection(startMoveAction.Direction);
+            Assert.AreEqual(expectedCoords, resultMoveAction.Coords);
+
+            Assert.AreEqual(startMoveAction.RemainingRange - 1, resultMoveAction.RemainingRange);
         }
 
         [TestMethod]
@@ -99,14 +103,15 @@ namespace ArenaMvpTests.Behaviors
             );
             
             // Act
-            var newMoveAction = TileMoveBehaviors.Redirect(this.tile, startMoveAction);
+            var resultMoveAction = TileMoveBehaviors.Redirect(this.tile, startMoveAction);
             
             // Assert
-            Assert.IsNotNull(newMoveAction);
-            Assert.AreEqual(0, newMoveAction.Coords.Row);
-            Assert.AreEqual(1, newMoveAction.Coords.Col);
-            Assert.AreEqual(tile.Direction, newMoveAction.Direction);
-            Assert.AreEqual(startMoveAction.RemainingRange, newMoveAction.RemainingRange);
+            Assert.IsNotNull(resultMoveAction);
+
+            var expectedCoords = startMoveAction.Coords.NextInDirection(this.tile.Direction);
+            Assert.AreEqual(expectedCoords, resultMoveAction.Coords);
+
+            Assert.AreEqual(startMoveAction.RemainingRange, resultMoveAction.RemainingRange);
         }
     }
 }

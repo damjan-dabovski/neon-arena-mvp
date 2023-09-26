@@ -1,7 +1,7 @@
 ﻿namespace NeonArenaMvp.Game.Maps.Coordinates
 {
-    using Microsoft.AspNetCore.Mvc.ActionConstraints;
     using static NeonArenaMvp.Game.Maps.Enums;
+    using static Maps.DirectionExtensions;
 
     public static class CoordsExtensions
     {
@@ -30,18 +30,26 @@
                 _ => throw new InvalidOperationException("Invalid direction")
             };
         }
-
-        // TODO add partial-specific logic when implementing sectors
+        
         public static SectorCoords NextInDirection(this SectorCoords self, Direction dir)
         {
-            return dir switch
+            // if on a sector and moving in the same direction,
+            // reuturn the opposite sector from the next tile in the direction
+            if (self.Sector == dir.ToSector())
             {
-                Direction.Up => self.FromDelta(-1, 0),
-                Direction.Down => self.FromDelta(+1, 0),
-                Direction.Left => self.FromDelta(0, -1),
-                Direction.Right => self.FromDelta(0, +1),
-                _ => throw new InvalidOperationException("Invalid direction")
-            };
+                return new (self.BaseCoords.NextInDirection(dir), dir.Reverse().ToSector()); 
+            }
+            
+            // if moving back from a sector, return the current tile's center
+            if (self.Sector == dir.Reverse().ToSector())
+            {
+                return new(self.BaseCoords);
+            }
+
+            // the remaining 2 cases are: 1) we're either on the center sector
+            // or 2) the input direction is the relative left/right
+            // direction for that sector
+            return new(self.BaseCoords, dir.ToSector());
         }
 
         public static bool EqualsWithoutSector(this SectorCoords self, SectorCoords other)
