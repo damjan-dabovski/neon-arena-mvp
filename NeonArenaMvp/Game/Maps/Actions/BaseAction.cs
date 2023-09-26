@@ -5,15 +5,17 @@
 
     public abstract class BaseAction
     {
-        public readonly Coords Coords;
+        public readonly SectorCoords Coords;
 
         public readonly Direction Direction;
 
         public readonly int RemainingRange;
 
-        public readonly Coords PreviousCoords;
+        public readonly SectorCoords PreviousCoords;
 
-        protected BaseAction(Coords coords, Direction direction, int remainingRange, Coords previousCoords)
+        public Coords BaseCoords => this.Coords.BaseCoords;
+
+        protected BaseAction(SectorCoords coords, Direction direction, int remainingRange, SectorCoords previousCoords)
         {
             this.Coords = coords;
             this.Direction = direction;

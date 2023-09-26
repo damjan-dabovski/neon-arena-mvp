@@ -7,6 +7,14 @@
             Up,
             Down,
             Left,
+            Right
+        }
+
+        public enum Sector
+        {
+            Up,
+            Down,
+            Left,
             Right,
             Center
         }

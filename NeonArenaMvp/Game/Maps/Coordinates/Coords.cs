@@ -10,39 +10,32 @@
 
         public readonly int Col;
 
-        // TODO should this be refactored into 2 separate classes:
-        // one 'base' Coords class, and one derived PartialCoords
-        public readonly Direction PartialDirection;
-
-        public Coords(int row, int col, Direction direction = Direction.Center)
+        public Coords(int row, int col)
         {
-            Row = row;
-            Col = col;
-            PartialDirection = direction;
+            this.Row = row;
+            this.Col = col;
         }
 
         public Coords(BaseAction action)
         {
-            Row = action.Coords.Row;
-            Col = action.Coords.Col;
-            PartialDirection = action.Coords.PartialDirection;
+            this.Row = action.Coords.Row;
+            this.Col = action.Coords.Col;
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is Coords coords && Equals(coords);
+            return obj is Coords coords && this.Equals(coords);
         }
 
         public bool Equals(Coords other)
         {
-            return Row == other.Row
-                && Col == other.Col
-                && PartialDirection == other.PartialDirection;
+            return this.Row == other.Row
+                && this.Col == other.Col;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Row, Col, PartialDirection);
+            return HashCode.Combine(Row, Col);
         }
 
         public static bool operator ==(Coords left, Coords right)

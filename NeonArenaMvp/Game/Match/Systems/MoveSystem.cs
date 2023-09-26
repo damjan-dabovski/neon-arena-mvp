@@ -6,28 +6,23 @@
 
     public static class MoveSystem
     {
-        public static List<Coords> ProcessMovement(Map map, MoveAction startMoveAction)
+        public static List<MoveResult> ProcessMovement(Map map, MoveAction startMoveAction)
         {
-            var resultCoords = new List<Coords>();
+            var resultList = new List<MoveResult>();
 
             var currentMoveAction = startMoveAction;
 
             while (true)
             {
-                // TODO do we need to preserve movement direction information
-                // for all moves explicitly? this is wrt the client and animations
-                // if so, we should make a custom 'MoveResult' model that contains Coords
-                // and an explicit Direction; to avoid using the PartialDirection of Coords
-                // as a hack to convey this direction information
-                var newCoords = new Coords(currentMoveAction);
+                var newCoords = new MoveResult(currentMoveAction);
 
-                if (resultCoords.Contains(newCoords))
+                if (resultList.Contains(newCoords))
                 {
-                    return new List<Coords> { new(startMoveAction) };
+                    return new List<MoveResult> { new(startMoveAction) };
                 }
                 else
                 {
-                    resultCoords.Add(newCoords);
+                    resultList.Add(newCoords);
                 }
 
                 var tile = map.Tiles[currentMoveAction.Coords.Row, currentMoveAction.Coords.Col];
@@ -36,7 +31,7 @@
 
                 if (nextMoveAction is null
                     || currentMoveAction.RemainingRange == 0
-                    || map.IsOutOfBounds(nextMoveAction.Coords))
+                    || map.IsOutOfBounds(nextMoveAction.Coords.Row, nextMoveAction.Coords.Col))
                 {
                     break;
                 }
@@ -44,7 +39,7 @@
                 currentMoveAction = nextMoveAction;
             }
 
-            return resultCoords;
+            return resultList;
         }
     }
 }
