@@ -12,6 +12,10 @@
 
         public readonly string Symbol;
 
+        // TODO add a Dictionary (or preferably a custom type that can
+        // enforce construction better) of Sector to TileBehavior (wrapper
+        // for both Move and Shot behaviors, what the sectors *actually* are,
+        // gameplay-wise)
         private readonly TileMoveBehavior MoveBehavior;
 
         public readonly TileShotBehavior ShotBehavior;

@@ -10,6 +10,12 @@
 
         public readonly Direction Direction;
 
+        // TODO refactor to use a custom type that's
+        // a thin wrapper around an int, for the sake of usability
+        // since range takes is the number of tiles evaluated,
+        // rather than the number of tiles away from the start
+        // this is because the start tile is always evaluated as well,
+        // so the range should always be 1 greater than the 'expected' int value
         public readonly int RemainingRange;
 
         public readonly SectorCoords PreviousCoords;
