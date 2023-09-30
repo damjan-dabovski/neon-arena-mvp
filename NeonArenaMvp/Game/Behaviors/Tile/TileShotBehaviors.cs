@@ -16,13 +16,11 @@
                 previousCoords: currentShotAction.Coords,
                 playerColor: currentShotAction.PlayerColor)
             },
-            tileMarks: new() { new(
-                coords: currentShotAction.BaseCoords,
-                playerColor: currentShotAction.PlayerColor,
+            mandatoryTileMark: new(
+                action: currentShotAction,
                 direction: currentShotAction.Direction)
-            }
         );
 
-        public static readonly TileShotBehavior Block = (_, currentShotAction) => new();
+        public static readonly TileShotBehavior Block = (_, currentShotAction) => ShotBehaviorResult.Empty;
     }
 }

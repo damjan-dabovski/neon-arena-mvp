@@ -16,6 +16,8 @@
             {
                 var newCoords = new MoveResult(currentMoveAction);
 
+                // TODO currently we're using pessimistic loop detection (fails immediately)
+                // we can change it to be more optimistic (i.e. let the non-looping cases through)
                 if (resultList.Contains(newCoords))
                 {
                     return new List<MoveResult> { new(startMoveAction) };

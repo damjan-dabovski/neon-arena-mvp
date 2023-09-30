@@ -9,16 +9,19 @@
 
         public readonly List<TileMark> TileMarks;
 
-        public ShotBehaviorResult()
+        public static readonly ShotBehaviorResult Empty = new();
+
+        private ShotBehaviorResult()
         {
             this.ResultActions = new();
             this.TileMarks = new();
         }
 
-        public ShotBehaviorResult(List<ShotAction> resultActions, List<TileMark> tileMarks)
+        public ShotBehaviorResult(List<ShotAction> resultActions, TileMark mandatoryTileMark, params TileMark[] otherTileMarks)
         {
             this.ResultActions = resultActions;
-            this.TileMarks = tileMarks;
+            this.TileMarks = new() { mandatoryTileMark };
+            this.TileMarks.AddRange(otherTileMarks);
         }
     }
 }

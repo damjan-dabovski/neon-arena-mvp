@@ -23,6 +23,8 @@
 
                 var shotResult = tile.GetShotResult(currentShotAction);
 
+                // TODO currently we're using pessimistic loop detection (fails immediately)
+                // we can change it to be more optimistic (i.e. let the non-looping cases through)
                 var loopDetected = false;
 
                 foreach (var mark in shotResult.TileMarks)
@@ -42,10 +44,12 @@
                     continue;
                 }
 
-
                 foreach (var newShotAction in shotResult.ResultActions)
                 {
-                    pendingShotActions.Push(newShotAction);
+                    if (!map.IsOutOfBounds(newShotAction.Coords.Row, newShotAction.Coords.Col))
+                    {
+                        pendingShotActions.Push(newShotAction);
+                    }
                 }
             }
 

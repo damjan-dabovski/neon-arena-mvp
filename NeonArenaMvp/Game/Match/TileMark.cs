@@ -1,5 +1,6 @@
 ﻿namespace NeonArenaMvp.Game.Match
 {
+    using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using System;
     using static NeonArenaMvp.Game.Maps.Enums;
@@ -13,10 +14,10 @@
 
         public readonly Direction Direction;
 
-        public TileMark(Coords coords, PlayerColor playerColor, Direction direction)
+        public TileMark(BaseAction action, Direction direction)
         {
-            this.Coords = coords;
-            this.PlayerColor = playerColor;
+            this.Coords = action.BaseCoords;
+            this.PlayerColor = action.PlayerColor;
             this.Direction = direction;
         }
 
