@@ -186,5 +186,7 @@
             Assert.AreEqual(startShotAction.BaseCoords.FromDelta(+1, 0), resultMarks[1].Coords);
             Assert.AreEqual(startShotAction.Direction, resultMarks[1].Direction);
         }
+
+        // TODO doesn't add tile marks from sectors
     }
 }

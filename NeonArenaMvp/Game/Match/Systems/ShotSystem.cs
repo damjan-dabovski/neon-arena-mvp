@@ -2,6 +2,7 @@
 {
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
+    using static NeonArenaMvp.Game.Maps.Enums;
 
     public static class ShotSystem
     {
@@ -27,15 +28,18 @@
                 // we can change it to be more optimistic (i.e. let the non-looping cases through)
                 var loopDetected = false;
 
-                foreach (var mark in shotResult.TileMarks)
+                if (currentShotAction.Coords.Sector == Sector.Center)
                 {
-                    if (resultMarks.Contains(mark))
+                    foreach (var mark in shotResult.TileMarks)
                     {
-                        loopDetected = true;
-                    }
-                    else
-                    {
-                        resultMarks.Add(mark);
+                        if (resultMarks.Contains(mark))
+                        {
+                            loopDetected = true;
+                        }
+                        else
+                        {
+                            resultMarks.Add(mark);
+                        }
                     }
                 }
 

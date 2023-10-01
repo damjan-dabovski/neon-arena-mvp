@@ -16,6 +16,7 @@
         // rather than the number of tiles away from the start
         // this is because the start tile is always evaluated as well,
         // so the range should always be 1 greater than the 'expected' int value
+        // also, default for movement should be Adjacent (i.e. 2), and infinite (i.e. -1) for shots
         public readonly int RemainingRange;
 
         public readonly SectorCoords PreviousCoords;
@@ -34,5 +35,13 @@
         }
 
         public bool IsOutgoing() => this.Coords.Equals(this.PreviousCoords);
+
+        // TODO move this out to the Range type (and probably rename it to be more descriptive)
+        public static int DecrementRange(BaseAction currentAction, int amount = 1)
+        {
+            return currentAction.Coords.Sector == Sector.Center
+                ? currentAction.RemainingRange - amount
+                : currentAction.RemainingRange;
+        }
     }
 }

@@ -10,6 +10,8 @@
 
         public readonly Direction MoveDirection;
 
+        public static readonly List<MoveResult> Empty = new();
+
         public MoveResult(Coords coords, Direction moveDirection)
         {
             this.Coords = coords;

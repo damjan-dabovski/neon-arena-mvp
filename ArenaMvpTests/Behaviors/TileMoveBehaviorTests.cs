@@ -11,11 +11,7 @@ namespace ArenaMvpTests.Behaviors
     [TestClass]
     public class TileMoveBehaviorTests
     {
-        private Tile tile = new(
-            symbol: "",
-            moveBehavior: TileMoveBehaviors.PassThrough,
-            shotBehavior: TileShotBehaviors.PassThrough,
-            direction: Direction.Up);
+        private Tile tile = new(centerBehavior: TileBehaviors.Empty);
 
         [TestMethod]
         public void PassThroughProducesNextTileInDirection()
@@ -31,7 +27,7 @@ namespace ArenaMvpTests.Behaviors
             );
 
             // Act
-            var resultMoveAction = TileMoveBehaviors.PassThrough(this.tile, startMoveAction);
+            var resultMoveAction = TileMoveBehaviors.PassThrough(this.tile.Direction, startMoveAction);
 
             // Assert
             Assert.IsNotNull(resultMoveAction);
@@ -57,7 +53,7 @@ namespace ArenaMvpTests.Behaviors
             );
 
             // Act
-            var resultMoveAction = TileMoveBehaviors.Block(this.tile, startMoveAction);
+            var resultMoveAction = TileMoveBehaviors.Block(this.tile.Direction, startMoveAction);
 
             // Assert
             Assert.IsNull(resultMoveAction);
@@ -77,7 +73,7 @@ namespace ArenaMvpTests.Behaviors
             );
 
             // Act
-            var resultMoveAction = TileMoveBehaviors.Redirect(this.tile, startMoveAction);
+            var resultMoveAction = TileMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);
 
             // Assert
             Assert.IsNotNull(resultMoveAction);
@@ -102,7 +98,7 @@ namespace ArenaMvpTests.Behaviors
             );
             
             // Act
-            var resultMoveAction = TileMoveBehaviors.Redirect(this.tile, startMoveAction);
+            var resultMoveAction = TileMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);
             
             // Assert
             Assert.IsNotNull(resultMoveAction);
