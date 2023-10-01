@@ -6,6 +6,7 @@ namespace ArenaMvpTests.Behaviors
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
+    using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
     public class TileMoveBehaviorTests
@@ -25,7 +26,8 @@ namespace ArenaMvpTests.Behaviors
                 coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1)
+                previousCoords: new(1, 1),
+                playerColor: PlayerColor.Red
             );
 
             // Act
@@ -50,7 +52,8 @@ namespace ArenaMvpTests.Behaviors
                 coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1)
+                previousCoords: new(1, 1),
+                playerColor: PlayerColor.Red
             );
 
             // Act
@@ -69,7 +72,8 @@ namespace ArenaMvpTests.Behaviors
                 coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(1, 1)
+                previousCoords: new(1, 1),
+                playerColor: PlayerColor.Red
             );
 
             // Act
@@ -93,7 +97,8 @@ namespace ArenaMvpTests.Behaviors
                 coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: 1,
-                previousCoords: new(0, 0)
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red
             );
             
             // Act

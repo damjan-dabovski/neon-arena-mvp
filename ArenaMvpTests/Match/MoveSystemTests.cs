@@ -6,6 +6,7 @@
     using NeonArenaMvp.Game.Maps.Coordinates;
     using NeonArenaMvp.Game.Match.Systems;
     using static NeonArenaMvp.Game.Maps.Enums;
+    using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
     public class MoveSystemTests
@@ -29,7 +30,8 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 0,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -53,7 +55,8 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -77,7 +80,8 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -96,7 +100,8 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 1,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
@@ -119,7 +124,8 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 3,
-                previousCoords: new(0, 0));
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);

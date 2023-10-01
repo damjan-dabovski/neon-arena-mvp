@@ -2,21 +2,25 @@
 {
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
+    using Tile = Maps.Tile;
 
     public static class TileShotBehaviors
     {
-        public delegate List<ShotAction> TileShotBehavior(ShotAction currentShotAction);
+        public delegate ShotBehaviorResult TileShotBehavior(Tile tile, ShotAction currentShotAction);
 
-        public static readonly TileShotBehavior PassThrough = (currentShotAction) => new List<ShotAction> {
-            new ShotAction
-            (
+        public static readonly TileShotBehavior PassThrough = (_, currentShotAction) => new(
+            resultActions: new() { new(
                 coords: currentShotAction.Coords.NextInDirection(currentShotAction.Direction),
                 direction: currentShotAction.Direction,
                 remainingRange: currentShotAction.RemainingRange - 1,
-                previousCoords: currentShotAction.Coords
-            )
-        };
+                previousCoords: currentShotAction.Coords,
+                playerColor: currentShotAction.PlayerColor)
+            },
+            mandatoryTileMark: new(
+                action: currentShotAction,
+                direction: currentShotAction.Direction)
+        );
 
-        public static readonly TileShotBehavior Block = (currentShotAction) => new List<ShotAction>();
+        public static readonly TileShotBehavior Block = (_, currentShotAction) => ShotBehaviorResult.Empty;
     }
 }

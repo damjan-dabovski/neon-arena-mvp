@@ -16,7 +16,7 @@
             this.MoveDirection = moveDirection;
         }
 
-        public MoveResult(BaseAction action)
+        public MoveResult(MoveAction action)
         {
             this.Coords = action.BaseCoords;
             this.MoveDirection = action.Direction;

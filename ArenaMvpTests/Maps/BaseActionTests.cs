@@ -3,6 +3,7 @@
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
+    using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
     public class BaseActionTests
@@ -22,7 +23,8 @@
                 remainingRange: 1,
                 previousCoords: isOutgoing
                     ? coords
-                    : new(0, 0)
+                    : new(0, 0),
+                playerColor: PlayerColor.Red
             );
 
             // Act
