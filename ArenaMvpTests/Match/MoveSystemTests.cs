@@ -136,7 +136,7 @@
             Assert.AreEqual(1, moveResults.Count);
 
             Assert.AreEqual(startMoveAction.BaseCoords, moveResults[0].Coords);
-            Assert.AreEqual(startMoveAction.Direction, moveResults[0].MoveDirection);
+            Assert.AreEqual(startMoveAction.Direction, moveResults[0].InputDirection);
         }
         
         // TODO returns N - 1 tiles when evaluating N tiles (i.e. range N)
@@ -159,10 +159,10 @@
             Assert.AreEqual(2, moveResults.Count);
 
             Assert.AreEqual(startMoveAction.BaseCoords, moveResults[0].Coords);
-            Assert.AreEqual(startMoveAction.Direction, moveResults[0].MoveDirection);
+            Assert.AreEqual(startMoveAction.Direction, moveResults[0].InputDirection);
 
             Assert.AreEqual(startMoveAction.BaseCoords.FromDelta(+1, 0), moveResults[1].Coords);
-            Assert.AreEqual(startMoveAction.Direction, moveResults[0].MoveDirection);
+            Assert.AreEqual(startMoveAction.Direction, moveResults[0].InputDirection);
         }
 
         // TODO doesn't add moves from sectors
