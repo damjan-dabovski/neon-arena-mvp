@@ -329,7 +329,5 @@
             // Assert
             Assert.AreEqual(0, moveResults.Count);
         }
-
-        // TODO move result for origin has correct direction when origin redirects
     }
 }
