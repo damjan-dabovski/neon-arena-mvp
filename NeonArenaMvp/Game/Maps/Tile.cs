@@ -5,6 +5,7 @@
     using static NeonArenaMvp.Game.Maps.Enums;
 
     public class Tile
+        : ITile
     {
         public readonly Direction Direction;
 

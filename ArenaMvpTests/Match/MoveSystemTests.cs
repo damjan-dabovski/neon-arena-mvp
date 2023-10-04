@@ -19,7 +19,8 @@
             var tile = new FakeTile();
 
             this.Map = new FakeMap()
-                .SetTile(0, 0, tile);
+                .SetTile(0, 0, tile)
+                .SetOutOfBounds(false);
         }
 
         [TestMethod]
@@ -41,15 +42,13 @@
         }
 
         [TestMethod]
-        [DataRow(0)]
-        [DataRow(1)]
-        public void ReturnsEmptyListWhenStartingActionHasRangeZeroOrOne(int startActionRange)
+        public void ReturnsEmptyListWhenStartingActionHasRangeZero()
         {
             // Arrange
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: startActionRange,
+                remainingRange: 0,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -64,6 +63,8 @@
         public void ReturnsEmptyListWhenStartActionOutOfBounds()
         {
             // Arrange
+            this.Map.SetOutOfBounds(true);
+
             var startMoveAction = new MoveAction(
                 coords: new(3, 3),
                 direction: Direction.Down,
@@ -130,8 +131,14 @@
         public void ReturnsEmptyListWhenOriginReturnsOutOfBoundsAction()
         {
             // Arrange
+            var mockBehavior = new Mock<TileMoveBehavior>();
+
+            mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(new MoveAction(new(-1, -1), Direction.Down, 1, new(0, 0), PlayerColor.Red))
+                .Callback(() => this.Map.SetOutOfBounds(true));
+
             var fakeTile = new FakeTile()
-                .SetupAllMoveBehaviors(MockMoveBehaviors.ReturnsOutOfBoundsAction);
+                .SetupAllMoveBehaviors(mockBehavior.Object);
 
             this.Map = new FakeMap()
                  .SetTile(0, 0, fakeTile);
@@ -161,8 +168,13 @@
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
+            var mockBehavior = new Mock<TileMoveBehavior>();
+
+            mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(startMoveAction);
+
             var fakeTile = new FakeTile()
-                .SetupAllMoveBehaviors(MockMoveBehaviors.ReturnsItself);
+                .SetupAllMoveBehaviors(mockBehavior.Object);
 
             this.Map = new FakeMap()
                 .SetTile(0, 0, fakeTile);
@@ -223,8 +235,8 @@
                 .SetupSectorMoveBehavior(Sector.Down, firstSectorBehavior.Object);
 
             var secondTile = new FakeTile()
-                .SetupSectorMoveBehavior(Sector.Center, secondCenterBehavior.Object)
-                .SetupSectorMoveBehavior(Sector.Down, secondSectorBehavior.Object);
+                .SetupSectorMoveBehavior(Sector.Up, secondSectorBehavior.Object)
+                .SetupSectorMoveBehavior(Sector.Center, secondCenterBehavior.Object);
 
             this.Map = new FakeMap()
                 .SetTile(0, 0, firstTile)
@@ -297,8 +309,8 @@
                 .SetupSectorMoveBehavior(Sector.Down, firstSectorBehavior.Object);
 
             var secondTile = new FakeTile()
-                .SetupSectorMoveBehavior(Sector.Center, secondCenterBehavior.Object)
-                .SetupSectorMoveBehavior(Sector.Down, secondSectorBehavior.Object);
+                .SetupSectorMoveBehavior(Sector.Up, secondSectorBehavior.Object)
+                .SetupSectorMoveBehavior(Sector.Center, secondCenterBehavior.Object);
 
             this.Map = new FakeMap()
                 .SetTile(0, 0, firstTile)

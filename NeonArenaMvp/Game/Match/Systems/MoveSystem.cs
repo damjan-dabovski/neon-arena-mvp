@@ -7,12 +7,13 @@
 
     public static class MoveSystem
     {
-        public static List<MoveResult> ProcessMovement(Map map, MoveAction startMoveAction)
+        public static List<MoveResult> ProcessMovement(IMap map, MoveAction startMoveAction)
         {
             /* starting a move from a non-Center sector should be impossible
              * because this means that the player ended on a non-Center sector,
              * which should also be impossible */
-            if (startMoveAction.Coords.Sector != Sector.Center)
+            if (startMoveAction.Coords.Sector != Sector.Center
+                || ShouldStopMovement(map, startMoveAction))
             {
                 return MoveResult.Empty;
             }
@@ -27,12 +28,7 @@
 
             while (true)
             {
-                if (ShouldStopMovement(map, currentMoveAction))
-                {
-                    break;
-                }
-
-                var tile = map.Tiles[currentMoveAction.Coords.Row, currentMoveAction.Coords.Col];
+                var tile = map[currentMoveAction.Coords.Row, currentMoveAction.Coords.Col];
 
                 var nextMoveAction = tile.GetNextMove(currentMoveAction);
 
@@ -83,7 +79,7 @@
             return moveResults;
         }
 
-        private static bool ShouldStopMovement(Map map, [NotNullWhen(false)] MoveAction? moveAction)
+        private static bool ShouldStopMovement(IMap map, [NotNullWhen(false)] MoveAction? moveAction)
         {
             return moveAction is null
                     || moveAction.RemainingRange == 0

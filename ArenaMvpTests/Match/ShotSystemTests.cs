@@ -8,6 +8,8 @@
     using NeonArenaMvp.Game.Maps.Coordinates;
     using NeonArenaMvp.Game.Match;
     using NeonArenaMvp.Game.Match.Systems;
+
+    using static NeonArenaMvp.Game.Behaviors.Tile.TileMoveBehaviors;
     using static NeonArenaMvp.Game.Behaviors.Tile.TileShotBehaviors;
     using static NeonArenaMvp.Game.Maps.Enums;
     using static NeonArenaMvp.Game.Match.Enums;
@@ -22,7 +24,8 @@
             var tile = new FakeTile();
 
             this.Map = new FakeMap()
-                .SetTile(0, 0, tile);
+                .SetTile(0, 0, tile)
+                .SetOutOfBounds(false);
         }
 
         [TestMethod]
@@ -47,6 +50,8 @@
         public void ReturnsEmptyListWhenStartActionOutOfBounds()
         {
             // Arrange
+            this.Map.SetOutOfBounds(true);
+
             var startShotAction = new ShotAction(
                 coords: new(-1, -1),
                 direction: Direction.Down,
@@ -65,8 +70,13 @@
         public void ReturnsEmptyListWhenOriginProducesNoMarks()
         {
             // Arrange
+            var mockBehavior = new Mock<TileShotBehavior>();
+
+            mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
+                .Returns(ShotBehaviorResult.Empty);
+
             var fakeTile = new FakeTile()
-                .SetupAllShotBehaviors(MockShotBehaviors.ReturnsEmptyList);
+                .SetupAllShotBehaviors(mockBehavior.Object);
 
             this.Map = new FakeMap()
                 .SetTile(0, 0, fakeTile);
@@ -89,12 +99,6 @@
         public void ReturnsOnlyOriginMarkWhenOriginProducesNoShotAction()
         {
             // Arrange
-            var fakeTile = new FakeTile()
-                .SetupAllShotBehaviors(MockShotBehaviors.ReturnsNoActionButMarksInDirection);
-
-            this.Map = new FakeMap()
-                .SetTile(0, 0, fakeTile);
-
             var startShotAction = new ShotAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
@@ -102,51 +106,62 @@
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
+            var mockBehavior = new Mock<TileShotBehavior>();
+
+            mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
+                .Returns(new ShotBehaviorResult(new(), new(startShotAction, Direction.Down)));
+
+            var fakeTile = new FakeTile()
+                .SetupAllShotBehaviors(mockBehavior.Object);
+
+            this.Map = new FakeMap()
+                .SetTile(0, 0, fakeTile);
+
             // Act
             var resultMarks = ShotSystem.ProcessShot(this.Map.Object, startShotAction);
 
             // Assert
             Assert.AreEqual(1, resultMarks.Count);
-            Assert.AreEqual(startShotAction.BaseCoords, resultMarks[0].Coords);
-            Assert.AreEqual(startShotAction.Direction, resultMarks[0].Direction);
+            Assert.AreEqual(new Coords(0, 0), resultMarks[0].Coords);
+            Assert.AreEqual(Direction.Down, resultMarks[0].Direction);
         }
 
         [TestMethod]
         public void ReturnsOnlyOriginWhenOriginCausesLoop()
         {
             // Arrange
-            var fakeTile = new FakeTile()
-                .SetupAllShotBehaviors(MockShotBehaviors.ReturnsItselfMarksInDirection);
-
-            this.Map = new FakeMap()
-                .SetTile(0, 0, fakeTile);
-
             var startShotAction = new ShotAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: 1,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
+
+            var mockBehavior = new Mock<TileShotBehavior>();
+
+            mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
+                .Returns(new ShotBehaviorResult(new() { startShotAction }, new(startShotAction, Direction.Down)));
+
+            var fakeTile = new FakeTile()
+                .SetupAllShotBehaviors(mockBehavior.Object);
+
+            this.Map = new FakeMap()
+                .SetTile(0, 0, fakeTile);
+
 
             // Act
             var resultMarks = ShotSystem.ProcessShot(this.Map.Object, startShotAction);
 
             // Assert
             Assert.AreEqual(1, resultMarks.Count);
-            Assert.AreEqual(startShotAction.BaseCoords, resultMarks[0].Coords);
-            Assert.AreEqual(startShotAction.Direction, resultMarks[0].Direction);
+            Assert.AreEqual(new Coords(0, 0), resultMarks[0].Coords);
+            Assert.AreEqual(Direction.Down, resultMarks[0].Direction);
         }
 
         [TestMethod]
         public void ReturnsMultipleMarksWhenOriginReturnsMultipleMarks()
         {
             // Arrange
-            var fakeTile = new FakeTile()
-                .SetupAllShotBehaviors(MockShotBehaviors.ReturnsNoActionMarksInDirectionAndOpposite);
-
-            this.Map = new FakeMap()
-                .SetTile(0, 0, fakeTile);
-
             var startShotAction = new ShotAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
@@ -154,16 +169,35 @@
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
+            var mockBehavior = new Mock<TileShotBehavior>();
+
+            mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
+                .Returns(new ShotBehaviorResult(
+                resultActions: new(),
+                mandatoryTileMark: new(
+                    action: startShotAction,
+                    direction: Direction.Down),
+                new TileMark(
+                    action: startShotAction,
+                    direction: Direction.Up)
+            ));
+
+            var fakeTile = new FakeTile()
+                .SetupAllShotBehaviors(mockBehavior.Object);
+
+            this.Map = new FakeMap()
+                .SetTile(0, 0, fakeTile);
+
             // Act
             var resultMarks = ShotSystem.ProcessShot(this.Map.Object, startShotAction);
 
             // Assert
             Assert.AreEqual(2, resultMarks.Count);
-            Assert.AreEqual(startShotAction.BaseCoords, resultMarks[0].Coords);
-            Assert.AreEqual(startShotAction.Direction, resultMarks[0].Direction);
+            Assert.AreEqual(new Coords(0,0), resultMarks[0].Coords);
+            Assert.AreEqual(Direction.Down, resultMarks[0].Direction);
 
-            Assert.AreEqual(startShotAction.BaseCoords, resultMarks[1].Coords);
-            Assert.AreEqual(startShotAction.Direction.Reverse(), resultMarks[1].Direction);
+            Assert.AreEqual(new Coords(0, 0), resultMarks[1].Coords);
+            Assert.AreEqual(Direction.Up, resultMarks[1].Direction);
         }
 
         [TestMethod]
@@ -235,7 +269,7 @@
             var secondCenterBehaviorResultAction = new ShotAction(
                     coords: new(1, 0, Sector.Down),
                     direction: Direction.Down,
-                    remainingRange: 1,
+                    remainingRange: 0,
                     previousCoords: new(1, 0, Sector.Center),
                     playerColor: PlayerColor.Red);
 

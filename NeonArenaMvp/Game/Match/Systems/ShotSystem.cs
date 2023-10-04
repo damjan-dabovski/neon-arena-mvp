@@ -2,12 +2,14 @@
 {
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
+
     using System.Diagnostics.CodeAnalysis;
+
     using static NeonArenaMvp.Game.Maps.Enums;
 
     public static class ShotSystem
     {
-        public static List<TileMark> ProcessShot(Map map, ShotAction startShotAction)
+        public static List<TileMark> ProcessShot(IMap map, ShotAction startShotAction)
         {
             var resultMarks = new List<TileMark>();
 
@@ -21,9 +23,14 @@
                     continue;
                 }
 
-                var tile = map.Tiles[currentShotAction.Coords.Row, currentShotAction.Coords.Col];
+                var tile = map[currentShotAction.Coords.Row, currentShotAction.Coords.Col];
 
                 var shotResult = tile.GetShotResult(currentShotAction);
+
+                if (shotResult.TileMarks.Count == 0)
+                {
+                    continue;
+                }
 
                 // TODO currently we're using pessimistic loop detection (fails immediately)
                 // we can change it to be more optimistic (i.e. let the non-looping cases through)
@@ -51,21 +58,14 @@
 
                 foreach (var newShotAction in shotResult.ResultActions)
                 {
-                    if (ShouldStopShotProcessing(map, newShotAction))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        pendingShotActions.Push(newShotAction);
-                    }
+                    pendingShotActions.Push(newShotAction);
                 }
             }
 
             return resultMarks;
         }
 
-        private static bool ShouldStopShotProcessing(Map map, [NotNullWhen(false)] ShotAction shotAction)
+        private static bool ShouldStopShotProcessing(IMap map, [NotNullWhen(false)] ShotAction shotAction)
         {
             return shotAction.RemainingRange == 0
                     || map.IsOutOfBounds(shotAction.Coords.Row, shotAction.Coords.Col);
