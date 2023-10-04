@@ -10,18 +10,18 @@ namespace NeonArenaMvp.Game.Match.Systems
 
         public readonly Coords DestCoords;
 
-        public readonly Direction SourceExitDirection;
+        public readonly Sector SourceExitSector;
 
-        public readonly Direction DestinationEnterDirection;
+        public readonly Sector DestinationEnterSector;
 
         public static readonly List<MoveResult> Empty = new();
 
-        public MoveResult(Coords sourceCoords, Coords destCoords, Direction sourceExitDirection, Direction destinationEnterDirection)
+        public MoveResult(Coords sourceCoords, Coords destCoords, Sector sourceExitSector, Sector destinationEnterSector)
         {
             this.SourceCoords = sourceCoords;
             this.DestCoords = destCoords;
-            this.SourceExitDirection = sourceExitDirection;
-            this.DestinationEnterDirection = destinationEnterDirection;
+            this.SourceExitSector = sourceExitSector;
+            this.DestinationEnterSector = destinationEnterSector;
         }
     }
 }

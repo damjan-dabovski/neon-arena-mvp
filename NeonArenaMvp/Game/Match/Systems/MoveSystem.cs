@@ -1,12 +1,10 @@
-﻿using NeonArenaMvp.Game.Maps;
-using NeonArenaMvp.Game.Maps.Actions;
-
-using System.Diagnostics.CodeAnalysis;
-
-using static NeonArenaMvp.Game.Maps.Enums;
-
-namespace NeonArenaMvp.Game.Match.Systems
+﻿namespace NeonArenaMvp.Game.Match.Systems
 {
+    using NeonArenaMvp.Game.Maps;
+    using NeonArenaMvp.Game.Maps.Actions;
+    using System.Diagnostics.CodeAnalysis;
+    using static NeonArenaMvp.Game.Maps.Enums;
+
     public static class MoveSystem
     {
         public static List<MoveResult> ProcessMovement(Map map, MoveAction startMoveAction)
@@ -21,11 +19,11 @@ namespace NeonArenaMvp.Game.Match.Systems
 
             var moveResults = new List<MoveResult>();
 
+            var lastCenterSectorCoords = startMoveAction.BaseCoords;
+
+            Sector lastExitSector = Sector.Center;
+
             var currentMoveAction = startMoveAction;
-
-            var lastCenterSectorCoords = currentMoveAction.BaseCoords;
-
-            Direction? lastExitDirection = null;
 
             while (true)
             {
@@ -44,35 +42,26 @@ namespace NeonArenaMvp.Game.Match.Systems
                 }
 
                 /* are we moving between 2 tiles?
-                 * if so, store the direction/sector from
+                 * if so, store the sector from
                  * which we exited the current tile */
                 if (currentMoveAction.BaseCoords != nextMoveAction.BaseCoords)
                 {
-                    lastExitDirection = DirectionFromSector(currentMoveAction.Coords.Sector);
+                    lastExitSector = currentMoveAction.Coords.Sector;
                 }
 
                 if (nextMoveAction.Coords.Sector == Sector.Center)
                 {
-                    /* if the lastExitDirection was never set up to this point,
-                     * it means that we're in some loop between the sectors of the tile
-                     * NOTE: we currently can't detect loops from something like 'all non-Center sectors
-                     * redirect us to the right' as they will never enter this block */
-                    if (lastExitDirection is null)
+                    // detects loops that happen between/because of the tile's sectors
+                    if (nextMoveAction.BaseCoords == lastCenterSectorCoords)
                     {
                         return MoveResult.Empty;
                     }
 
-                    /* if we've been teleported to this Center sector from another Center sector,
-                     * we have to 'fake' the direction since we never entered the tile through a non-Center sector */
-                    var destinationEnterDirection = nextMoveAction.PreviousCoords.Sector == Sector.Center
-                        ? lastExitDirection.Value.Reverse()
-                        : DirectionFromSector(nextMoveAction.PreviousCoords.Sector);
-
                     var currentMoveResult = new MoveResult(
                         sourceCoords: lastCenterSectorCoords,
                         destCoords: nextMoveAction.BaseCoords,
-                        sourceExitDirection: lastExitDirection.Value,
-                        destinationEnterDirection: destinationEnterDirection);
+                        sourceExitSector: lastExitSector,
+                        destinationEnterSector: nextMoveAction.PreviousCoords.Sector);
 
                     lastCenterSectorCoords = nextMoveAction.BaseCoords;
 
@@ -94,23 +83,11 @@ namespace NeonArenaMvp.Game.Match.Systems
             return moveResults;
         }
 
-        private static bool ShouldStopMovement(Map map, [NotNullWhen(false)] MoveAction? currentMoveAction)
+        private static bool ShouldStopMovement(Map map, [NotNullWhen(false)] MoveAction? moveAction)
         {
-            return currentMoveAction is null
-                    || currentMoveAction.RemainingRange == 0
-                    || map.IsOutOfBounds(currentMoveAction.Coords.Row, currentMoveAction.Coords.Col);
-        }
-
-        private static Direction DirectionFromSector(Sector sector)
-        {
-            return sector switch
-            {
-                Sector.Up => Direction.Up,
-                Sector.Right => Direction.Right,
-                Sector.Down => Direction.Down,
-                Sector.Left => Direction.Left,
-                _ => throw new InvalidOperationException("Can't convert Sector.Center to Direction.")
-            };
+            return moveAction is null
+                    || moveAction.RemainingRange == 0
+                    || map.IsOutOfBounds(moveAction.Coords.Row, moveAction.Coords.Col);
         }
     }
 }

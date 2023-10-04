@@ -9,22 +9,6 @@
 
     public static class MockShotBehaviors
     {
-        public static readonly TileShotBehavior ReturnsOneRowDownOneRangeLessMarksInDirection = (_, currentShotAction) =>
-        {
-            return new(
-                resultActions: new() { new(
-                    coords: currentShotAction.Coords.FromDelta(+1, 0),
-                    direction: currentShotAction.Direction,
-                    remainingRange: currentShotAction.RemainingRange - 1,
-                    previousCoords: currentShotAction.Coords,
-                    playerColor: currentShotAction.PlayerColor)
-                },
-                mandatoryTileMark: new(
-                    action: currentShotAction,
-                    direction: currentShotAction.Direction)
-            );
-        };
-
         public static readonly TileShotBehavior ReturnsEmptyList = (_, currentShotAction) => ShotBehaviorResult.Empty;
 
         public static readonly TileShotBehavior ReturnsNoActionButMarksInDirection = (_, currentShotAction) =>

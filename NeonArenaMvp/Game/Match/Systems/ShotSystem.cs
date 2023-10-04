@@ -2,6 +2,7 @@
 {
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
+    using System.Diagnostics.CodeAnalysis;
     using static NeonArenaMvp.Game.Maps.Enums;
 
     public static class ShotSystem
@@ -15,7 +16,7 @@
 
             while (pendingShotActions.TryPop(out var currentShotAction))
             {
-                if (currentShotAction.RemainingRange == 0)
+                if (ShouldStopShotProcessing(map, currentShotAction))
                 {
                     continue;
                 }
@@ -50,7 +51,11 @@
 
                 foreach (var newShotAction in shotResult.ResultActions)
                 {
-                    if (!map.IsOutOfBounds(newShotAction.Coords.Row, newShotAction.Coords.Col))
+                    if (ShouldStopShotProcessing(map, newShotAction))
+                    {
+                        continue;
+                    }
+                    else
                     {
                         pendingShotActions.Push(newShotAction);
                     }
@@ -58,6 +63,12 @@
             }
 
             return resultMarks;
+        }
+
+        private static bool ShouldStopShotProcessing(Map map, [NotNullWhen(false)] ShotAction shotAction)
+        {
+            return shotAction.RemainingRange == 0
+                    || map.IsOutOfBounds(shotAction.Coords.Row, shotAction.Coords.Col);
         }
     }
 }
