@@ -1,29 +1,48 @@
 ﻿namespace ArenaMvpTests.Match
 {
     using ArenaMvpTests.Mocks;
+    using Moq;
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
-    using NeonArenaMvp.Game.Maps.Coordinates;
     using NeonArenaMvp.Game.Match.Systems;
+    using static NeonArenaMvp.Game.Behaviors.Tile.TileMoveBehaviors;
     using static NeonArenaMvp.Game.Maps.Enums;
     using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
     public class MoveSystemTests
     {
-        public Map Map;
+        public FakeMap Map;
 
         public MoveSystemTests()
         {
-            Map = new(new Tile[2, 1]
-            {
-                { new Tile("", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList) },
-                { new Tile("", MockMoveBehaviors.ReturnsOneRowDownOneRangeLess, MockShotBehaviors.ReturnsEmptyList) }
-            });
+            var tile = new FakeTile();
+
+            this.Map = new FakeMap()
+                .SetTile(0, 0, tile)
+                .SetOutOfBounds(false);
         }
 
         [TestMethod]
-        public void ReturnsOnlyOriginCoordsWhenActionHasRangeZero()
+        public void ReturnsEmptyListWhenStartingActionDoesntStartFromCenter()
+        {
+            // Arrange
+            var startMoveAction = new MoveAction(
+                coords: new(0, 0, Sector.Up),
+                direction: Direction.Down,
+                remainingRange: 1,
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
+
+            // Act
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+
+            // Assert
+            Assert.AreEqual(0, moveResults.Count);
+        }
+
+        [TestMethod]
+        public void ReturnsEmptyListWhenStartingActionHasRangeZero()
         {
             // Arrange
             var startMoveAction = new MoveAction(
@@ -34,22 +53,41 @@
                 playerColor: PlayerColor.Red);
 
             // Act
-            var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
 
             // Assert
-            Assert.AreEqual(1, moveResults.Count);
-            Assert.AreEqual(startMoveAction.BaseCoords, moveResults[0].Coords);
-            Assert.AreEqual(startMoveAction.Direction, moveResults[0].MoveDirection);
+            Assert.AreEqual(0, moveResults.Count);
         }
 
         [TestMethod]
-        public void ReturnsOnlyOriginCoordsWhenOriginReturnsNull()
+        public void ReturnsEmptyListWhenStartActionOutOfBounds()
         {
             // Arrange
-            Map = new(new Tile[1, 1]
-            {
-                { new Tile("", MockMoveBehaviors.ReturnsNull, MockShotBehaviors.ReturnsEmptyList) }
-            });
+            this.Map.SetOutOfBounds(true);
+
+            var startMoveAction = new MoveAction(
+                coords: new(3, 3),
+                direction: Direction.Down,
+                remainingRange: 1,
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
+
+            // Act
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+
+            // Assert
+            Assert.AreEqual(0, moveResults.Count);
+        }
+
+        [TestMethod]
+        public void ReturnsEmptyListWhenOriginReturnsNull()
+        {
+            // Arrange
+            var fakeTile = new FakeTile()
+                .SetupAllMoveBehaviors(MockMoveBehaviors.ReturnsNull);
+
+            this.Map = new FakeMap()
+                .SetTile(0, 0, fakeTile);
 
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
@@ -59,22 +97,21 @@
                 playerColor: PlayerColor.Red);
 
             // Act
-            var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
 
             // Assert
-            Assert.AreEqual(1, moveResults.Count);
-            Assert.AreEqual(startMoveAction.BaseCoords, moveResults[0].Coords);
-            Assert.AreEqual(startMoveAction.Direction, moveResults[0].MoveDirection);
+            Assert.AreEqual(0, moveResults.Count);
         }
 
         [TestMethod]
-        public void ReturnsOnlyOriginCoordsWhenLoopDetected()
+        public void ReturnsEmptyListWhenOriginReturnsZeroRangeAction()
         {
             // Arrange
-            Map = new(new Tile[1, 1]
-            {
-                { new Tile("", MockMoveBehaviors.ReturnsItself, MockShotBehaviors.ReturnsEmptyList) }
-            });
+            var fakeTile = new FakeTile()
+                .SetupAllMoveBehaviors(MockMoveBehaviors.ReturnsZeroRangeAction);
+
+            this.Map = new FakeMap()
+                .SetTile(0, 0, fakeTile);
 
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
@@ -84,16 +121,44 @@
                 playerColor: PlayerColor.Red);
 
             // Act
-            var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
 
             // Assert
-            Assert.AreEqual(1, moveResults.Count);
-            Assert.AreEqual(startMoveAction.BaseCoords, moveResults[0].Coords);
-            Assert.AreEqual(startMoveAction.Direction, moveResults[0].MoveDirection);
+            Assert.AreEqual(0, moveResults.Count);
         }
 
         [TestMethod]
-        public void SuccessfullyReturnsMoveList()
+        public void ReturnsEmptyListWhenOriginReturnsOutOfBoundsAction()
+        {
+            // Arrange
+            var mockBehavior = new Mock<TileMoveBehavior>();
+
+            mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(new MoveAction(new(-1, -1), Direction.Down, 1, new(0, 0), PlayerColor.Red))
+                .Callback(() => this.Map.SetOutOfBounds(true));
+
+            var fakeTile = new FakeTile()
+                .SetupAllMoveBehaviors(mockBehavior.Object);
+
+            this.Map = new FakeMap()
+                 .SetTile(0, 0, fakeTile);
+
+            var startMoveAction = new MoveAction(
+                coords: new(0, 0),
+                direction: Direction.Down,
+                remainingRange: 1,
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
+
+            // Act
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+
+            // Assert
+            Assert.AreEqual(0, moveResults.Count);
+        }
+
+        [TestMethod]
+        public void ReturnsEmptyListWhenLoopDetectedInsideOrigin()
         {
             // Arrange
             var startMoveAction = new MoveAction(
@@ -103,41 +168,166 @@
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
+            var mockBehavior = new Mock<TileMoveBehavior>();
+
+            mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(startMoveAction);
+
+            var fakeTile = new FakeTile()
+                .SetupAllMoveBehaviors(mockBehavior.Object);
+
+            this.Map = new FakeMap()
+                .SetTile(0, 0, fakeTile);
+
             // Act
-            var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
 
             // Assert
-            Assert.AreEqual(2, moveResults.Count);
-
-            Assert.AreEqual(startMoveAction.BaseCoords, moveResults[0].Coords);
-            Assert.AreEqual(startMoveAction.Direction, moveResults[0].MoveDirection);
-
-            Assert.AreEqual(startMoveAction.BaseCoords.FromDelta(+1, 0), moveResults[1].Coords);
-            Assert.AreEqual(startMoveAction.Direction, moveResults[0].MoveDirection);
+            Assert.AreEqual(0, moveResults.Count);
         }
 
         [TestMethod]
-        public void StopsProcessingMovementWhenOutOfBounds()
+        public void ReturnsSingleMoveResultWhenMovingOneTile()
         {
             // Arrange
+            var firstCenterBehavior = new Mock<TileMoveBehavior>();
+
+            firstCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(new MoveAction(
+                    coords: new(0, 0, Sector.Down),
+                    direction: Direction.Down,
+                    remainingRange: 1,
+                    previousCoords: new(0, 0, Sector.Center),
+                    playerColor: PlayerColor.Red));
+
+            var firstSectorBehavior = new Mock<TileMoveBehavior>();
+            
+            firstSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(new MoveAction(
+                    coords: new(1, 0, Sector.Up),
+                    direction: Direction.Down,
+                    remainingRange: 1,
+                    previousCoords: new(0, 0, Sector.Down),
+                    playerColor: PlayerColor.Red));
+
+            var secondSectorBehavior = new Mock<TileMoveBehavior>();
+
+            secondSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(new MoveAction(
+                    coords: new(1, 0, Sector.Center),
+                    direction: Direction.Down,
+                    remainingRange: 1,
+                    previousCoords: new(1, 0, Sector.Up),
+                    playerColor: PlayerColor.Red));
+
+            var secondCenterBehavior = new Mock<TileMoveBehavior>();
+
+            secondCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(new MoveAction(
+                    coords: new(1, 0, Sector.Down),
+                    direction: Direction.Down,
+                    remainingRange: 0,
+                    previousCoords: new(1, 0, Sector.Center),
+                    playerColor: PlayerColor.Red));
+
+            var firstTile = new FakeTile()
+                .SetupSectorMoveBehavior(Sector.Center, firstCenterBehavior.Object)
+                .SetupSectorMoveBehavior(Sector.Down, firstSectorBehavior.Object);
+
+            var secondTile = new FakeTile()
+                .SetupSectorMoveBehavior(Sector.Up, secondSectorBehavior.Object)
+                .SetupSectorMoveBehavior(Sector.Center, secondCenterBehavior.Object);
+
+            this.Map = new FakeMap()
+                .SetTile(0, 0, firstTile)
+                .SetTile(1, 0, secondTile);
+
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 3,
+                remainingRange: 2,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
             // Act
-            var moveResults = MoveSystem.ProcessMovement(Map, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
 
             // Assert
-            Assert.AreEqual(2, moveResults.Count);
+            Assert.AreEqual(1, moveResults.Count);
+            Assert.AreEqual(new(0,0), moveResults[0].SourceCoords);
+            Assert.AreEqual(new(1,0), moveResults[0].DestCoords);
+            Assert.AreEqual(Sector.Down, moveResults[0].SourceExitSector);
+            Assert.AreEqual(Sector.Up, moveResults[0].DestinationEnterSector);
+        }
 
-            Assert.AreEqual(startMoveAction.BaseCoords, moveResults[0].Coords);
-            Assert.AreEqual(startMoveAction.Direction, moveResults[0].MoveDirection);
+        [TestMethod]
+        public void ReturnsEmptyListWhenLoopDetected()
+        {
+            // Arrange
+            var firstCenterBehavior = new Mock<TileMoveBehavior>();
 
-            Assert.AreEqual(startMoveAction.BaseCoords.FromDelta(+1, 0), moveResults[1].Coords);
-            Assert.AreEqual(startMoveAction.Direction, moveResults[0].MoveDirection);
+            firstCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(new MoveAction(
+                    coords: new(0, 0, Sector.Down),
+                    direction: Direction.Down,
+                    remainingRange: 1,
+                    previousCoords: new(0, 0, Sector.Center),
+                    playerColor: PlayerColor.Red));
+
+            var firstSectorBehavior = new Mock<TileMoveBehavior>();
+
+            firstSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(new MoveAction(
+                    coords: new(1, 0, Sector.Up),
+                    direction: Direction.Down,
+                    remainingRange: 1,
+                    previousCoords: new(0, 0, Sector.Down),
+                    playerColor: PlayerColor.Red));
+
+            var secondSectorBehavior = new Mock<TileMoveBehavior>();
+
+            secondSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(new MoveAction(
+                    coords: new(1, 0, Sector.Center),
+                    direction: Direction.Down,
+                    remainingRange: 1,
+                    previousCoords: new(1, 0, Sector.Up),
+                    playerColor: PlayerColor.Red));
+
+            var secondCenterBehavior = new Mock<TileMoveBehavior>();
+
+            secondCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(new MoveAction(
+                    coords: new(0, 0, Sector.Center),
+                    direction: Direction.Down,
+                    remainingRange: 1,
+                    previousCoords: new(1, 0, Sector.Center),
+                    playerColor: PlayerColor.Red));
+
+            var firstTile = new FakeTile()
+                .SetupSectorMoveBehavior(Sector.Center, firstCenterBehavior.Object)
+                .SetupSectorMoveBehavior(Sector.Down, firstSectorBehavior.Object);
+
+            var secondTile = new FakeTile()
+                .SetupSectorMoveBehavior(Sector.Up, secondSectorBehavior.Object)
+                .SetupSectorMoveBehavior(Sector.Center, secondCenterBehavior.Object);
+
+            this.Map = new FakeMap()
+                .SetTile(0, 0, firstTile)
+                .SetTile(1, 0, secondTile);
+
+            var startMoveAction = new MoveAction(
+                coords: new(0, 0),
+                direction: Direction.Down,
+                remainingRange: 2,
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
+
+            // Act
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+
+            // Assert
+            Assert.AreEqual(0, moveResults.Count);
         }
     }
 }

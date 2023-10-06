@@ -10,11 +10,7 @@
     [TestClass]
     public class TileShotBehaviorTests
     {
-        private Tile tile = new(
-            symbol: "",
-            moveBehavior: TileMoveBehaviors.PassThrough,
-            shotBehavior: TileShotBehaviors.PassThrough,
-            direction: Direction.Up);
+        private Tile tile = new(centerBehavior: TileBehaviors.Empty);
 
         [TestMethod]
         public void PassThroughProducesNextTileInDirection()
@@ -30,7 +26,7 @@
             );
 
             // Act
-            var behaviorResult = TileShotBehaviors.PassThrough(tile, startShotAction);
+            var behaviorResult = TileShotBehaviors.PassThrough(this.tile.Direction, startShotAction);
 
             // Assert
             Assert.AreEqual(1, behaviorResult.ResultActions.Count);
@@ -63,7 +59,7 @@
             );
 
             // Act
-            var result = TileShotBehaviors.Block(tile, startShotAction);
+            var result = TileShotBehaviors.Block(this.tile.Direction, startShotAction);
 
             // Assert
             Assert.AreEqual(0, result.ResultActions.Count);

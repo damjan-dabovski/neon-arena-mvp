@@ -2,46 +2,88 @@
 {
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
-    using NeonArenaMvp.Game.Maps.Coordinates;
+    using System.Diagnostics.CodeAnalysis;
+    using static NeonArenaMvp.Game.Maps.Enums;
 
     public static class MoveSystem
     {
-        public static List<MoveResult> ProcessMovement(Map map, MoveAction startMoveAction)
+        public static List<MoveResult> ProcessMovement(IMap map, MoveAction startMoveAction)
         {
-            var resultList = new List<MoveResult>();
+            /* starting a move from a non-Center sector should be impossible
+             * because this means that the player ended on a non-Center sector,
+             * which should also be impossible */
+            if (startMoveAction.Coords.Sector != Sector.Center
+                || ShouldStopMovement(map, startMoveAction))
+            {
+                return MoveResult.Empty;
+            }
+
+            var moveResults = new List<MoveResult>();
+
+            var lastCenterSectorCoords = startMoveAction.BaseCoords;
+
+            Sector lastExitSector = Sector.Center;
 
             var currentMoveAction = startMoveAction;
 
             while (true)
             {
-                var newCoords = new MoveResult(currentMoveAction);
-
-                // TODO currently we're using pessimistic loop detection (fails immediately)
-                // we can change it to be more optimistic (i.e. let the non-looping cases through)
-                if (resultList.Contains(newCoords))
-                {
-                    return new List<MoveResult> { new(startMoveAction) };
-                }
-                else
-                {
-                    resultList.Add(newCoords);
-                }
-
-                var tile = map.Tiles[currentMoveAction.Coords.Row, currentMoveAction.Coords.Col];
+                var tile = map[currentMoveAction.Coords.Row, currentMoveAction.Coords.Col];
 
                 var nextMoveAction = tile.GetNextMove(currentMoveAction);
 
-                if (nextMoveAction is null
-                    || currentMoveAction.RemainingRange == 0
-                    || map.IsOutOfBounds(nextMoveAction.Coords.Row, nextMoveAction.Coords.Col))
+                if (ShouldStopMovement(map, nextMoveAction))
                 {
                     break;
+                }
+
+                /* are we moving between 2 tiles?
+                 * if so, store the sector from
+                 * which we exited the current tile */
+                if (currentMoveAction.BaseCoords != nextMoveAction.BaseCoords)
+                {
+                    lastExitSector = currentMoveAction.Coords.Sector;
+                }
+
+                if (nextMoveAction.Coords.Sector == Sector.Center)
+                {
+                    // detects loops that happen between/because of the tile's sectors
+                    if (nextMoveAction.BaseCoords == lastCenterSectorCoords)
+                    {
+                        return MoveResult.Empty;
+                    }
+
+                    var currentMoveResult = new MoveResult(
+                        sourceCoords: lastCenterSectorCoords,
+                        destCoords: nextMoveAction.BaseCoords,
+                        sourceExitSector: lastExitSector,
+                        destinationEnterSector: nextMoveAction.PreviousCoords.Sector);
+
+                    lastCenterSectorCoords = nextMoveAction.BaseCoords;
+
+                    // TODO currently we're using pessimistic loop detection (fails immediately)
+                    // we can change it to be more optimistic (i.e. let the non-looping cases through)
+                    if (moveResults.Contains(currentMoveResult))
+                    {
+                        return MoveResult.Empty;
+                    }
+                    else
+                    {
+                        moveResults.Add(currentMoveResult);
+                    }
                 }
 
                 currentMoveAction = nextMoveAction;
             }
 
-            return resultList;
+            return moveResults;
+        }
+
+        private static bool ShouldStopMovement(IMap map, [NotNullWhen(false)] MoveAction? moveAction)
+        {
+            return moveAction is null
+                    || moveAction.RemainingRange == 0
+                    || map.IsOutOfBounds(moveAction.Coords.Row, moveAction.Coords.Col);
         }
     }
 }

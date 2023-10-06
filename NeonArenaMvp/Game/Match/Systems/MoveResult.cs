@@ -1,25 +1,27 @@
-﻿namespace NeonArenaMvp.Game.Match.Systems
-{
-    using NeonArenaMvp.Game.Maps.Actions;
-    using NeonArenaMvp.Game.Maps.Coordinates;
-    using static NeonArenaMvp.Game.Maps.Enums;
+﻿using NeonArenaMvp.Game.Maps.Coordinates;
 
+using static NeonArenaMvp.Game.Maps.Enums;
+
+namespace NeonArenaMvp.Game.Match.Systems
+{
     public readonly struct MoveResult
     {
-        public readonly Coords Coords;
+        public readonly Coords SourceCoords;
 
-        public readonly Direction MoveDirection;
+        public readonly Coords DestCoords;
 
-        public MoveResult(Coords coords, Direction moveDirection)
+        public readonly Sector SourceExitSector;
+
+        public readonly Sector DestinationEnterSector;
+
+        public static readonly List<MoveResult> Empty = new();
+
+        public MoveResult(Coords sourceCoords, Coords destCoords, Sector sourceExitSector, Sector destinationEnterSector)
         {
-            this.Coords = coords;
-            this.MoveDirection = moveDirection;
-        }
-
-        public MoveResult(MoveAction action)
-        {
-            this.Coords = action.BaseCoords;
-            this.MoveDirection = action.Direction;
+            this.SourceCoords = sourceCoords;
+            this.DestCoords = destCoords;
+            this.SourceExitSector = sourceExitSector;
+            this.DestinationEnterSector = destinationEnterSector;
         }
     }
 }

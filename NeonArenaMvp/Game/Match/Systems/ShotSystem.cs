@@ -3,9 +3,13 @@
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
 
+    using System.Diagnostics.CodeAnalysis;
+
+    using static NeonArenaMvp.Game.Maps.Enums;
+
     public static class ShotSystem
     {
-        public static List<TileMark> ProcessShot(Map map, ShotAction startShotAction)
+        public static List<TileMark> ProcessShot(IMap map, ShotAction startShotAction)
         {
             var resultMarks = new List<TileMark>();
 
@@ -14,28 +18,36 @@
 
             while (pendingShotActions.TryPop(out var currentShotAction))
             {
-                if (currentShotAction.RemainingRange == 0)
+                if (ShouldStopShotProcessing(map, currentShotAction))
                 {
                     continue;
                 }
 
-                var tile = map.Tiles[currentShotAction.Coords.Row, currentShotAction.Coords.Col];
+                var tile = map[currentShotAction.Coords.Row, currentShotAction.Coords.Col];
 
                 var shotResult = tile.GetShotResult(currentShotAction);
+
+                if (shotResult.TileMarks.Count == 0)
+                {
+                    continue;
+                }
 
                 // TODO currently we're using pessimistic loop detection (fails immediately)
                 // we can change it to be more optimistic (i.e. let the non-looping cases through)
                 var loopDetected = false;
 
-                foreach (var mark in shotResult.TileMarks)
+                if (currentShotAction.Coords.Sector == Sector.Center)
                 {
-                    if (resultMarks.Contains(mark))
+                    foreach (var mark in shotResult.TileMarks)
                     {
-                        loopDetected = true;
-                    }
-                    else
-                    {
-                        resultMarks.Add(mark);
+                        if (resultMarks.Contains(mark))
+                        {
+                            loopDetected = true;
+                        }
+                        else
+                        {
+                            resultMarks.Add(mark);
+                        }
                     }
                 }
 
@@ -46,14 +58,17 @@
 
                 foreach (var newShotAction in shotResult.ResultActions)
                 {
-                    if (!map.IsOutOfBounds(newShotAction.Coords.Row, newShotAction.Coords.Col))
-                    {
-                        pendingShotActions.Push(newShotAction);
-                    }
+                    pendingShotActions.Push(newShotAction);
                 }
             }
 
             return resultMarks;
+        }
+
+        private static bool ShouldStopShotProcessing(IMap map, [NotNullWhen(false)] ShotAction shotAction)
+        {
+            return shotAction.RemainingRange == 0
+                    || map.IsOutOfBounds(shotAction.Coords.Row, shotAction.Coords.Col);
         }
     }
 }

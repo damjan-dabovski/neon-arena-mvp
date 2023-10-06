@@ -3,16 +3,19 @@
 namespace NeonArenaMvp.Game.Maps
 {
     public class Map
+        : IMap
     {
-        public readonly Tile[,] Tiles;
+        private readonly Tile[,] tiles;
 
-        public int RowCount => this.Tiles.GetLength(0);
+        public int RowCount => this.tiles.GetLength(0);
 
-        public int ColCount => this.Tiles.GetLength(1);
+        public int ColCount => this.tiles.GetLength(1);
+
+        public ITile this[int row, int col] => this.tiles[row, col];
 
         public Map(Tile[,] tiles)
         {
-            this.Tiles = tiles;
+            this.tiles = tiles;
         }
 
         public bool IsOutOfBounds(int row, int col)
