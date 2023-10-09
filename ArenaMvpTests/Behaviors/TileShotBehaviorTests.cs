@@ -20,7 +20,7 @@
             (
                 coords: new(1, 1),
                 direction: Direction.Right,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(1, 1),
                 playerColor: PlayerColor.Red
             );
@@ -53,7 +53,7 @@
             (
                 coords: new(1, 1),
                 direction: Direction.Right,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(1, 1),
                 playerColor: PlayerColor.Red
             );

@@ -13,6 +13,7 @@
     using static NeonArenaMvp.Game.Behaviors.Tile.TileShotBehaviors;
     using static NeonArenaMvp.Game.Maps.Enums;
     using static NeonArenaMvp.Game.Match.Enums;
+    using Range = NeonArenaMvp.Game.Maps.Actions.Range;
 
     [TestClass]
     public class ShotSystemTests
@@ -35,7 +36,7 @@
             var startShotAction = new ShotAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 0,
+                remainingRange: Range.None,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -55,7 +56,7 @@
             var startShotAction = new ShotAction(
                 coords: new(-1, -1),
                 direction: Direction.Down,
-                remainingRange: 0,
+                remainingRange: Range.None,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -84,7 +85,7 @@
             var startShotAction = new ShotAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -102,7 +103,7 @@
             var startShotAction = new ShotAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -133,7 +134,7 @@
             var startShotAction = new ShotAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -165,7 +166,7 @@
             var startShotAction = new ShotAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -209,7 +210,7 @@
             var firstCenterBehaviorResultAction = new ShotAction(
                     coords: new(0, 0, Sector.Down),
                     direction: Direction.Down,
-                    remainingRange: 1,
+                    remainingRange: Range.Melee,
                     previousCoords: new(0, 0, Sector.Center),
                     playerColor: PlayerColor.Red);
 
@@ -229,7 +230,7 @@
             var firstSectorBehaviorResultAction = new ShotAction(
                     coords: new(1, 0, Sector.Up),
                     direction: Direction.Down,
-                    remainingRange: 1,
+                    remainingRange: Range.Melee,
                     previousCoords: new(0, 0, Sector.Down),
                     playerColor: PlayerColor.Red);
 
@@ -249,7 +250,7 @@
             var secondSectorBehaviorResultAction = new ShotAction(
                     coords: new(1, 0, Sector.Center),
                     direction: Direction.Down,
-                    remainingRange: 1,
+                    remainingRange: Range.Melee,
                     previousCoords: new(0, 0, Sector.Down),
                     playerColor: PlayerColor.Red);
 
@@ -269,7 +270,7 @@
             var secondCenterBehaviorResultAction = new ShotAction(
                     coords: new(1, 0, Sector.Down),
                     direction: Direction.Down,
-                    remainingRange: 0,
+                    remainingRange: Range.None,
                     previousCoords: new(1, 0, Sector.Center),
                     playerColor: PlayerColor.Red);
 
@@ -299,7 +300,7 @@
             var startShotAction = new ShotAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 2,
+                remainingRange: Range.Adjacent,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 

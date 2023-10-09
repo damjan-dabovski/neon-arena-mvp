@@ -21,7 +21,7 @@ namespace ArenaMvpTests.Behaviors
             (
                 coords: new(1, 1),
                 direction: Direction.Right,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(1, 1),
                 playerColor: PlayerColor.Red
             );
@@ -47,7 +47,7 @@ namespace ArenaMvpTests.Behaviors
             (
                 coords: new(1, 1),
                 direction: Direction.Right,
-                remainingRange: 1,
+                remainingRange: Range.Adjacent,
                 previousCoords: new(1, 1),
                 playerColor: PlayerColor.Red
             );
@@ -67,7 +67,7 @@ namespace ArenaMvpTests.Behaviors
             (
                 coords: new(1, 1),
                 direction: Direction.Right,
-                remainingRange: 1,
+                remainingRange: Range.Adjacent,
                 previousCoords: new(1, 1),
                 playerColor: PlayerColor.Red
             );
@@ -92,7 +92,7 @@ namespace ArenaMvpTests.Behaviors
             (
                 coords: new(1, 1),
                 direction: Direction.Right,
-                remainingRange: 1,
+                remainingRange: Range.Adjacent,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red
             );

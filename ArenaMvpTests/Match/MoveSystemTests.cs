@@ -8,6 +8,7 @@
     using static NeonArenaMvp.Game.Behaviors.Tile.TileMoveBehaviors;
     using static NeonArenaMvp.Game.Maps.Enums;
     using static NeonArenaMvp.Game.Match.Enums;
+    using Range = NeonArenaMvp.Game.Maps.Actions.Range;
 
     [TestClass]
     public class MoveSystemTests
@@ -30,7 +31,7 @@
             var startMoveAction = new MoveAction(
                 coords: new(0, 0, Sector.Up),
                 direction: Direction.Down,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -48,7 +49,7 @@
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 0,
+                remainingRange: Range.None,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -68,7 +69,7 @@
             var startMoveAction = new MoveAction(
                 coords: new(3, 3),
                 direction: Direction.Down,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -92,7 +93,7 @@
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -116,7 +117,7 @@
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -134,7 +135,7 @@
             var mockBehavior = new Mock<TileMoveBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
-                .Returns(new MoveAction(new(-1, -1), Direction.Down, 1, new(0, 0), PlayerColor.Red))
+                .Returns(new MoveAction(new(-1, -1), Direction.Down, Range.Melee, new(0, 0), PlayerColor.Red))
                 .Callback(() => this.Map.SetOutOfBounds(true));
 
             var fakeTile = new FakeTile()
@@ -146,7 +147,7 @@
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -164,7 +165,7 @@
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -196,7 +197,7 @@
                 .Returns(new MoveAction(
                     coords: new(0, 0, Sector.Down),
                     direction: Direction.Down,
-                    remainingRange: 1,
+                    remainingRange: Range.Melee,
                     previousCoords: new(0, 0, Sector.Center),
                     playerColor: PlayerColor.Red));
 
@@ -206,7 +207,7 @@
                 .Returns(new MoveAction(
                     coords: new(1, 0, Sector.Up),
                     direction: Direction.Down,
-                    remainingRange: 1,
+                    remainingRange: Range.Melee,
                     previousCoords: new(0, 0, Sector.Down),
                     playerColor: PlayerColor.Red));
 
@@ -216,7 +217,7 @@
                 .Returns(new MoveAction(
                     coords: new(1, 0, Sector.Center),
                     direction: Direction.Down,
-                    remainingRange: 1,
+                    remainingRange: Range.Melee,
                     previousCoords: new(1, 0, Sector.Up),
                     playerColor: PlayerColor.Red));
 
@@ -226,7 +227,7 @@
                 .Returns(new MoveAction(
                     coords: new(1, 0, Sector.Down),
                     direction: Direction.Down,
-                    remainingRange: 0,
+                    remainingRange: Range.None,
                     previousCoords: new(1, 0, Sector.Center),
                     playerColor: PlayerColor.Red));
 
@@ -245,7 +246,7 @@
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 2,
+                remainingRange: Range.Adjacent,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 
@@ -270,7 +271,7 @@
                 .Returns(new MoveAction(
                     coords: new(0, 0, Sector.Down),
                     direction: Direction.Down,
-                    remainingRange: 1,
+                    remainingRange: Range.Melee,
                     previousCoords: new(0, 0, Sector.Center),
                     playerColor: PlayerColor.Red));
 
@@ -280,7 +281,7 @@
                 .Returns(new MoveAction(
                     coords: new(1, 0, Sector.Up),
                     direction: Direction.Down,
-                    remainingRange: 1,
+                    remainingRange: Range.Melee,
                     previousCoords: new(0, 0, Sector.Down),
                     playerColor: PlayerColor.Red));
 
@@ -290,7 +291,7 @@
                 .Returns(new MoveAction(
                     coords: new(1, 0, Sector.Center),
                     direction: Direction.Down,
-                    remainingRange: 1,
+                    remainingRange: Range.Melee,
                     previousCoords: new(1, 0, Sector.Up),
                     playerColor: PlayerColor.Red));
 
@@ -300,7 +301,7 @@
                 .Returns(new MoveAction(
                     coords: new(0, 0, Sector.Center),
                     direction: Direction.Down,
-                    remainingRange: 1,
+                    remainingRange: Range.Melee,
                     previousCoords: new(1, 0, Sector.Center),
                     playerColor: PlayerColor.Red));
 
@@ -319,7 +320,7 @@
             var startMoveAction = new MoveAction(
                 coords: new(0, 0),
                 direction: Direction.Down,
-                remainingRange: 2,
+                remainingRange: Range.Adjacent,
                 previousCoords: new(0, 0),
                 playerColor: PlayerColor.Red);
 

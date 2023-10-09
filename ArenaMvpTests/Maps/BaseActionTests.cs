@@ -20,7 +20,7 @@
             (
                 coords: coords,
                 direction: Direction.Up,
-                remainingRange: 1,
+                remainingRange: Range.Melee,
                 previousCoords: isOutgoing
                     ? coords
                     : new(0, 0),

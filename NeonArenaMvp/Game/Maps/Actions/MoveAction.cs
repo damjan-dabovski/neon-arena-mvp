@@ -7,7 +7,7 @@
     public class MoveAction
         : BaseAction
     {
-        public MoveAction(SectorCoords coords, Direction direction, int remainingRange, SectorCoords previousCoords, PlayerColor playerColor)
+        public MoveAction(SectorCoords coords, Direction direction, Range remainingRange, SectorCoords previousCoords, PlayerColor playerColor)
             : base(coords, direction, remainingRange, previousCoords, playerColor) { }
     }
 }

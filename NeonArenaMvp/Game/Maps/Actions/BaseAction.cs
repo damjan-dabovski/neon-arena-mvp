@@ -10,14 +10,7 @@
 
         public readonly Direction Direction;
 
-        // TODO refactor to use a custom type that's
-        // a thin wrapper around an int, for the sake of usability
-        // since range takes is the number of tiles evaluated,
-        // rather than the number of tiles away from the start
-        // this is because the start tile is always evaluated as well,
-        // so the range should always be 1 greater than the 'expected' int value
-        // also, default for movement should be Adjacent (i.e. 2), and infinite (i.e. -1) for shots
-        public readonly int RemainingRange;
+        public readonly Range RemainingRange;
 
         public readonly SectorCoords PreviousCoords;
 
@@ -25,7 +18,7 @@
 
         public Coords BaseCoords => this.Coords.BaseCoords;
 
-        protected BaseAction(SectorCoords coords, Direction direction, int remainingRange, SectorCoords previousCoords, PlayerColor playerColor)
+        protected BaseAction(SectorCoords coords, Direction direction, Range remainingRange, SectorCoords previousCoords, PlayerColor playerColor)
         {
             this.Coords = coords;
             this.Direction = direction;
@@ -37,7 +30,9 @@
         public bool IsOutgoing() => this.Coords.Equals(this.PreviousCoords);
 
         // TODO move this out to the Range type (and probably rename it to be more descriptive)
-        public static int DecrementRange(BaseAction currentAction, int amount = 1)
+        // TODO this should probably actually be in the SectorBehavior builders as the 'default' range
+        // setting behavior
+        public static Range DecrementRange(BaseAction currentAction, int amount = 1)
         {
             return currentAction.Coords.Sector == Sector.Center
                 ? currentAction.RemainingRange - amount

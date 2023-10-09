@@ -6,6 +6,7 @@ using NeonArenaMvp.Game.Maps.Coordinates;
 using static NeonArenaMvp.Game.Behaviors.Tile.TileMoveBehaviors;
 using static NeonArenaMvp.Game.Maps.Enums;
 using static NeonArenaMvp.Game.Match.Enums;
+using Range = NeonArenaMvp.Game.Maps.Actions.Range;
 
 namespace ArenaMvpTests.Mocks
 {
@@ -16,7 +17,7 @@ namespace ArenaMvpTests.Mocks
         public static readonly TileMoveBehavior ReturnsZeroRangeAction = (_, currentMoveAction) => new MoveAction(
             coords: It.IsAny<SectorCoords>(),
             direction: It.IsAny<Direction>(),
-            remainingRange: 0,
+            remainingRange: Range.None,
             previousCoords: It.IsAny<SectorCoords>(),
             playerColor: It.IsAny<PlayerColor>());
     }
