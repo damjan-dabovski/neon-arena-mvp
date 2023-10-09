@@ -8,24 +8,6 @@
     public class CoordsTests
     {
         [TestMethod]
-        public void CreatesCoordsFromAction()
-        {
-            // Arrange
-            var moveAction = new MoveAction(
-                coords: new(1, 1),
-                direction: Direction.Up,
-                remainingRange: Range.Melee,
-                previousCoords: new(1, 1));
-
-            // Act
-            var coords = new Coords(moveAction);
-
-            // Assert
-            Assert.AreEqual(moveAction.Coords.Row, coords.Row);
-            Assert.AreEqual(moveAction.Coords.Col, coords.Col);
-        }
-
-        [TestMethod]
         [DataRow(Direction.Up, -1, 0)]
         [DataRow(Direction.Down, 1, 0)]
         [DataRow(Direction.Left, 0, -1)]

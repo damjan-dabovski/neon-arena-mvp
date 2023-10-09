@@ -15,12 +15,6 @@
             this.Col = col;
         }
 
-        public Coords(BaseAction action)
-        {
-            this.Row = action.Coords.Row;
-            this.Col = action.Coords.Col;
-        }
-
         public override bool Equals(object? obj)
         {
             return obj is Coords coords && this.Equals(coords);
