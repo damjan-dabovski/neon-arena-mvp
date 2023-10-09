@@ -1,7 +1,6 @@
 ﻿namespace NeonArenaMvp.Game.Maps.Coordinates
 {
     using NeonArenaMvp.Game.Maps.Actions;
-    using static NeonArenaMvp.Game.Maps.Enums;
 
     public readonly struct Coords
         : IEquatable<Coords>

@@ -3,7 +3,6 @@
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
-    using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
     public class BaseActionTests

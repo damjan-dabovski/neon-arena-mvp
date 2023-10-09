@@ -2,7 +2,6 @@
 {
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
-    using static NeonArenaMvp.Game.Match.Enums;
 
     public abstract class BaseAction
     {

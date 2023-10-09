@@ -3,13 +3,10 @@
     using ArenaMvpTests.Mocks;
     using Moq;
     using NeonArenaMvp.Game.Behaviors.Tile;
-    using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using NeonArenaMvp.Game.Match;
     using NeonArenaMvp.Game.Match.Systems;
-
-    using static NeonArenaMvp.Game.Behaviors.Tile.TileMoveBehaviors;
     using static NeonArenaMvp.Game.Behaviors.Tile.TileShotBehaviors;
     using static NeonArenaMvp.Game.Maps.Enums;
     using static NeonArenaMvp.Game.Match.Enums;
