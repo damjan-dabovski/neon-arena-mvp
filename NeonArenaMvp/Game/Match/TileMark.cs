@@ -14,7 +14,7 @@
 
         public readonly Direction Direction;
 
-        public TileMark(BaseAction action, Direction direction)
+        public TileMark(ShotAction action, Direction direction)
         {
             this.Coords = action.BaseCoords;
             this.PlayerColor = action.PlayerColor;

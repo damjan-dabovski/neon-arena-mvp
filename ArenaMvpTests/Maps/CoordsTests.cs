@@ -16,8 +16,7 @@
                 coords: new(1, 1),
                 direction: Direction.Up,
                 remainingRange: Range.Melee,
-                previousCoords: new(1, 1),
-                playerColor: PlayerColor.Red);
+                previousCoords: new(1, 1));
 
             // Act
             var coords = new Coords(moveAction);

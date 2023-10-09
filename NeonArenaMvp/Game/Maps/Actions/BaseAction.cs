@@ -14,17 +14,14 @@
 
         public readonly SectorCoords PreviousCoords;
 
-        public readonly PlayerColor PlayerColor;
-
         public Coords BaseCoords => this.Coords.BaseCoords;
 
-        protected BaseAction(SectorCoords coords, Direction direction, Range remainingRange, SectorCoords previousCoords, PlayerColor playerColor)
+        protected BaseAction(SectorCoords coords, Direction direction, Range remainingRange, SectorCoords previousCoords)
         {
             this.Coords = coords;
             this.Direction = direction;
             this.RemainingRange = remainingRange;
             this.PreviousCoords = previousCoords;
-            this.PlayerColor = playerColor;
         }
 
         public bool IsOutgoing() => this.Coords.Equals(this.PreviousCoords);

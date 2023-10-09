@@ -32,8 +32,7 @@
                 coords: new(0, 0, Sector.Up),
                 direction: Direction.Down,
                 remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+                previousCoords: new(0, 0));
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
@@ -50,8 +49,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: Range.None,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+                previousCoords: new(0, 0));
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
@@ -70,8 +68,7 @@
                 coords: new(3, 3),
                 direction: Direction.Down,
                 remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+                previousCoords: new(0, 0));
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
@@ -94,8 +91,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+                previousCoords: new(0, 0));
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
@@ -118,8 +114,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+                previousCoords: new(0, 0));
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
@@ -135,7 +130,7 @@
             var mockBehavior = new Mock<TileMoveBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
-                .Returns(new MoveAction(new(-1, -1), Direction.Down, Range.Melee, new(0, 0), PlayerColor.Red))
+                .Returns(new MoveAction(new(-1, -1), Direction.Down, Range.Melee, new(0, 0)))
                 .Callback(() => this.Map.SetOutOfBounds(true));
 
             var fakeTile = new FakeTile()
@@ -148,8 +143,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+                previousCoords: new(0, 0));
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
@@ -166,8 +160,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+                previousCoords: new(0, 0));
 
             var mockBehavior = new Mock<TileMoveBehavior>();
 
@@ -198,8 +191,7 @@
                     coords: new(0, 0, Sector.Down),
                     direction: Direction.Down,
                     remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Center),
-                    playerColor: PlayerColor.Red));
+                    previousCoords: new(0, 0, Sector.Center)));
 
             var firstSectorBehavior = new Mock<TileMoveBehavior>();
             
@@ -208,8 +200,7 @@
                     coords: new(1, 0, Sector.Up),
                     direction: Direction.Down,
                     remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Down),
-                    playerColor: PlayerColor.Red));
+                    previousCoords: new(0, 0, Sector.Down)));
 
             var secondSectorBehavior = new Mock<TileMoveBehavior>();
 
@@ -218,8 +209,7 @@
                     coords: new(1, 0, Sector.Center),
                     direction: Direction.Down,
                     remainingRange: Range.Melee,
-                    previousCoords: new(1, 0, Sector.Up),
-                    playerColor: PlayerColor.Red));
+                    previousCoords: new(1, 0, Sector.Up)));
 
             var secondCenterBehavior = new Mock<TileMoveBehavior>();
 
@@ -228,8 +218,7 @@
                     coords: new(1, 0, Sector.Down),
                     direction: Direction.Down,
                     remainingRange: Range.None,
-                    previousCoords: new(1, 0, Sector.Center),
-                    playerColor: PlayerColor.Red));
+                    previousCoords: new(1, 0, Sector.Center)));
 
             var firstTile = new FakeTile()
                 .SetupSectorMoveBehavior(Sector.Center, firstCenterBehavior.Object)
@@ -247,8 +236,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: Range.Adjacent,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+                previousCoords: new(0, 0));
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
@@ -272,8 +260,7 @@
                     coords: new(0, 0, Sector.Down),
                     direction: Direction.Down,
                     remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Center),
-                    playerColor: PlayerColor.Red));
+                    previousCoords: new(0, 0, Sector.Center)));
 
             var firstSectorBehavior = new Mock<TileMoveBehavior>();
 
@@ -282,8 +269,7 @@
                     coords: new(1, 0, Sector.Up),
                     direction: Direction.Down,
                     remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Down),
-                    playerColor: PlayerColor.Red));
+                    previousCoords: new(0, 0, Sector.Down)));
 
             var secondSectorBehavior = new Mock<TileMoveBehavior>();
 
@@ -292,8 +278,7 @@
                     coords: new(1, 0, Sector.Center),
                     direction: Direction.Down,
                     remainingRange: Range.Melee,
-                    previousCoords: new(1, 0, Sector.Up),
-                    playerColor: PlayerColor.Red));
+                    previousCoords: new(1, 0, Sector.Up)));
 
             var secondCenterBehavior = new Mock<TileMoveBehavior>();
 
@@ -302,8 +287,7 @@
                     coords: new(0, 0, Sector.Center),
                     direction: Direction.Down,
                     remainingRange: Range.Melee,
-                    previousCoords: new(1, 0, Sector.Center),
-                    playerColor: PlayerColor.Red));
+                    previousCoords: new(1, 0, Sector.Center)));
 
             var firstTile = new FakeTile()
                 .SetupSectorMoveBehavior(Sector.Center, firstCenterBehavior.Object)
@@ -321,8 +305,7 @@
                 coords: new(0, 0),
                 direction: Direction.Down,
                 remainingRange: Range.Adjacent,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+                previousCoords: new(0, 0));
 
             // Act
             var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);

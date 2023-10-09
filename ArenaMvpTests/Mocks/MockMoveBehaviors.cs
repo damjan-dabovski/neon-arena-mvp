@@ -18,7 +18,6 @@ namespace ArenaMvpTests.Mocks
             coords: It.IsAny<SectorCoords>(),
             direction: It.IsAny<Direction>(),
             remainingRange: Range.None,
-            previousCoords: It.IsAny<SectorCoords>(),
-            playerColor: It.IsAny<PlayerColor>());
+            previousCoords: It.IsAny<SectorCoords>());
     }
 }

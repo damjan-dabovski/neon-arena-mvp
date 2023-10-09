@@ -14,8 +14,7 @@
             coords: currentMoveAction.Coords.NextInDirection(currentMoveAction.Direction),
             direction: currentMoveAction.Direction,
             remainingRange: DecrementRange(currentMoveAction),
-            previousCoords: currentMoveAction.Coords,
-            playerColor: currentMoveAction.PlayerColor
+            previousCoords: currentMoveAction.Coords
         );
 
         public static readonly TileMoveBehavior Block = (_, currentMoveAction) => null;
@@ -33,8 +32,7 @@
                     coords: currentMoveAction.Coords.NextInDirection(tileDirection),
                     direction: tileDirection,
                     remainingRange: currentMoveAction.RemainingRange,
-                    previousCoords: currentMoveAction.PreviousCoords,
-                    playerColor: currentMoveAction.PlayerColor
+                    previousCoords: currentMoveAction.PreviousCoords
                 );
             }
         };

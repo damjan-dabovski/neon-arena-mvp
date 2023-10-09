@@ -23,8 +23,7 @@
                 remainingRange: Range.Melee,
                 previousCoords: isOutgoing
                     ? coords
-                    : new(0, 0),
-                playerColor: PlayerColor.Red
+                    : new(0, 0)
             );
 
             // Act
