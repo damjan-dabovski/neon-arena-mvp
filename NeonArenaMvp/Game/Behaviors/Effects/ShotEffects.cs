@@ -8,6 +8,8 @@
     {
         public delegate ShotBehaviorResult ShotEffect(ShotAction sourceAction, ShotBehaviorResult sourceActionResult);
 
+        // TODO remove this; make it so that default behavior means that there isn't a wrapper at all
+        // and have the system check that when evaluating the action
         public static readonly ShotEffect DefaultShot = (_, sourceActionResult) => sourceActionResult;
 
         public static readonly ShotEffect ContinuesAfterBlock = (sourceAction, sourceActionResult) =>
