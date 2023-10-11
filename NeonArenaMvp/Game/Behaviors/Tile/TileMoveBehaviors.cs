@@ -3,7 +3,6 @@
     using Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
-    using static Game.Maps.Actions.BaseAction;
 
     public static class TileMoveBehaviors
     {
@@ -12,7 +11,7 @@
         public static readonly TileMoveBehavior PassThrough = (_, currentMoveAction) => currentMoveAction with
         {
             Coords = currentMoveAction.Coords.NextInDirection(currentMoveAction.Direction),
-            RemainingRange = DecrementRange(currentMoveAction),
+            RemainingRange = Range.ReduceIfCenter(currentMoveAction),
             PreviousCoords = currentMoveAction.Coords
         };
 

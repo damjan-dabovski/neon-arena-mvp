@@ -3,7 +3,6 @@
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
-    using static NeonArenaMvp.Game.Maps.Actions.BaseAction;
 
     public static class TileShotBehaviors
     {
@@ -12,7 +11,7 @@
         public static readonly TileShotBehavior PassThrough = (_, currentShotAction) => new(
             resultActions: new() { currentShotAction with {
                 Coords = currentShotAction.Coords.NextInDirection(currentShotAction.Direction),
-                RemainingRange = DecrementRange(currentShotAction),
+                RemainingRange = Range.ReduceIfCenter(currentShotAction),
                 PreviousCoords = currentShotAction.Coords }
             },
             mandatoryTileMark: new(

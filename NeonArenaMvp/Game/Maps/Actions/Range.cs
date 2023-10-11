@@ -1,8 +1,10 @@
 ﻿namespace NeonArenaMvp.Game.Maps.Actions
 {
+    using static NeonArenaMvp.Game.Maps.Enums;
+
     public readonly struct Range
     {
-        public readonly int value;
+        public readonly int Value;
 
         public static readonly Range None = new(0);
 
@@ -14,14 +16,14 @@
 
         private Range(int numberOfTiles)
         {
-            this.value = numberOfTiles;
+            this.Value = numberOfTiles;
         }
 
-        public static implicit operator int(Range range) => range.value;
+        public static implicit operator int(Range range) => range.Value;
 
         public static Range operator -(Range range, int i)
         {
-            return new Range(range.value - i);
+            return new Range(range.Value - i);
         }
 
         public static Range Tiles(int numberOfTiles)
@@ -33,6 +35,15 @@
                 < 0 => Range.Infinite,
                 _ => new(numberOfTiles + 1)
             };
+        }
+
+        // TODO this should probably actually be in the SectorBehavior builders as the 'default' range
+        // setting behavior
+        public static Range ReduceIfCenter(BaseAction currentAction, int amount = 1)
+        {
+            return currentAction.Coords.Sector == Sector.Center
+                ? currentAction.RemainingRange - amount
+                : currentAction.RemainingRange;
         }
     }
 }
