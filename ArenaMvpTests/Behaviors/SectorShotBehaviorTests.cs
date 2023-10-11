@@ -8,25 +8,28 @@
     using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
-    public class TileShotBehaviorTests
+    public class SectorShotBehaviorTests
     {
-        private Tile tile = new(centerBehavior: TileBehaviors.Empty);
+        private ShotAction startShotAction;
+        private readonly Tile tile = new(centerBehavior: SectorBehaviors.Empty);
+
+        public SectorShotBehaviorTests()
+        {
+            this.startShotAction = new ShotAction
+            (
+                coords: new(1, 1),
+                direction: Direction.Right,
+                remainingRange: Range.Melee,
+                previousCoords: new(1, 1),
+                playerColor: PlayerColor.Red
+            );
+        }
 
         [TestMethod]
         public void PassThroughProducesNextTileInDirection()
         {
-            // Arrange
-            var startShotAction = new ShotAction
-            (
-                coords: new(1, 1),
-                direction: Direction.Right,
-                remainingRange: 1,
-                previousCoords: new(1, 1),
-                playerColor: PlayerColor.Red
-            );
-
             // Act
-            var behaviorResult = TileShotBehaviors.PassThrough(this.tile.Direction, startShotAction);
+            var behaviorResult = SectorShotBehaviors.PassThrough(this.tile.Direction, startShotAction);
 
             // Assert
             Assert.AreEqual(1, behaviorResult.ResultActions.Count);
@@ -48,18 +51,8 @@
         [TestMethod]
         public void BlockedProducesEmptyList()
         {
-            // Arrange
-            var startShotAction = new ShotAction
-            (
-                coords: new(1, 1),
-                direction: Direction.Right,
-                remainingRange: 1,
-                previousCoords: new(1, 1),
-                playerColor: PlayerColor.Red
-            );
-
             // Act
-            var result = TileShotBehaviors.Block(this.tile.Direction, startShotAction);
+            var result = SectorShotBehaviors.Block(this.tile.Direction, startShotAction);
 
             // Assert
             Assert.AreEqual(0, result.ResultActions.Count);

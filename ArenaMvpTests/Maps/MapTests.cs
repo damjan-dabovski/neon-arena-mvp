@@ -1,6 +1,5 @@
 ﻿namespace ArenaMvpTests.Maps
 {
-    using ArenaMvpTests.Mocks;
     using NeonArenaMvp.Game.Maps;
 
     [TestClass]

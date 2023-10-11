@@ -3,30 +3,10 @@
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
-    using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
     public class CoordsTests
     {
-        [TestMethod]
-        public void CreatesCoordsFromAction()
-        {
-            // Arrange
-            var moveAction = new MoveAction(
-                coords: new(1, 1),
-                direction: Direction.Up,
-                remainingRange: 1,
-                previousCoords: new(1, 1),
-                playerColor: PlayerColor.Red);
-
-            // Act
-            var coords = new Coords(moveAction);
-
-            // Assert
-            Assert.AreEqual(moveAction.Coords.Row, coords.Row);
-            Assert.AreEqual(moveAction.Coords.Col, coords.Col);
-        }
-
         [TestMethod]
         [DataRow(Direction.Up, -1, 0)]
         [DataRow(Direction.Down, 1, 0)]

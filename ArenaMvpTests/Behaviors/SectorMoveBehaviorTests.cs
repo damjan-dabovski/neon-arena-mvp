@@ -6,28 +6,29 @@ namespace ArenaMvpTests.Behaviors
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
-    using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
-    public class TileMoveBehaviorTests
+    public class SectorMoveBehaviorTests
     {
-        private Tile tile = new(centerBehavior: TileBehaviors.Empty);
+        private MoveAction startMoveAction;
+        private readonly Tile tile = new(centerBehavior: SectorBehaviors.Empty);
+
+        public SectorMoveBehaviorTests()
+        {
+            startMoveAction = new MoveAction
+            (
+                coords: new(1, 1),
+                direction: Direction.Right,
+                remainingRange: Range.Melee,
+                previousCoords: new(1, 1)
+            );
+        }
 
         [TestMethod]
         public void PassThroughProducesNextTileInDirection()
         {
-            // Arrange
-            var startMoveAction = new MoveAction
-            (
-                coords: new(1, 1),
-                direction: Direction.Right,
-                remainingRange: 1,
-                previousCoords: new(1, 1),
-                playerColor: PlayerColor.Red
-            );
-
             // Act
-            var resultMoveAction = TileMoveBehaviors.PassThrough(this.tile.Direction, startMoveAction);
+            var resultMoveAction = SectorMoveBehaviors.PassThrough(this.tile.Direction, startMoveAction);
 
             // Assert
             Assert.IsNotNull(resultMoveAction);
@@ -43,17 +44,13 @@ namespace ArenaMvpTests.Behaviors
         public void BlockedProducesNull()
         {
             // Arrange
-            var startMoveAction = new MoveAction
-            (
-                coords: new(1, 1),
-                direction: Direction.Right,
-                remainingRange: 1,
-                previousCoords: new(1, 1),
-                playerColor: PlayerColor.Red
-            );
+            this.startMoveAction = this.startMoveAction with
+            {
+                RemainingRange = Range.Adjacent
+            };
 
             // Act
-            var resultMoveAction = TileMoveBehaviors.Block(this.tile.Direction, startMoveAction);
+            var resultMoveAction = SectorMoveBehaviors.Block(this.tile.Direction, startMoveAction);
 
             // Assert
             Assert.IsNull(resultMoveAction);
@@ -63,17 +60,13 @@ namespace ArenaMvpTests.Behaviors
         public void RedirectPassesThroughWhenOutgoing()
         {
             // Arrange
-            var startMoveAction = new MoveAction
-            (
-                coords: new(1, 1),
-                direction: Direction.Right,
-                remainingRange: 1,
-                previousCoords: new(1, 1),
-                playerColor: PlayerColor.Red
-            );
+            this.startMoveAction = this.startMoveAction with
+            {
+                RemainingRange = Range.Adjacent
+            };
 
             // Act
-            var resultMoveAction = TileMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);
+            var resultMoveAction = SectorMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);
 
             // Assert
             Assert.IsNotNull(resultMoveAction);
@@ -88,17 +81,14 @@ namespace ArenaMvpTests.Behaviors
         public void RedirectChangesDirectionWhenIncoming()
         {
             // Arrange
-            var startMoveAction = new MoveAction
-            (
-                coords: new(1, 1),
-                direction: Direction.Right,
-                remainingRange: 1,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red
-            );
+            this.startMoveAction = this.startMoveAction with
+            {
+                RemainingRange = Range.Adjacent,
+                PreviousCoords = new(0,0)
+            };
             
             // Act
-            var resultMoveAction = TileMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);
+            var resultMoveAction = SectorMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);
             
             // Assert
             Assert.IsNotNull(resultMoveAction);

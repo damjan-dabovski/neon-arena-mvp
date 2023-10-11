@@ -1,7 +1,6 @@
 ﻿namespace NeonArenaMvp.Game.Maps.Coordinates
 {
     using NeonArenaMvp.Game.Maps.Actions;
-    using static NeonArenaMvp.Game.Maps.Enums;
 
     public readonly struct Coords
         : IEquatable<Coords>
@@ -14,12 +13,6 @@
         {
             this.Row = row;
             this.Col = col;
-        }
-
-        public Coords(BaseAction action)
-        {
-            this.Row = action.Coords.Row;
-            this.Col = action.Coords.Col;
         }
 
         public override bool Equals(object? obj)
