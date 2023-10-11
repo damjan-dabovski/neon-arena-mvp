@@ -7,7 +7,7 @@
     using NeonArenaMvp.Game.Maps.Coordinates;
     using NeonArenaMvp.Game.Match;
     using NeonArenaMvp.Game.Match.Systems;
-    using static NeonArenaMvp.Game.Behaviors.Tile.TileShotBehaviors;
+    using static NeonArenaMvp.Game.Behaviors.Tile.SectorShotBehaviors;
     using static NeonArenaMvp.Game.Maps.Enums;
     using static NeonArenaMvp.Game.Match.Enums;
     using Range = NeonArenaMvp.Game.Maps.Actions.Range;
@@ -72,7 +72,7 @@
         public void ReturnsEmptyListWhenOriginProducesNoMarks()
         {
             // Arrange
-            var mockBehavior = new Mock<TileShotBehavior>();
+            var mockBehavior = new Mock<SectorShotBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
                 .Returns(ShotBehaviorResult.Empty);
@@ -94,7 +94,7 @@
         public void ReturnsOnlyOriginMarkWhenOriginProducesNoShotAction()
         {
             // Arrange
-            var mockBehavior = new Mock<TileShotBehavior>();
+            var mockBehavior = new Mock<SectorShotBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
                 .Returns(new ShotBehaviorResult(new(), new(this.startShotAction, Direction.Down)));
@@ -118,7 +118,7 @@
         public void ReturnsOnlyOriginWhenOriginCausesLoop()
         {
             // Arrange
-            var mockBehavior = new Mock<TileShotBehavior>();
+            var mockBehavior = new Mock<SectorShotBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
                 .Returns(new ShotBehaviorResult(new() { this.startShotAction }, new(this.startShotAction, Direction.Down)));
@@ -143,7 +143,7 @@
         public void ReturnsMultipleMarksWhenOriginReturnsMultipleMarks()
         {
             // Arrange
-            var mockBehavior = new Mock<TileShotBehavior>();
+            var mockBehavior = new Mock<SectorShotBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
                 .Returns(new ShotBehaviorResult(
@@ -178,7 +178,7 @@
         public void ReturnsMultipleMarksWhenEvaluatingMultipleTiles()
         {
             // Arrange
-            var firstCenterBehavior = new Mock<TileShotBehavior>();
+            var firstCenterBehavior = new Mock<SectorShotBehavior>();
 
             var firstCenterBehaviorResultAction = new ShotAction(
                     coords: new(0, 0, Sector.Down),
@@ -198,7 +198,7 @@
                     direction: Direction.Down)
             ));
 
-            var firstSectorBehavior = new Mock<TileShotBehavior>();
+            var firstSectorBehavior = new Mock<SectorShotBehavior>();
 
             var firstSectorBehaviorResultAction = new ShotAction(
                     coords: new(1, 0, Sector.Up),
@@ -218,7 +218,7 @@
                     direction: Direction.Down)
             ));
 
-            var secondSectorBehavior = new Mock<TileShotBehavior>();
+            var secondSectorBehavior = new Mock<SectorShotBehavior>();
 
             var secondSectorBehaviorResultAction = new ShotAction(
                     coords: new(1, 0, Sector.Center),
@@ -238,7 +238,7 @@
                     direction: Direction.Down)
             ));
 
-            var secondCenterBehavior = new Mock<TileShotBehavior>();
+            var secondCenterBehavior = new Mock<SectorShotBehavior>();
 
             var secondCenterBehaviorResultAction = new ShotAction(
                     coords: new(1, 0, Sector.Down),

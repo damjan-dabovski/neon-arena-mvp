@@ -4,11 +4,11 @@
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
 
-    public static class TileShotBehaviors
+    public static class SectorShotBehaviors
     {
-        public delegate ShotBehaviorResult TileShotBehavior(Direction tileDirection, ShotAction currentShotAction);
+        public delegate ShotBehaviorResult SectorShotBehavior(Direction tileDirection, ShotAction currentShotAction);
 
-        public static readonly TileShotBehavior PassThrough = (_, currentShotAction) => new(
+        public static readonly SectorShotBehavior PassThrough = (_, currentShotAction) => new(
             resultActions: new() { currentShotAction with {
                 Coords = currentShotAction.Coords.NextInDirection(currentShotAction.Direction),
                 RemainingRange = Range.ReduceIfCenter(currentShotAction),
@@ -19,6 +19,6 @@
                 direction: currentShotAction.Direction)
         );
 
-        public static readonly TileShotBehavior Block = (_, currentShotAction) => ShotBehaviorResult.Empty;
+        public static readonly SectorShotBehavior Block = (_, currentShotAction) => ShotBehaviorResult.Empty;
     }
 }

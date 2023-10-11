@@ -8,12 +8,12 @@ namespace ArenaMvpTests.Behaviors
     using static NeonArenaMvp.Game.Maps.Enums;
 
     [TestClass]
-    public class TileMoveBehaviorTests
+    public class SectorMoveBehaviorTests
     {
         private MoveAction startMoveAction;
-        private readonly Tile tile = new(centerBehavior: TileBehaviors.Empty);
+        private readonly Tile tile = new(centerBehavior: SectorBehaviors.Empty);
 
-        public TileMoveBehaviorTests()
+        public SectorMoveBehaviorTests()
         {
             startMoveAction = new MoveAction
             (
@@ -28,7 +28,7 @@ namespace ArenaMvpTests.Behaviors
         public void PassThroughProducesNextTileInDirection()
         {
             // Act
-            var resultMoveAction = TileMoveBehaviors.PassThrough(this.tile.Direction, startMoveAction);
+            var resultMoveAction = SectorMoveBehaviors.PassThrough(this.tile.Direction, startMoveAction);
 
             // Assert
             Assert.IsNotNull(resultMoveAction);
@@ -50,7 +50,7 @@ namespace ArenaMvpTests.Behaviors
             };
 
             // Act
-            var resultMoveAction = TileMoveBehaviors.Block(this.tile.Direction, startMoveAction);
+            var resultMoveAction = SectorMoveBehaviors.Block(this.tile.Direction, startMoveAction);
 
             // Assert
             Assert.IsNull(resultMoveAction);
@@ -66,7 +66,7 @@ namespace ArenaMvpTests.Behaviors
             };
 
             // Act
-            var resultMoveAction = TileMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);
+            var resultMoveAction = SectorMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);
 
             // Assert
             Assert.IsNotNull(resultMoveAction);
@@ -88,7 +88,7 @@ namespace ArenaMvpTests.Behaviors
             };
             
             // Act
-            var resultMoveAction = TileMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);
+            var resultMoveAction = SectorMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);
             
             // Assert
             Assert.IsNotNull(resultMoveAction);

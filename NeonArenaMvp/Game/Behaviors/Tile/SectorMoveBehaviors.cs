@@ -4,20 +4,20 @@
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
 
-    public static class TileMoveBehaviors
+    public static class SectorMoveBehaviors
     {
-        public delegate MoveAction? TileMoveBehavior(Direction tileDirection, MoveAction currentMoveAction);
+        public delegate MoveAction? SectorMoveBehavior(Direction tileDirection, MoveAction currentMoveAction);
 
-        public static readonly TileMoveBehavior PassThrough = (_, currentMoveAction) => currentMoveAction with
+        public static readonly SectorMoveBehavior PassThrough = (_, currentMoveAction) => currentMoveAction with
         {
             Coords = currentMoveAction.Coords.NextInDirection(currentMoveAction.Direction),
             RemainingRange = Range.ReduceIfCenter(currentMoveAction),
             PreviousCoords = currentMoveAction.Coords
         };
 
-        public static readonly TileMoveBehavior Block = (_, currentMoveAction) => null;
+        public static readonly SectorMoveBehavior Block = (_, currentMoveAction) => null;
 
-        public static readonly TileMoveBehavior Redirect = (tileDirection, currentMoveAction) =>
+        public static readonly SectorMoveBehavior Redirect = (tileDirection, currentMoveAction) =>
         {
             if (currentMoveAction.IsOutgoing())
             {

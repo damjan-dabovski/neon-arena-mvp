@@ -4,7 +4,7 @@
     using Moq;
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Match.Systems;
-    using static NeonArenaMvp.Game.Behaviors.Tile.TileMoveBehaviors;
+    using static NeonArenaMvp.Game.Behaviors.Tile.SectorMoveBehaviors;
     using static NeonArenaMvp.Game.Maps.Enums;
     using Range = NeonArenaMvp.Game.Maps.Actions.Range;
 
@@ -117,7 +117,7 @@
         public void ReturnsEmptyListWhenOriginReturnsOutOfBoundsAction()
         {
             // Arrange
-            var mockBehavior = new Mock<TileMoveBehavior>();
+            var mockBehavior = new Mock<SectorMoveBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(new(-1, -1), Direction.Down, Range.Melee, new(0, 0)))
@@ -140,7 +140,7 @@
         public void ReturnsEmptyListWhenLoopDetectedInsideOrigin()
         {
             // Arrange
-            var mockBehavior = new Mock<TileMoveBehavior>();
+            var mockBehavior = new Mock<SectorMoveBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(this.startMoveAction);
@@ -162,7 +162,7 @@
         public void ReturnsSingleMoveResultWhenMovingOneTile()
         {
             // Arrange
-            var firstCenterBehavior = new Mock<TileMoveBehavior>();
+            var firstCenterBehavior = new Mock<SectorMoveBehavior>();
 
             firstCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
@@ -171,7 +171,7 @@
                     remainingRange: Range.Melee,
                     previousCoords: new(0, 0, Sector.Center)));
 
-            var firstSectorBehavior = new Mock<TileMoveBehavior>();
+            var firstSectorBehavior = new Mock<SectorMoveBehavior>();
             
             firstSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
@@ -180,7 +180,7 @@
                     remainingRange: Range.Melee,
                     previousCoords: new(0, 0, Sector.Down)));
 
-            var secondSectorBehavior = new Mock<TileMoveBehavior>();
+            var secondSectorBehavior = new Mock<SectorMoveBehavior>();
 
             secondSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
@@ -189,7 +189,7 @@
                     remainingRange: Range.Melee,
                     previousCoords: new(1, 0, Sector.Up)));
 
-            var secondCenterBehavior = new Mock<TileMoveBehavior>();
+            var secondCenterBehavior = new Mock<SectorMoveBehavior>();
 
             secondCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
@@ -230,7 +230,7 @@
         public void ReturnsEmptyListWhenLoopDetected()
         {
             // Arrange
-            var firstCenterBehavior = new Mock<TileMoveBehavior>();
+            var firstCenterBehavior = new Mock<SectorMoveBehavior>();
 
             firstCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
@@ -239,7 +239,7 @@
                     remainingRange: Range.Melee,
                     previousCoords: new(0, 0, Sector.Center)));
 
-            var firstSectorBehavior = new Mock<TileMoveBehavior>();
+            var firstSectorBehavior = new Mock<SectorMoveBehavior>();
 
             firstSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
@@ -248,7 +248,7 @@
                     remainingRange: Range.Melee,
                     previousCoords: new(0, 0, Sector.Down)));
 
-            var secondSectorBehavior = new Mock<TileMoveBehavior>();
+            var secondSectorBehavior = new Mock<SectorMoveBehavior>();
 
             secondSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
@@ -257,7 +257,7 @@
                     remainingRange: Range.Melee,
                     previousCoords: new(1, 0, Sector.Up)));
 
-            var secondCenterBehavior = new Mock<TileMoveBehavior>();
+            var secondCenterBehavior = new Mock<SectorMoveBehavior>();
 
             secondCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(

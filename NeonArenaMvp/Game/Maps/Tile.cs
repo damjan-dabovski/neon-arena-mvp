@@ -10,19 +10,19 @@
     {
         public readonly Direction Direction;
 
-        private readonly ImmutableDictionary<Sector, TileBehavior> SectorBehaviors;
+        private readonly ImmutableDictionary<Sector, SectorBehavior> SectorBehaviors;
 
-        public Tile(Direction direction = Direction.Up, TileBehavior? centerBehavior = null, TileBehavior? upBehavior = null, TileBehavior? rightBehavior = null, TileBehavior? downBehavior = null, TileBehavior? leftBehavior = null)
+        public Tile(Direction direction = Direction.Up, SectorBehavior? centerBehavior = null, SectorBehavior? upBehavior = null, SectorBehavior? rightBehavior = null, SectorBehavior? downBehavior = null, SectorBehavior? leftBehavior = null)
         {
             this.Direction = direction;
 
-            this.SectorBehaviors = new Dictionary<Sector, TileBehavior>()
+            this.SectorBehaviors = new Dictionary<Sector, SectorBehavior>()
             {
-                [Sector.Center] = centerBehavior ?? TileBehaviors.Empty,
-                [Sector.Up] = upBehavior ?? TileBehaviors.Empty,
-                [Sector.Right] = rightBehavior ?? TileBehaviors.Empty,
-                [Sector.Down] = downBehavior ?? TileBehaviors.Empty,
-                [Sector.Left] = leftBehavior ?? TileBehaviors.Empty
+                [Sector.Center] = centerBehavior ?? Behaviors.Tile.SectorBehaviors.Empty,
+                [Sector.Up] = upBehavior ?? Behaviors.Tile.SectorBehaviors.Empty,
+                [Sector.Right] = rightBehavior ?? Behaviors.Tile.SectorBehaviors.Empty,
+                [Sector.Down] = downBehavior ?? Behaviors.Tile.SectorBehaviors.Empty,
+                [Sector.Left] = leftBehavior ?? Behaviors.Tile.SectorBehaviors.Empty
             }.ToImmutableDictionary();
         }
 

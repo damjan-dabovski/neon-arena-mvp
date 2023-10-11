@@ -8,12 +8,12 @@
     using static NeonArenaMvp.Game.Match.Enums;
 
     [TestClass]
-    public class TileShotBehaviorTests
+    public class SectorShotBehaviorTests
     {
         private ShotAction startShotAction;
-        private readonly Tile tile = new(centerBehavior: TileBehaviors.Empty);
+        private readonly Tile tile = new(centerBehavior: SectorBehaviors.Empty);
 
-        public TileShotBehaviorTests()
+        public SectorShotBehaviorTests()
         {
             this.startShotAction = new ShotAction
             (
@@ -29,7 +29,7 @@
         public void PassThroughProducesNextTileInDirection()
         {
             // Act
-            var behaviorResult = TileShotBehaviors.PassThrough(this.tile.Direction, startShotAction);
+            var behaviorResult = SectorShotBehaviors.PassThrough(this.tile.Direction, startShotAction);
 
             // Assert
             Assert.AreEqual(1, behaviorResult.ResultActions.Count);
@@ -52,7 +52,7 @@
         public void BlockedProducesEmptyList()
         {
             // Act
-            var result = TileShotBehaviors.Block(this.tile.Direction, startShotAction);
+            var result = SectorShotBehaviors.Block(this.tile.Direction, startShotAction);
 
             // Assert
             Assert.AreEqual(0, result.ResultActions.Count);
