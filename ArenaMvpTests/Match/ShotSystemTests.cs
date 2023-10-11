@@ -15,7 +15,8 @@
     [TestClass]
     public class ShotSystemTests
     {
-        public FakeMap Map;
+        private FakeMap Map;
+        private ShotAction startShotAction;
 
         public ShotSystemTests()
         {
@@ -24,21 +25,26 @@
             this.Map = new FakeMap()
                 .SetTile(0, 0, tile)
                 .SetOutOfBounds(false);
+
+            this.startShotAction = new ShotAction(
+                coords: new(0, 0),
+                direction: Direction.Down,
+                remainingRange: Range.Melee,
+                previousCoords: new(0, 0),
+                playerColor: PlayerColor.Red);
         }
 
         [TestMethod]
         public void ReturnsEmptyListWhenStartActionHasRangeZero()
         {
             // Arrange
-            var startShotAction = new ShotAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.None,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+            this.startShotAction = this.startShotAction with
+            {
+                RemainingRange = Range.None
+            };
 
             // Act
-            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, startShotAction);
+            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, this.startShotAction);
 
             // Assert
             Assert.AreEqual(0, resultMarks.Count);
@@ -50,15 +56,13 @@
             // Arrange
             this.Map.SetOutOfBounds(true);
 
-            var startShotAction = new ShotAction(
-                coords: new(-1, -1),
-                direction: Direction.Down,
-                remainingRange: Range.None,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+            this.startShotAction = this.startShotAction with
+            {
+                Coords = new(-1, -1)
+            };
 
             // Act
-            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, startShotAction);
+            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, this.startShotAction);
 
             // Assert
             Assert.AreEqual(0, resultMarks.Count);
@@ -79,15 +83,8 @@
             this.Map = new FakeMap()
                 .SetTile(0, 0, fakeTile);
 
-            var startShotAction = new ShotAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
-
             // Act
-            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, startShotAction);
+            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, this.startShotAction);
 
             // Assert
             Assert.AreEqual(0, resultMarks.Count);
@@ -97,17 +94,10 @@
         public void ReturnsOnlyOriginMarkWhenOriginProducesNoShotAction()
         {
             // Arrange
-            var startShotAction = new ShotAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
-
             var mockBehavior = new Mock<TileShotBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
-                .Returns(new ShotBehaviorResult(new(), new(startShotAction, Direction.Down)));
+                .Returns(new ShotBehaviorResult(new(), new(this.startShotAction, Direction.Down)));
 
             var fakeTile = new FakeTile()
                 .SetupAllShotBehaviors(mockBehavior.Object);
@@ -116,7 +106,7 @@
                 .SetTile(0, 0, fakeTile);
 
             // Act
-            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, startShotAction);
+            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, this.startShotAction);
 
             // Assert
             Assert.AreEqual(1, resultMarks.Count);
@@ -128,17 +118,10 @@
         public void ReturnsOnlyOriginWhenOriginCausesLoop()
         {
             // Arrange
-            var startShotAction = new ShotAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
-
             var mockBehavior = new Mock<TileShotBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
-                .Returns(new ShotBehaviorResult(new() { startShotAction }, new(startShotAction, Direction.Down)));
+                .Returns(new ShotBehaviorResult(new() { this.startShotAction }, new(this.startShotAction, Direction.Down)));
 
             var fakeTile = new FakeTile()
                 .SetupAllShotBehaviors(mockBehavior.Object);
@@ -148,7 +131,7 @@
 
 
             // Act
-            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, startShotAction);
+            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, this.startShotAction);
 
             // Assert
             Assert.AreEqual(1, resultMarks.Count);
@@ -160,23 +143,16 @@
         public void ReturnsMultipleMarksWhenOriginReturnsMultipleMarks()
         {
             // Arrange
-            var startShotAction = new ShotAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
-
             var mockBehavior = new Mock<TileShotBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
                 .Returns(new ShotBehaviorResult(
                 resultActions: new(),
                 mandatoryTileMark: new(
-                    action: startShotAction,
+                    action: this.startShotAction,
                     direction: Direction.Down),
                 new TileMark(
-                    action: startShotAction,
+                    action: this.startShotAction,
                     direction: Direction.Up)
             ));
 
@@ -187,7 +163,7 @@
                 .SetTile(0, 0, fakeTile);
 
             // Act
-            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, startShotAction);
+            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, this.startShotAction);
 
             // Assert
             Assert.AreEqual(2, resultMarks.Count);
@@ -294,15 +270,13 @@
                 .SetTile(0, 0, firstTile)
                 .SetTile(1, 0, secondTile);
 
-            var startShotAction = new ShotAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Adjacent,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+            this.startShotAction = this.startShotAction with
+            {
+                RemainingRange = Range.Adjacent
+            };
 
             // Act
-            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, startShotAction);
+            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, this.startShotAction);
 
             // Assert
             Assert.AreEqual(2, resultMarks.Count);

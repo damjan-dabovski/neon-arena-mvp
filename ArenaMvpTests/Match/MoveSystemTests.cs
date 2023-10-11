@@ -11,7 +11,8 @@
     [TestClass]
     public class MoveSystemTests
     {
-        public FakeMap Map;
+        private FakeMap Map;
+        private MoveAction startMoveAction;
 
         public MoveSystemTests()
         {
@@ -20,20 +21,25 @@
             this.Map = new FakeMap()
                 .SetTile(0, 0, tile)
                 .SetOutOfBounds(false);
+
+            this.startMoveAction = new MoveAction(
+                coords: new(0, 0),
+                direction: Direction.Down,
+                remainingRange: Range.Melee,
+                previousCoords: new(0, 0));
         }
 
         [TestMethod]
         public void ReturnsEmptyListWhenStartingActionDoesntStartFromCenter()
         {
             // Arrange
-            var startMoveAction = new MoveAction(
-                coords: new(0, 0, Sector.Up),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0));
+            this.startMoveAction = this.startMoveAction with
+            {
+                Coords = new(0, 0, Sector.Up)
+            };
 
             // Act
-            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, this.startMoveAction);
 
             // Assert
             Assert.AreEqual(0, moveResults.Count);
@@ -43,14 +49,13 @@
         public void ReturnsEmptyListWhenStartingActionHasRangeZero()
         {
             // Arrange
-            var startMoveAction = new MoveAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.None,
-                previousCoords: new(0, 0));
+            this.startMoveAction = this.startMoveAction with
+            {
+                RemainingRange = Range.None
+            };
 
             // Act
-            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, this.startMoveAction);
 
             // Assert
             Assert.AreEqual(0, moveResults.Count);
@@ -62,14 +67,13 @@
             // Arrange
             this.Map.SetOutOfBounds(true);
 
-            var startMoveAction = new MoveAction(
-                coords: new(3, 3),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0));
+            this.startMoveAction = this.startMoveAction with
+            {
+                Coords = new(-1, -1)
+            };
 
             // Act
-            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, this.startMoveAction);
 
             // Assert
             Assert.AreEqual(0, moveResults.Count);
@@ -85,14 +89,8 @@
             this.Map = new FakeMap()
                 .SetTile(0, 0, fakeTile);
 
-            var startMoveAction = new MoveAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0));
-
             // Act
-            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, this.startMoveAction);
 
             // Assert
             Assert.AreEqual(0, moveResults.Count);
@@ -108,14 +106,8 @@
             this.Map = new FakeMap()
                 .SetTile(0, 0, fakeTile);
 
-            var startMoveAction = new MoveAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0));
-
             // Act
-            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, this.startMoveAction);
 
             // Assert
             Assert.AreEqual(0, moveResults.Count);
@@ -137,14 +129,8 @@
             this.Map = new FakeMap()
                  .SetTile(0, 0, fakeTile);
 
-            var startMoveAction = new MoveAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0));
-
             // Act
-            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, this.startMoveAction);
 
             // Assert
             Assert.AreEqual(0, moveResults.Count);
@@ -154,16 +140,10 @@
         public void ReturnsEmptyListWhenLoopDetectedInsideOrigin()
         {
             // Arrange
-            var startMoveAction = new MoveAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0));
-
             var mockBehavior = new Mock<TileMoveBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
-                .Returns(startMoveAction);
+                .Returns(this.startMoveAction);
 
             var fakeTile = new FakeTile()
                 .SetupAllMoveBehaviors(mockBehavior.Object);
@@ -172,7 +152,7 @@
                 .SetTile(0, 0, fakeTile);
 
             // Act
-            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, this.startMoveAction);
 
             // Assert
             Assert.AreEqual(0, moveResults.Count);
@@ -230,14 +210,13 @@
                 .SetTile(0, 0, firstTile)
                 .SetTile(1, 0, secondTile);
 
-            var startMoveAction = new MoveAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Adjacent,
-                previousCoords: new(0, 0));
+            this.startMoveAction = this.startMoveAction with
+            {
+                RemainingRange= Range.Adjacent
+            };
 
             // Act
-            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, this.startMoveAction);
 
             // Assert
             Assert.AreEqual(1, moveResults.Count);
@@ -299,14 +278,13 @@
                 .SetTile(0, 0, firstTile)
                 .SetTile(1, 0, secondTile);
 
-            var startMoveAction = new MoveAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Adjacent,
-                previousCoords: new(0, 0));
+            this.startMoveAction = this.startMoveAction with
+            {
+                RemainingRange = Range.Adjacent
+            };
 
             // Act
-            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, startMoveAction);
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, this.startMoveAction);
 
             // Assert
             Assert.AreEqual(0, moveResults.Count);

@@ -3,7 +3,7 @@ using static NeonArenaMvp.Game.Match.Enums;
 
 namespace NeonArenaMvp.Game.Maps.Actions
 {
-    public class ShotAction
+    public record class ShotAction
         : BaseAction
     {
         public readonly PlayerColor PlayerColor;

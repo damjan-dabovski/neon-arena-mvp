@@ -10,20 +10,23 @@ namespace ArenaMvpTests.Behaviors
     [TestClass]
     public class TileMoveBehaviorTests
     {
-        private Tile tile = new(centerBehavior: TileBehaviors.Empty);
+        private MoveAction startMoveAction;
+        private readonly Tile tile = new(centerBehavior: TileBehaviors.Empty);
 
-        [TestMethod]
-        public void PassThroughProducesNextTileInDirection()
+        public TileMoveBehaviorTests()
         {
-            // Arrange
-            var startMoveAction = new MoveAction
+            startMoveAction = new MoveAction
             (
                 coords: new(1, 1),
                 direction: Direction.Right,
                 remainingRange: Range.Melee,
                 previousCoords: new(1, 1)
             );
+        }
 
+        [TestMethod]
+        public void PassThroughProducesNextTileInDirection()
+        {
             // Act
             var resultMoveAction = TileMoveBehaviors.PassThrough(this.tile.Direction, startMoveAction);
 
@@ -41,13 +44,10 @@ namespace ArenaMvpTests.Behaviors
         public void BlockedProducesNull()
         {
             // Arrange
-            var startMoveAction = new MoveAction
-            (
-                coords: new(1, 1),
-                direction: Direction.Right,
-                remainingRange: Range.Adjacent,
-                previousCoords: new(1, 1)
-            );
+            this.startMoveAction = this.startMoveAction with
+            {
+                RemainingRange = Range.Adjacent
+            };
 
             // Act
             var resultMoveAction = TileMoveBehaviors.Block(this.tile.Direction, startMoveAction);
@@ -60,13 +60,10 @@ namespace ArenaMvpTests.Behaviors
         public void RedirectPassesThroughWhenOutgoing()
         {
             // Arrange
-            var startMoveAction = new MoveAction
-            (
-                coords: new(1, 1),
-                direction: Direction.Right,
-                remainingRange: Range.Adjacent,
-                previousCoords: new(1, 1)
-            );
+            this.startMoveAction = this.startMoveAction with
+            {
+                RemainingRange = Range.Adjacent
+            };
 
             // Act
             var resultMoveAction = TileMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);
@@ -84,13 +81,11 @@ namespace ArenaMvpTests.Behaviors
         public void RedirectChangesDirectionWhenIncoming()
         {
             // Arrange
-            var startMoveAction = new MoveAction
-            (
-                coords: new(1, 1),
-                direction: Direction.Right,
-                remainingRange: Range.Adjacent,
-                previousCoords: new(0, 0)
-            );
+            this.startMoveAction = this.startMoveAction with
+            {
+                RemainingRange = Range.Adjacent,
+                PreviousCoords = new(0,0)
+            };
             
             // Act
             var resultMoveAction = TileMoveBehaviors.Redirect(this.tile.Direction, startMoveAction);

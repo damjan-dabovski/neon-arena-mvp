@@ -10,12 +10,10 @@
         public delegate ShotBehaviorResult TileShotBehavior(Direction tileDirection, ShotAction currentShotAction);
 
         public static readonly TileShotBehavior PassThrough = (_, currentShotAction) => new(
-            resultActions: new() { new(
-                coords: currentShotAction.Coords.NextInDirection(currentShotAction.Direction),
-                direction: currentShotAction.Direction,
-                remainingRange: DecrementRange(currentShotAction),
-                previousCoords: currentShotAction.Coords,
-                playerColor: currentShotAction.PlayerColor)
+            resultActions: new() { currentShotAction with {
+                Coords = currentShotAction.Coords.NextInDirection(currentShotAction.Direction),
+                RemainingRange = DecrementRange(currentShotAction),
+                PreviousCoords = currentShotAction.Coords }
             },
             mandatoryTileMark: new(
                 action: currentShotAction,

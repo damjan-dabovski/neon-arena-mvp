@@ -9,13 +9,12 @@
     {
         public delegate MoveAction? TileMoveBehavior(Direction tileDirection, MoveAction currentMoveAction);
 
-        public static readonly TileMoveBehavior PassThrough = (_, currentMoveAction) => new MoveAction
-        (
-            coords: currentMoveAction.Coords.NextInDirection(currentMoveAction.Direction),
-            direction: currentMoveAction.Direction,
-            remainingRange: DecrementRange(currentMoveAction),
-            previousCoords: currentMoveAction.Coords
-        );
+        public static readonly TileMoveBehavior PassThrough = (_, currentMoveAction) => currentMoveAction with
+        {
+            Coords = currentMoveAction.Coords.NextInDirection(currentMoveAction.Direction),
+            RemainingRange = DecrementRange(currentMoveAction),
+            PreviousCoords = currentMoveAction.Coords
+        };
 
         public static readonly TileMoveBehavior Block = (_, currentMoveAction) => null;
 
@@ -27,13 +26,11 @@
             }
             else
             {
-                return new MoveAction
-                (
-                    coords: currentMoveAction.Coords.NextInDirection(tileDirection),
-                    direction: tileDirection,
-                    remainingRange: currentMoveAction.RemainingRange,
-                    previousCoords: currentMoveAction.PreviousCoords
-                );
+                return currentMoveAction with
+                {
+                    Coords = currentMoveAction.Coords.NextInDirection(tileDirection),
+                    Direction = tileDirection
+                };
             }
         };
     }

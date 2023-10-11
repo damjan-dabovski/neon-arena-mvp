@@ -3,7 +3,7 @@
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
 
-    public class MoveAction
+    public record class MoveAction
         : BaseAction
     {
         public MoveAction(SectorCoords coords, Direction direction, Range remainingRange, SectorCoords previousCoords)

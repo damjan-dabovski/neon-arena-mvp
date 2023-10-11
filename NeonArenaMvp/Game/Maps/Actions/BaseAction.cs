@@ -3,25 +3,9 @@
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
 
-    public abstract class BaseAction
+    public abstract record class BaseAction(SectorCoords Coords, Direction Direction, Range RemainingRange, SectorCoords PreviousCoords)
     {
-        public readonly SectorCoords Coords;
-
-        public readonly Direction Direction;
-
-        public readonly Range RemainingRange;
-
-        public readonly SectorCoords PreviousCoords;
-
         public Coords BaseCoords => this.Coords.BaseCoords;
-
-        protected BaseAction(SectorCoords coords, Direction direction, Range remainingRange, SectorCoords previousCoords)
-        {
-            this.Coords = coords;
-            this.Direction = direction;
-            this.RemainingRange = remainingRange;
-            this.PreviousCoords = previousCoords;
-        }
 
         public bool IsOutgoing() => this.Coords.Equals(this.PreviousCoords);
 

@@ -10,13 +10,12 @@
     [TestClass]
     public class TileShotBehaviorTests
     {
-        private Tile tile = new(centerBehavior: TileBehaviors.Empty);
+        private ShotAction startShotAction;
+        private readonly Tile tile = new(centerBehavior: TileBehaviors.Empty);
 
-        [TestMethod]
-        public void PassThroughProducesNextTileInDirection()
+        public TileShotBehaviorTests()
         {
-            // Arrange
-            var startShotAction = new ShotAction
+            this.startShotAction = new ShotAction
             (
                 coords: new(1, 1),
                 direction: Direction.Right,
@@ -24,7 +23,11 @@
                 previousCoords: new(1, 1),
                 playerColor: PlayerColor.Red
             );
+        }
 
+        [TestMethod]
+        public void PassThroughProducesNextTileInDirection()
+        {
             // Act
             var behaviorResult = TileShotBehaviors.PassThrough(this.tile.Direction, startShotAction);
 
@@ -48,16 +51,6 @@
         [TestMethod]
         public void BlockedProducesEmptyList()
         {
-            // Arrange
-            var startShotAction = new ShotAction
-            (
-                coords: new(1, 1),
-                direction: Direction.Right,
-                remainingRange: Range.Melee,
-                previousCoords: new(1, 1),
-                playerColor: PlayerColor.Red
-            );
-
             // Act
             var result = TileShotBehaviors.Block(this.tile.Direction, startShotAction);
 
