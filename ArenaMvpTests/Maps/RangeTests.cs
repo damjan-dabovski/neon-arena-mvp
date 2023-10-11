@@ -1,5 +1,6 @@
 ﻿namespace ArenaMvpTests.Maps
 {
+    using NeonArenaMvp.Game.Behaviors.Effects;
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
@@ -32,10 +33,11 @@
             var coords = new SectorCoords(0, 0, onCenter ? Sector.Center : Sector.Up);
 
             var action = new MoveAction(
-                coords: coords,
-                direction: Direction.Up,
-                remainingRange: Range.Adjacent,
-                previousCoords: coords);
+                Coords: coords,
+                Direction: Direction.Up,
+                RemainingRange: Range.Adjacent,
+                PreviousCoords: coords,
+                Effect: MoveEffects.DefaultMove);
 
             // Act
             var result = Range.ReduceIfCenter(action);

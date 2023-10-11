@@ -30,6 +30,7 @@
             {
                 var tile = map[currentMoveAction.Coords.Row, currentMoveAction.Coords.Col];
 
+                // TODO change to use the effect
                 var nextMoveAction = tile.GetNextMove(currentMoveAction);
 
                 if (ShouldStopMovement(map, nextMoveAction))

@@ -2,6 +2,7 @@
 
 namespace ArenaMvpTests.Behaviors
 {
+    using NeonArenaMvp.Game.Behaviors.Effects;
     using NeonArenaMvp.Game.Behaviors.Tile;
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
@@ -17,10 +18,11 @@ namespace ArenaMvpTests.Behaviors
         {
             startMoveAction = new MoveAction
             (
-                coords: new(1, 1),
-                direction: Direction.Right,
-                remainingRange: Range.Melee,
-                previousCoords: new(1, 1)
+                Coords: new(1, 1),
+                Direction: Direction.Right,
+                RemainingRange: Range.Melee,
+                PreviousCoords: new(1, 1),
+                Effect: MoveEffects.DefaultMove
             );
         }
 

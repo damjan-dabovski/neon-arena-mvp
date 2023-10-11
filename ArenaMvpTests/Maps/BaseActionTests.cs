@@ -1,5 +1,6 @@
 ﻿namespace ArenaMvpTests.Maps
 {
+    using NeonArenaMvp.Game.Behaviors.Effects;
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using static NeonArenaMvp.Game.Maps.Enums;
@@ -17,12 +18,13 @@
 
             var moveAction = new MoveAction
             (
-                coords: coords,
-                direction: Direction.Up,
-                remainingRange: Range.Melee,
-                previousCoords: isOutgoing
+                Coords: coords,
+                Direction: Direction.Up,
+                RemainingRange: Range.Melee,
+                PreviousCoords: isOutgoing
                     ? coords
-                    : new(0, 0)
+                    : new(0, 0),
+                Effect: MoveEffects.DefaultMove
             );
 
             // Act

@@ -23,6 +23,7 @@
                     continue;
                 }
 
+                // TODO change to use the effect
                 var tile = map[currentShotAction.Coords.Row, currentShotAction.Coords.Col];
 
                 var shotResult = tile.GetShotResult(currentShotAction);

@@ -2,6 +2,7 @@
 {
     using ArenaMvpTests.Mocks;
     using Moq;
+    using NeonArenaMvp.Game.Behaviors.Effects;
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Match.Systems;
     using static NeonArenaMvp.Game.Behaviors.Tile.SectorMoveBehaviors;
@@ -23,10 +24,11 @@
                 .SetOutOfBounds(false);
 
             this.startMoveAction = new MoveAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0));
+                Coords: new(0, 0),
+                Direction: Direction.Down,
+                RemainingRange: Range.Melee,
+                PreviousCoords: new(0, 0),
+                Effect: MoveEffects.DefaultMove);
         }
 
         [TestMethod]
@@ -120,7 +122,7 @@
             var mockBehavior = new Mock<SectorMoveBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
-                .Returns(new MoveAction(new(-1, -1), Direction.Down, Range.Melee, new(0, 0)))
+                .Returns(new MoveAction(new(-1, -1), Direction.Down, Range.Melee, new(0, 0), MoveEffects.DefaultMove))
                 .Callback(() => this.Map.SetOutOfBounds(true));
 
             var fakeTile = new FakeTile()
@@ -166,37 +168,41 @@
 
             firstCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
-                    coords: new(0, 0, Sector.Down),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Center)));
+                    Coords: new(0, 0, Sector.Down),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(0, 0, Sector.Center),
+                    Effect: MoveEffects.DefaultMove));
 
             var firstSectorBehavior = new Mock<SectorMoveBehavior>();
             
             firstSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
-                    coords: new(1, 0, Sector.Up),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Down)));
+                    Coords: new(1, 0, Sector.Up),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(0, 0, Sector.Down),
+                    Effect: MoveEffects.DefaultMove));
 
             var secondSectorBehavior = new Mock<SectorMoveBehavior>();
 
             secondSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
-                    coords: new(1, 0, Sector.Center),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(1, 0, Sector.Up)));
+                    Coords: new(1, 0, Sector.Center),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(1, 0, Sector.Up),
+                    Effect: MoveEffects.DefaultMove));
 
             var secondCenterBehavior = new Mock<SectorMoveBehavior>();
 
             secondCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
-                    coords: new(1, 0, Sector.Down),
-                    direction: Direction.Down,
-                    remainingRange: Range.None,
-                    previousCoords: new(1, 0, Sector.Center)));
+                    Coords: new(1, 0, Sector.Down),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.None,
+                    PreviousCoords: new(1, 0, Sector.Center),
+                    Effect: MoveEffects.DefaultMove));
 
             var firstTile = new FakeTile()
                 .SetupSectorMoveBehavior(Sector.Center, firstCenterBehavior.Object)
@@ -234,37 +240,41 @@
 
             firstCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
-                    coords: new(0, 0, Sector.Down),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Center)));
+                    Coords: new(0, 0, Sector.Down),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(0, 0, Sector.Center),
+                    Effect: MoveEffects.DefaultMove));
 
             var firstSectorBehavior = new Mock<SectorMoveBehavior>();
 
             firstSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
-                    coords: new(1, 0, Sector.Up),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Down)));
+                    Coords: new(1, 0, Sector.Up),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(0, 0, Sector.Down),
+                    Effect: MoveEffects.DefaultMove));
 
             var secondSectorBehavior = new Mock<SectorMoveBehavior>();
 
             secondSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
-                    coords: new(1, 0, Sector.Center),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(1, 0, Sector.Up)));
+                    Coords: new(1, 0, Sector.Center),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(1, 0, Sector.Up),
+                    Effect: MoveEffects.DefaultMove));
 
             var secondCenterBehavior = new Mock<SectorMoveBehavior>();
 
             secondCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
-                    coords: new(0, 0, Sector.Center),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(1, 0, Sector.Center)));
+                    Coords: new(0, 0, Sector.Center),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(1, 0, Sector.Center),
+                    Effect: MoveEffects.DefaultMove));
 
             var firstTile = new FakeTile()
                 .SetupSectorMoveBehavior(Sector.Center, firstCenterBehavior.Object)
