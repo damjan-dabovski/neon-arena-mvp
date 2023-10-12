@@ -4,18 +4,7 @@ using static NeonArenaMvp.Game.Match.Enums;
 
 namespace NeonArenaMvp.Game.Maps.Actions
 {
-    public record class ShotAction
-        : BaseAction
-    {
-        public readonly PlayerColor PlayerColor;
-
-        public readonly ShotEffect Effect;
-
-        public ShotAction(SectorCoords coords, Enums.Direction direction, Range remainingRange, SectorCoords previousCoords, PlayerColor playerColor, ShotEffect? effect = null)
-            : base(coords, direction, remainingRange, previousCoords)
-        {
-            this.PlayerColor = playerColor;
-            this.Effect = effect ?? DefaultShot;
-        }
-    }
+    public record class ShotAction(SectorCoords Coords, Enums.Direction Direction, Range RemainingRange, SectorCoords PreviousCoords, PlayerColor PlayerColor, ShotEffect? Effect = null)
+        : BaseAction(Coords, Direction, RemainingRange, PreviousCoords)
+    {}
 }

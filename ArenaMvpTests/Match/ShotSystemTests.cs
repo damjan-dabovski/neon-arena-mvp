@@ -27,11 +27,11 @@
                 .SetOutOfBounds(false);
 
             this.startShotAction = new ShotAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+                Coords: new(0, 0),
+                Direction: Direction.Down,
+                RemainingRange: Range.Melee,
+                PreviousCoords: new(0, 0),
+                PlayerColor: PlayerColor.Red);
         }
 
         [TestMethod]
@@ -181,11 +181,11 @@
             var firstCenterBehavior = new Mock<SectorShotBehavior>();
 
             var firstCenterBehaviorResultAction = new ShotAction(
-                    coords: new(0, 0, Sector.Down),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Center),
-                    playerColor: PlayerColor.Red);
+                    Coords: new(0, 0, Sector.Down),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(0, 0, Sector.Center),
+                    PlayerColor: PlayerColor.Red);
 
             firstCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
             .Returns(new ShotBehaviorResult(
@@ -201,11 +201,11 @@
             var firstSectorBehavior = new Mock<SectorShotBehavior>();
 
             var firstSectorBehaviorResultAction = new ShotAction(
-                    coords: new(1, 0, Sector.Up),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Down),
-                    playerColor: PlayerColor.Red);
+                    Coords: new(1, 0, Sector.Up),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(0, 0, Sector.Down),
+                    PlayerColor: PlayerColor.Red);
 
             firstSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
             .Returns(new ShotBehaviorResult(
@@ -221,11 +221,11 @@
             var secondSectorBehavior = new Mock<SectorShotBehavior>();
 
             var secondSectorBehaviorResultAction = new ShotAction(
-                    coords: new(1, 0, Sector.Center),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Down),
-                    playerColor: PlayerColor.Red);
+                    Coords: new(1, 0, Sector.Center),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(0, 0, Sector.Down),
+                    PlayerColor: PlayerColor.Red);
 
             secondSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
             .Returns(new ShotBehaviorResult(
@@ -241,11 +241,11 @@
             var secondCenterBehavior = new Mock<SectorShotBehavior>();
 
             var secondCenterBehaviorResultAction = new ShotAction(
-                    coords: new(1, 0, Sector.Down),
-                    direction: Direction.Down,
-                    remainingRange: Range.None,
-                    previousCoords: new(1, 0, Sector.Center),
-                    playerColor: PlayerColor.Red);
+                    Coords: new(1, 0, Sector.Down),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.None,
+                    PreviousCoords: new(1, 0, Sector.Center),
+                    PlayerColor: PlayerColor.Red);
 
             secondCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
             .Returns(new ShotBehaviorResult(

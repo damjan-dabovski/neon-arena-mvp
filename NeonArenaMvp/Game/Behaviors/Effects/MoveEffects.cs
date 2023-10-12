@@ -7,10 +7,6 @@
     {
         public delegate MoveAction? MoveEffect(MoveAction sourceAction, MoveAction? sourceActionResult);
 
-        // TODO remove this; make it so that default behavior means that there isn't a wrapper at all
-        // and have the system check that when evaluating the action
-        public static readonly MoveEffect DefaultMove = (_, sourceActionResult) => sourceActionResult;
-
         public static readonly MoveEffect ContinuesAfterBlock = (sourceAction, sourceActionResult) =>
         {
             return sourceActionResult ?? sourceAction with

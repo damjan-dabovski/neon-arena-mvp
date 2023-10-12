@@ -23,8 +23,7 @@
                 RemainingRange: Range.Melee,
                 PreviousCoords: isOutgoing
                     ? coords
-                    : new(0, 0),
-                Effect: MoveEffects.DefaultMove
+                    : new(0, 0)
             );
 
             // Act

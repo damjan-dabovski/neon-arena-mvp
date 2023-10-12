@@ -4,7 +4,7 @@
     using static NeonArenaMvp.Game.Behaviors.Effects.MoveEffects;
     using static NeonArenaMvp.Game.Maps.Enums;
 
-    public record class MoveAction(SectorCoords Coords, Direction Direction, Range RemainingRange, SectorCoords PreviousCoords, MoveEffect? Effect)
+    public record class MoveAction(SectorCoords Coords, Direction Direction, Range RemainingRange, SectorCoords PreviousCoords, MoveEffect? Effect = null)
         : BaseAction(Coords, Direction, RemainingRange, PreviousCoords)
     {    }
 }

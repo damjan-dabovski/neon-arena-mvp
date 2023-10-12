@@ -21,8 +21,7 @@ namespace ArenaMvpTests.Behaviors
                 Coords: new(1, 1),
                 Direction: Direction.Right,
                 RemainingRange: Range.Melee,
-                PreviousCoords: new(1, 1),
-                Effect: MoveEffects.DefaultMove
+                PreviousCoords: new(1, 1)
             );
         }
 

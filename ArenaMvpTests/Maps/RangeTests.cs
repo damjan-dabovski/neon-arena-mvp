@@ -36,8 +36,7 @@
                 Coords: coords,
                 Direction: Direction.Up,
                 RemainingRange: Range.Adjacent,
-                PreviousCoords: coords,
-                Effect: MoveEffects.DefaultMove);
+                PreviousCoords: coords);
 
             // Act
             var result = Range.ReduceIfCenter(action);

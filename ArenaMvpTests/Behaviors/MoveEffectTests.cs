@@ -16,29 +16,7 @@
                 Coords: new(1, 1),
                 Direction: Direction.Up,
                 RemainingRange: Range.Adjacent,
-                PreviousCoords: new(1, 1),
-                Effect: MoveEffects.DefaultMove);
-        }
-
-        [TestMethod]
-        public void DefaultMoveReturnsSourceAction()
-        {
-            // Arrange
-            var resultMoveAction = this.startMoveAction with
-            {
-                Coords = new(0, 1),
-                Effect = MoveEffects.ContinuesAfterBlock
-            };
-
-            // Act
-            var effectResultAction = MoveEffects.DefaultMove(this.startMoveAction, resultMoveAction);
-
-            // Assert
-            Assert.IsNotNull(effectResultAction);
-            Assert.AreEqual(resultMoveAction.Coords, effectResultAction.Coords);
-            Assert.AreEqual(resultMoveAction.Direction, effectResultAction.Direction);
-            Assert.AreEqual(resultMoveAction.RemainingRange, effectResultAction.RemainingRange);
-            Assert.AreEqual(resultMoveAction.PreviousCoords, effectResultAction.PreviousCoords);
+                PreviousCoords: new(1, 1));
         }
 
         [TestMethod]

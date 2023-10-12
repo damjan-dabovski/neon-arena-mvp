@@ -17,7 +17,6 @@
             Coords: It.IsAny<SectorCoords>(),
             Direction: It.IsAny<Direction>(),
             RemainingRange: Range.None,
-            PreviousCoords: It.IsAny<SectorCoords>(),
-            Effect: MoveEffects.DefaultMove);
+            PreviousCoords: It.IsAny<SectorCoords>());
     }
 }
