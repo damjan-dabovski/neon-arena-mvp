@@ -23,11 +23,6 @@
         public void ContinuesAfterBlockReturnsSourceActionWhenNotBlocked()
         {
             // Arrange
-            this.startMoveAction = this.startMoveAction with
-            {
-                Effect = MoveEffects.ContinuesAfterBlock
-            };
-
             var resultMoveAction = this.startMoveAction with
             {
                 Coords = new(0, 1),
@@ -48,12 +43,6 @@
         [TestMethod]
         public void ContinuesAfterBlockReturnsNextInDirectionWhenBlocked()
         {
-            // Arrange
-            this.startMoveAction = this.startMoveAction with
-            {
-                Effect = MoveEffects.ContinuesAfterBlock
-            };
-
             // Act
             var effectResultAction = MoveEffects.ContinuesAfterBlock(this.startMoveAction, null);
 

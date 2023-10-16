@@ -4,7 +4,9 @@
     using Moq;
     using NeonArenaMvp.Game.Behaviors.Effects;
     using NeonArenaMvp.Game.Maps.Actions;
+    using NeonArenaMvp.Game.Maps.Coordinates;
     using NeonArenaMvp.Game.Match.Systems;
+    using static NeonArenaMvp.Game.Behaviors.Effects.MoveEffects;
     using static NeonArenaMvp.Game.Behaviors.Tile.SectorMoveBehaviors;
     using static NeonArenaMvp.Game.Maps.Enums;
     using Range = NeonArenaMvp.Game.Maps.Actions.Range;
@@ -173,7 +175,7 @@
                     PreviousCoords: new(0, 0, Sector.Center)));
 
             var firstSectorBehavior = new Mock<SectorMoveBehavior>();
-            
+
             firstSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
                 .Returns(new MoveAction(
                     Coords: new(1, 0, Sector.Up),
@@ -213,7 +215,7 @@
 
             this.startMoveAction = this.startMoveAction with
             {
-                RemainingRange= Range.Adjacent
+                RemainingRange = Range.Adjacent
             };
 
             // Act
@@ -221,8 +223,8 @@
 
             // Assert
             Assert.AreEqual(1, moveResults.Count);
-            Assert.AreEqual(new(0,0), moveResults[0].SourceCoords);
-            Assert.AreEqual(new(1,0), moveResults[0].DestCoords);
+            Assert.AreEqual(new(0, 0), moveResults[0].SourceCoords);
+            Assert.AreEqual(new(1, 0), moveResults[0].DestCoords);
             Assert.AreEqual(Sector.Down, moveResults[0].SourceExitSector);
             Assert.AreEqual(Sector.Up, moveResults[0].DestinationEnterSector);
         }
@@ -289,6 +291,64 @@
 
             // Assert
             Assert.AreEqual(0, moveResults.Count);
+        }
+
+        [TestMethod]
+        public void ReturnsEffectResultWhenEffectExists()
+        {
+            // Arrange
+            var mockEffect = new Mock<MoveEffect>();
+
+            mockEffect.Setup(x => x(It.IsAny<MoveAction>(), It.IsAny<MoveAction?>()))
+                .Returns(new MoveAction(new(2, 2), Direction.Up, Range.Melee, new(2, 2)));
+
+            var firstCenterBehavior = new Mock<SectorMoveBehavior>();
+            firstCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(this.startMoveAction with
+                {
+                    Coords = new(1, 1),
+                    Effect = mockEffect.Object
+                });
+
+            var secondCenterBehavior = new Mock<SectorMoveBehavior>();
+            secondCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(this.startMoveAction);
+
+            var thirdCenterBehavior = new Mock<SectorMoveBehavior>();
+            thirdCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<MoveAction>()))
+                .Returns(this.startMoveAction with
+                {
+                    RemainingRange = Range.None
+                });
+
+            var firstTile = new FakeTile()
+                .SetupAllMoveBehaviors(firstCenterBehavior.Object);
+
+            var secondTile = new FakeTile()
+                .SetupAllMoveBehaviors(secondCenterBehavior.Object);
+
+            var thirdTile = new FakeTile()
+                .SetupAllMoveBehaviors(thirdCenterBehavior.Object);
+
+            this.Map = new FakeMap()
+                .SetTile(0, 0, firstTile)
+                .SetTile(1, 1, secondTile)
+                .SetTile(2, 2, thirdTile);
+
+            // Act
+            var moveResults = MoveSystem.ProcessMovement(this.Map.Object, this.startMoveAction);
+
+            // Assert
+            Assert.AreEqual(2, moveResults.Count);
+            Assert.AreEqual(new(0, 0), moveResults[0].SourceCoords);
+            Assert.AreEqual(new(1, 1), moveResults[0].DestCoords);
+            Assert.AreEqual(Sector.Center, moveResults[0].SourceExitSector);
+            Assert.AreEqual(Sector.Center, moveResults[0].DestinationEnterSector);
+            
+            Assert.AreEqual(new(1, 1), moveResults[1].SourceCoords);
+            Assert.AreEqual(new(2, 2), moveResults[1].DestCoords);
+            Assert.AreEqual(Sector.Center, moveResults[1].SourceExitSector);
+            Assert.AreEqual(Sector.Center, moveResults[1].DestinationEnterSector);
         }
     }
 }

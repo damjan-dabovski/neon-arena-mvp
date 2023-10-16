@@ -23,10 +23,14 @@
                     continue;
                 }
 
-                // TODO change to use the effect
                 var tile = map[currentShotAction.Coords.Row, currentShotAction.Coords.Col];
 
                 var shotResult = tile.GetShotResult(currentShotAction);
+
+                if (currentShotAction.Effect is not null)
+                {
+                    shotResult = currentShotAction.Effect(currentShotAction, shotResult);
+                }
 
                 if (shotResult.TileMarks.Count == 0)
                 {
