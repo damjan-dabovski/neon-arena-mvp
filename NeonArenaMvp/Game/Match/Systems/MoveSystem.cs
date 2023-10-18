@@ -30,9 +30,14 @@
             {
                 var tile = map[currentMoveAction.Coords.Row, currentMoveAction.Coords.Col];
 
-                var nextMoveAction = tile.GetNextMove(currentMoveAction);
+                var resultMoveAction = tile.GetNextMove(currentMoveAction);
 
-                if (ShouldStopMovement(map, nextMoveAction))
+                if (currentMoveAction.Effect is not null)
+                {
+                    resultMoveAction = currentMoveAction.Effect(currentMoveAction, resultMoveAction);
+                }
+
+                if (ShouldStopMovement(map, resultMoveAction))
                 {
                     break;
                 }
@@ -40,26 +45,26 @@
                 /* are we moving between 2 tiles?
                  * if so, store the sector from
                  * which we exited the current tile */
-                if (currentMoveAction.BaseCoords != nextMoveAction.BaseCoords)
+                if (currentMoveAction.BaseCoords != resultMoveAction.BaseCoords)
                 {
                     lastExitSector = currentMoveAction.Coords.Sector;
                 }
 
-                if (nextMoveAction.Coords.Sector == Sector.Center)
+                if (resultMoveAction.Coords.Sector == Sector.Center)
                 {
                     // detects loops that happen between/because of the tile's sectors
-                    if (nextMoveAction.BaseCoords == lastCenterSectorCoords)
+                    if (resultMoveAction.BaseCoords == lastCenterSectorCoords)
                     {
                         return MoveResult.Empty;
                     }
 
                     var currentMoveResult = new MoveResult(
                         sourceCoords: lastCenterSectorCoords,
-                        destCoords: nextMoveAction.BaseCoords,
+                        destCoords: resultMoveAction.BaseCoords,
                         sourceExitSector: lastExitSector,
-                        destinationEnterSector: nextMoveAction.PreviousCoords.Sector);
+                        destinationEnterSector: resultMoveAction.PreviousCoords.Sector);
 
-                    lastCenterSectorCoords = nextMoveAction.BaseCoords;
+                    lastCenterSectorCoords = resultMoveAction.BaseCoords;
 
                     // TODO currently we're using pessimistic loop detection (fails immediately)
                     // we can change it to be more optimistic (i.e. let the non-looping cases through)
@@ -73,7 +78,7 @@
                     }
                 }
 
-                currentMoveAction = nextMoveAction;
+                currentMoveAction = resultMoveAction;
             }
 
             return moveResults;

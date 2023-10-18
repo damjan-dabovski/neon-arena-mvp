@@ -27,6 +27,11 @@
 
                 var shotResult = tile.GetShotResult(currentShotAction);
 
+                if (currentShotAction.Effect is not null)
+                {
+                    shotResult = currentShotAction.Effect(currentShotAction, shotResult);
+                }
+
                 if (shotResult.TileMarks.Count == 0)
                 {
                     continue;

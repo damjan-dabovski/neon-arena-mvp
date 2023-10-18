@@ -7,6 +7,8 @@
     using NeonArenaMvp.Game.Maps.Coordinates;
     using NeonArenaMvp.Game.Match;
     using NeonArenaMvp.Game.Match.Systems;
+    using static NeonArenaMvp.Game.Behaviors.Effects.MoveEffects;
+    using static NeonArenaMvp.Game.Behaviors.Effects.ShotEffects;
     using static NeonArenaMvp.Game.Behaviors.Tile.SectorShotBehaviors;
     using static NeonArenaMvp.Game.Maps.Enums;
     using static NeonArenaMvp.Game.Match.Enums;
@@ -27,11 +29,11 @@
                 .SetOutOfBounds(false);
 
             this.startShotAction = new ShotAction(
-                coords: new(0, 0),
-                direction: Direction.Down,
-                remainingRange: Range.Melee,
-                previousCoords: new(0, 0),
-                playerColor: PlayerColor.Red);
+                Coords: new(0, 0),
+                Direction: Direction.Down,
+                RemainingRange: Range.Melee,
+                PreviousCoords: new(0, 0),
+                PlayerColor: PlayerColor.Red);
         }
 
         [TestMethod]
@@ -167,7 +169,7 @@
 
             // Assert
             Assert.AreEqual(2, resultMarks.Count);
-            Assert.AreEqual(new Coords(0,0), resultMarks[0].Coords);
+            Assert.AreEqual(new Coords(0, 0), resultMarks[0].Coords);
             Assert.AreEqual(Direction.Down, resultMarks[0].Direction);
 
             Assert.AreEqual(new Coords(0, 0), resultMarks[1].Coords);
@@ -181,11 +183,11 @@
             var firstCenterBehavior = new Mock<SectorShotBehavior>();
 
             var firstCenterBehaviorResultAction = new ShotAction(
-                    coords: new(0, 0, Sector.Down),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Center),
-                    playerColor: PlayerColor.Red);
+                    Coords: new(0, 0, Sector.Down),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(0, 0, Sector.Center),
+                    PlayerColor: PlayerColor.Red);
 
             firstCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
             .Returns(new ShotBehaviorResult(
@@ -201,11 +203,11 @@
             var firstSectorBehavior = new Mock<SectorShotBehavior>();
 
             var firstSectorBehaviorResultAction = new ShotAction(
-                    coords: new(1, 0, Sector.Up),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Down),
-                    playerColor: PlayerColor.Red);
+                    Coords: new(1, 0, Sector.Up),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(0, 0, Sector.Down),
+                    PlayerColor: PlayerColor.Red);
 
             firstSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
             .Returns(new ShotBehaviorResult(
@@ -221,11 +223,11 @@
             var secondSectorBehavior = new Mock<SectorShotBehavior>();
 
             var secondSectorBehaviorResultAction = new ShotAction(
-                    coords: new(1, 0, Sector.Center),
-                    direction: Direction.Down,
-                    remainingRange: Range.Melee,
-                    previousCoords: new(0, 0, Sector.Down),
-                    playerColor: PlayerColor.Red);
+                    Coords: new(1, 0, Sector.Center),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.Melee,
+                    PreviousCoords: new(0, 0, Sector.Down),
+                    PlayerColor: PlayerColor.Red);
 
             secondSectorBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
             .Returns(new ShotBehaviorResult(
@@ -241,11 +243,11 @@
             var secondCenterBehavior = new Mock<SectorShotBehavior>();
 
             var secondCenterBehaviorResultAction = new ShotAction(
-                    coords: new(1, 0, Sector.Down),
-                    direction: Direction.Down,
-                    remainingRange: Range.None,
-                    previousCoords: new(1, 0, Sector.Center),
-                    playerColor: PlayerColor.Red);
+                    Coords: new(1, 0, Sector.Down),
+                    Direction: Direction.Down,
+                    RemainingRange: Range.None,
+                    PreviousCoords: new(1, 0, Sector.Center),
+                    PlayerColor: PlayerColor.Red);
 
             secondCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
             .Returns(new ShotBehaviorResult(
@@ -281,10 +283,60 @@
             // Assert
             Assert.AreEqual(2, resultMarks.Count);
 
-            Assert.AreEqual(new Coords(0,0), resultMarks[0].Coords);
+            Assert.AreEqual(new Coords(0, 0), resultMarks[0].Coords);
             Assert.AreEqual(Direction.Down, resultMarks[0].Direction);
 
             Assert.AreEqual(new Coords(1, 0), resultMarks[1].Coords);
+            Assert.AreEqual(Direction.Down, resultMarks[1].Direction);
+        }
+
+        [TestMethod]
+        public void ReturnsEffectResultWhenEffectExists()
+        {
+            // Arrange
+            var mockEffect = new Mock<ShotEffect>();
+
+            mockEffect.Setup(x => x(It.IsAny<ShotAction>(), It.IsAny<ShotBehaviorResult>()))
+                .Returns(new ShotBehaviorResult(
+                    resultActions: new List<ShotAction>(),
+                    mandatoryTileMark: new TileMark(
+                        action: this.startShotAction,
+                        direction: Direction.Up),
+                    otherTileMarks: new TileMark(
+                        action: this.startShotAction,
+                        direction: Direction.Down
+                    )
+            ));
+
+            var mockCenterBehavior = new Mock<SectorShotBehavior>();
+
+            var centerBehaviorResultAction = this.startShotAction with
+            {
+                Coords = new(1, 1),
+                Effect = mockEffect.Object
+            };
+
+            mockCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
+            .Returns(ShotBehaviorResult.Empty);
+
+            var fakeTile = new FakeTile()
+                .SetupAllShotBehaviors(mockCenterBehavior.Object);
+
+            this.Map = new FakeMap()
+                .SetTile(0, 0, fakeTile);
+
+            this.startShotAction = this.startShotAction with
+            {
+                Effect = mockEffect.Object
+            };
+
+            // Act
+            var resultMarks = ShotSystem.ProcessShot(this.Map.Object, this.startShotAction);
+
+            // Assert
+            Assert.AreEqual(2, resultMarks.Count);
+            Assert.AreEqual(new Coords(0, 0), resultMarks[0].Coords);
+            Assert.AreEqual(Direction.Up, resultMarks[0].Direction);
             Assert.AreEqual(Direction.Down, resultMarks[1].Direction);
         }
     }
