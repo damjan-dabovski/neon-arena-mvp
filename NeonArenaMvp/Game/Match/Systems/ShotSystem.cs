@@ -73,7 +73,7 @@
         private static bool ShouldStopShotProcessing(IMap map, [NotNullWhen(false)] ShotAction shotAction)
         {
             return shotAction.RemainingRange == 0
-                    || map.IsOutOfBounds(shotAction.Coords.Row, shotAction.Coords.Col);
+                    || map.IsOutOfBounds(shotAction.BaseCoords);
         }
     }
 }

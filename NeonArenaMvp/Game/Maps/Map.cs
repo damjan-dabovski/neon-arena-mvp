@@ -1,5 +1,7 @@
 ﻿namespace NeonArenaMvp.Game.Maps
 {
+    using NeonArenaMvp.Game.Maps.Coordinates;
+
     public class Map
         : IMap
     {
@@ -16,12 +18,12 @@
             this.tiles = tiles;
         }
 
-        public bool IsOutOfBounds(int row, int col)
+        public bool IsOutOfBounds(Coords coords)
         {
-            return row >= this.RowCount
-                || col >= this.ColCount
-                || row < 0
-                || col < 0;
+            return coords.Row >= this.RowCount
+                || coords.Col >= this.ColCount
+                || coords.Row < 0
+                || coords.Col < 0;
         }
     }
 }
