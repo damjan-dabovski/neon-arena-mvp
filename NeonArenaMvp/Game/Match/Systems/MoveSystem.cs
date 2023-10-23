@@ -88,7 +88,7 @@
         {
             return moveAction is null
                     || moveAction.RemainingRange == 0
-                    || map.IsOutOfBounds(moveAction.Coords.Row, moveAction.Coords.Col);
+                    || map.IsOutOfBounds(moveAction.BaseCoords);
         }
     }
 }

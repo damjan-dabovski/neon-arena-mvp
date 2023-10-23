@@ -2,6 +2,7 @@
 {
     using Moq;
     using NeonArenaMvp.Game.Maps;
+    using NeonArenaMvp.Game.Maps.Coordinates;
 
     public class FakeMap
     {
@@ -19,7 +20,7 @@
 
         public FakeMap SetOutOfBounds(bool outOfBounds)
         {
-            this.map.Setup(x => x.IsOutOfBounds(It.IsAny<int>(), It.IsAny<int>()))
+            this.map.Setup(x => x.IsOutOfBounds(It.IsAny<Coords>()))
                 .Returns(outOfBounds);
 
             return this;

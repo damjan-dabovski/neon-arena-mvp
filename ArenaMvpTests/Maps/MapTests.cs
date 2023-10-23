@@ -1,6 +1,7 @@
 ﻿namespace ArenaMvpTests.Maps
 {
     using NeonArenaMvp.Game.Maps;
+    using NeonArenaMvp.Game.Maps.Coordinates;
 
     [TestClass]
     public class MapTests
@@ -20,7 +21,7 @@
             });
 
             // Act
-            var isOutOfBounds = map.IsOutOfBounds(coordsRow, coordsCol);
+            var isOutOfBounds = map.IsOutOfBounds(new Coords(coordsRow, coordsCol));
 
             // Assert
             Assert.AreEqual(expectedOutOfBounds, isOutOfBounds);

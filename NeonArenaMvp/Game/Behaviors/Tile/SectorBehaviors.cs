@@ -10,6 +10,6 @@
 
         public static readonly SectorBehavior Hole = new("H", SectorMoveBehaviors.Block, SectorShotBehaviors.PassThrough);
 
-        public static readonly SectorBehavior Pillar = new("P", SectorMoveBehaviors.PassThrough, SectorShotBehaviors.Block);
+        public static readonly SectorBehavior Pillar = new("L", SectorMoveBehaviors.PassThrough, SectorShotBehaviors.Block);
     }
 }

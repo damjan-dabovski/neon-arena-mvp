@@ -18,5 +18,13 @@
             Right,
             Center
         }
+
+        public enum TileType
+        {
+            Empty,
+            Wall,
+            Hole,
+            Pillar
+        }
     }
 }
