@@ -4,10 +4,11 @@
 
     public interface IMap
     {
-        public ITile this[int row, int col]
-        {
-            get;
-        }
+        public int RowCount { get; }
+
+        public int ColCount { get; }
+
+        public ITile this[int row, int col] { get; set; }
 
         public bool IsOutOfBounds(Coords coords);
     }

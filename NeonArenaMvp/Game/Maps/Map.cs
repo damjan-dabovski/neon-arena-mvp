@@ -5,13 +5,17 @@
     public class Map
         : IMap
     {
-        private readonly Tile[,] tiles;
+        private readonly ITile[,] tiles;
 
         public int RowCount => this.tiles.GetLength(0);
 
         public int ColCount => this.tiles.GetLength(1);
 
-        public ITile this[int row, int col] => this.tiles[row, col];
+        public ITile this[int row, int col]
+        {
+            get => this.tiles[row, col];
+            set { this.tiles[row, col] = value; }
+        }
 
         public Map(Tile[,] tiles)
         {

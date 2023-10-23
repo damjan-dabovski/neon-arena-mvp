@@ -8,13 +8,15 @@
     public class Tile
         : ITile
     {
-        public readonly Direction Direction;
+        private readonly Direction direction;
+
+        public Direction Direction => this.direction;
 
         private readonly ImmutableDictionary<Sector, SectorBehavior> SectorBehaviors;
 
         public Tile(Direction direction = Direction.Up, SectorBehavior? centerBehavior = null, SectorBehavior? upBehavior = null, SectorBehavior? rightBehavior = null, SectorBehavior? downBehavior = null, SectorBehavior? leftBehavior = null)
         {
-            this.Direction = direction;
+            this.direction = direction;
 
             this.SectorBehaviors = new Dictionary<Sector, SectorBehavior>()
             {
