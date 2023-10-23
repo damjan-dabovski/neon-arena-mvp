@@ -30,9 +30,9 @@
         {
             return numberOfTiles switch
             {
-                0 => Range.Melee,
-                1 => Range.Adjacent,
-                < 0 => Range.Infinite,
+                0 => Melee,
+                1 => Adjacent,
+                < 0 => Infinite,
                 _ => new(numberOfTiles + 1)
             };
         }

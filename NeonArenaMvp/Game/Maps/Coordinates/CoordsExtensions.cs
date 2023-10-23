@@ -19,7 +19,6 @@
                 sector: self.Sector);
         }
 
-        // TODO this needs to be mocked for tests
         public static Coords NextInDirection(this Coords self, Direction dir)
         {
             return dir switch
