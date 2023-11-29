@@ -1,17 +1,21 @@
 ﻿namespace ArenaMvpTests.Match
 {
     using ArenaMvpTests.Mocks;
+
     using Moq;
+
     using NeonArenaMvp.Game.Behaviors.Tile;
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
     using NeonArenaMvp.Game.Match;
     using NeonArenaMvp.Game.Match.Systems;
+
     using static NeonArenaMvp.Game.Behaviors.Effects.MoveEffects;
     using static NeonArenaMvp.Game.Behaviors.Effects.ShotEffects;
     using static NeonArenaMvp.Game.Behaviors.Tile.SectorShotBehaviors;
     using static NeonArenaMvp.Game.Maps.Enums;
     using static NeonArenaMvp.Game.Match.Enums;
+
     using Range = NeonArenaMvp.Game.Maps.Actions.Range;
 
     [TestClass]
@@ -77,7 +81,7 @@
             var mockBehavior = new Mock<SectorShotBehavior>();
 
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
-                .Returns(ShotBehaviorResult.Empty);
+                .Returns((ShotBehaviorResult?)null);
 
             var fakeTile = new FakeTile()
                 .SetupAllShotBehaviors(mockBehavior.Object);
@@ -150,13 +154,10 @@
             mockBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
                 .Returns(new ShotBehaviorResult(
                 resultActions: new(),
-                mandatoryTileMark: new(
+                tileMark: new(
                     action: this.startShotAction,
-                    direction: Direction.Down),
-                new TileMark(
-                    action: this.startShotAction,
-                    direction: Direction.Up)
-            ));
+                    mandatoryDir: Direction.Down,
+                    optionalDirs: Direction.Up)));
 
             var fakeTile = new FakeTile()
                 .SetupAllShotBehaviors(mockBehavior.Object);
@@ -168,12 +169,9 @@
             var resultMarks = ShotSystem.ProcessShot(this.Map.Object, this.startShotAction);
 
             // Assert
-            Assert.AreEqual(2, resultMarks.Count);
+            Assert.AreEqual(1, resultMarks.Count);
             Assert.AreEqual(new Coords(0, 0), resultMarks[0].Coords);
-            Assert.AreEqual(Direction.Down, resultMarks[0].Direction);
-
-            Assert.AreEqual(new Coords(0, 0), resultMarks[1].Coords);
-            Assert.AreEqual(Direction.Up, resultMarks[1].Direction);
+            Assert.AreEqual(Direction.Down | Direction.Up, resultMarks[0].Direction);
         }
 
         [TestMethod]
@@ -195,9 +193,9 @@
                 {
                     firstCenterBehaviorResultAction
                 },
-                mandatoryTileMark: new TileMark(
+                tileMark: new TileMark(
                     action: firstCenterBehaviorResultAction,
-                    direction: Direction.Down)
+                    mandatoryDir: Direction.Down)
             ));
 
             var firstSectorBehavior = new Mock<SectorShotBehavior>();
@@ -215,9 +213,9 @@
                 {
                     firstSectorBehaviorResultAction
                 },
-                mandatoryTileMark: new TileMark(
+                tileMark: new TileMark(
                     action: firstSectorBehaviorResultAction,
-                    direction: Direction.Down)
+                    mandatoryDir: Direction.Down)
             ));
 
             var secondSectorBehavior = new Mock<SectorShotBehavior>();
@@ -235,9 +233,9 @@
                 {
                     secondSectorBehaviorResultAction
                 },
-                mandatoryTileMark: new TileMark(
+                tileMark: new TileMark(
                     action: secondSectorBehaviorResultAction,
-                    direction: Direction.Down)
+                    mandatoryDir: Direction.Down)
             ));
 
             var secondCenterBehavior = new Mock<SectorShotBehavior>();
@@ -255,9 +253,9 @@
                 {
                     secondCenterBehaviorResultAction
                 },
-                mandatoryTileMark: new TileMark(
+                tileMark: new TileMark(
                     action: secondCenterBehaviorResultAction,
-                    direction: Direction.Down)
+                    mandatoryDir: Direction.Down)
             ));
 
             var firstTile = new FakeTile()
@@ -299,14 +297,11 @@
             mockEffect.Setup(x => x(It.IsAny<ShotAction>(), It.IsAny<ShotBehaviorResult>()))
                 .Returns(new ShotBehaviorResult(
                     resultActions: new List<ShotAction>(),
-                    mandatoryTileMark: new TileMark(
+                    tileMark: new TileMark(
                         action: this.startShotAction,
-                        direction: Direction.Up),
-                    otherTileMarks: new TileMark(
-                        action: this.startShotAction,
-                        direction: Direction.Down
-                    )
-            ));
+                        mandatoryDir: Direction.Up,
+                        optionalDirs: Direction.Down
+                    )));
 
             var mockCenterBehavior = new Mock<SectorShotBehavior>();
 
@@ -317,7 +312,7 @@
             };
 
             mockCenterBehavior.Setup(x => x(It.IsAny<Direction>(), It.IsAny<ShotAction>()))
-            .Returns(ShotBehaviorResult.Empty);
+            .Returns((ShotBehaviorResult?)null);
 
             var fakeTile = new FakeTile()
                 .SetupAllShotBehaviors(mockCenterBehavior.Object);
@@ -334,10 +329,9 @@
             var resultMarks = ShotSystem.ProcessShot(this.Map.Object, this.startShotAction);
 
             // Assert
-            Assert.AreEqual(2, resultMarks.Count);
+            Assert.AreEqual(1, resultMarks.Count);
             Assert.AreEqual(new Coords(0, 0), resultMarks[0].Coords);
-            Assert.AreEqual(Direction.Up, resultMarks[0].Direction);
-            Assert.AreEqual(Direction.Down, resultMarks[1].Direction);
+            Assert.AreEqual(Direction.Up | Direction.Down, resultMarks[0].Direction);
         }
     }
 }

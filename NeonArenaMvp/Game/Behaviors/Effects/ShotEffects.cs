@@ -6,11 +6,11 @@
 
     public static class ShotEffects
     {
-        public delegate ShotBehaviorResult ShotEffect(ShotAction sourceAction, ShotBehaviorResult sourceActionResult);
+        public delegate ShotBehaviorResult? ShotEffect(ShotAction sourceAction, ShotBehaviorResult? sourceActionResult);
 
         public static readonly ShotEffect ContinuesAfterBlock = (sourceAction, sourceActionResult) =>
         {
-            if (sourceActionResult.ResultActions.Count == 0)
+            if (sourceActionResult is null || sourceActionResult.ResultActions.Count == 0)
             {
                 return new ShotBehaviorResult(
                     resultActions: new()
@@ -20,7 +20,7 @@
                             Coords = sourceAction.Coords.NextInDirection(sourceAction.Direction)
                         }
                     },
-                    mandatoryTileMark: new(sourceAction, sourceAction.Direction)
+                    tileMark: new(sourceAction, sourceAction.Direction)
                 );
             }
             else
