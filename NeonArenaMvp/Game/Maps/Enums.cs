@@ -2,7 +2,9 @@
 {
     public static class Enums
     {
+        [Flags]
         public enum Direction
+            : byte
         {
             Up = 1,
             Down = 2,

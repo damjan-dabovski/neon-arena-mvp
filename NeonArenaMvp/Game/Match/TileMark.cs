@@ -14,16 +14,11 @@
 
         public readonly Direction Direction;
 
-        public TileMark(ShotAction action, Direction mandatoryDir, params Direction[] optionalDirs)
+        public TileMark(ShotAction action, Direction directions)
         {
             this.Coords = action.BaseCoords;
             this.PlayerColor = action.PlayerColor;
-            this.Direction = mandatoryDir;
-
-            foreach (var dir in optionalDirs)
-            {
-                this.Direction |= dir;
-            }
+            this.Direction = directions;
         }
 
         public override bool Equals(object? obj)

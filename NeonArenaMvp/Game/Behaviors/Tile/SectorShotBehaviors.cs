@@ -16,7 +16,7 @@
             },
             tileMark: new(
                 action: currentShotAction,
-                mandatoryDir: currentShotAction.Direction)
+                directions: currentShotAction.Direction)
         );
 
         public static readonly SectorShotBehavior Block = (_, currentShotAction) => null;

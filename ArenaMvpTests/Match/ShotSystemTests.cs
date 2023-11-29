@@ -156,8 +156,7 @@
                 resultActions: new(),
                 tileMark: new(
                     action: this.startShotAction,
-                    mandatoryDir: Direction.Down,
-                    optionalDirs: Direction.Up)));
+                    directions: Direction.Down | Direction.Up)));
 
             var fakeTile = new FakeTile()
                 .SetupAllShotBehaviors(mockBehavior.Object);
@@ -195,7 +194,7 @@
                 },
                 tileMark: new TileMark(
                     action: firstCenterBehaviorResultAction,
-                    mandatoryDir: Direction.Down)
+                    directions: Direction.Down)
             ));
 
             var firstSectorBehavior = new Mock<SectorShotBehavior>();
@@ -215,7 +214,7 @@
                 },
                 tileMark: new TileMark(
                     action: firstSectorBehaviorResultAction,
-                    mandatoryDir: Direction.Down)
+                    directions: Direction.Down)
             ));
 
             var secondSectorBehavior = new Mock<SectorShotBehavior>();
@@ -235,7 +234,7 @@
                 },
                 tileMark: new TileMark(
                     action: secondSectorBehaviorResultAction,
-                    mandatoryDir: Direction.Down)
+                    directions: Direction.Down)
             ));
 
             var secondCenterBehavior = new Mock<SectorShotBehavior>();
@@ -255,7 +254,7 @@
                 },
                 tileMark: new TileMark(
                     action: secondCenterBehaviorResultAction,
-                    mandatoryDir: Direction.Down)
+                    directions: Direction.Down)
             ));
 
             var firstTile = new FakeTile()
@@ -299,8 +298,7 @@
                     resultActions: new List<ShotAction>(),
                     tileMark: new TileMark(
                         action: this.startShotAction,
-                        mandatoryDir: Direction.Up,
-                        optionalDirs: Direction.Down
+                        directions: Direction.Up | Direction.Down
                     )));
 
             var mockCenterBehavior = new Mock<SectorShotBehavior>();
