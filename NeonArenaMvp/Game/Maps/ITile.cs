@@ -10,6 +10,6 @@ namespace NeonArenaMvp.Game.Maps
 
         public MoveAction? GetNextMove(MoveAction currentMoveAction);
 
-        public ShotBehaviorResult GetShotResult(ShotAction currentShotAction);
+        public ShotBehaviorResult? GetShotResult(ShotAction currentShotAction);
     }
 }

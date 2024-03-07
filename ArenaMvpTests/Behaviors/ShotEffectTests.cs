@@ -34,22 +34,22 @@
             var startShotResult = new ShotBehaviorResult
             (
                 resultActions: new() { this.startShotAction },
-                mandatoryTileMark: new TileMark(this.startShotAction, this.startShotAction.Direction)
+                tileMark: new TileMark(this.startShotAction, this.startShotAction.Direction)
             );
 
             // Act
             var effectResult = ShotEffects.ContinuesAfterBlock(this.startShotAction, startShotResult);
 
             // Assert
+            Assert.IsNotNull(effectResult);
             Assert.AreEqual(1, effectResult.ResultActions.Count);
             Assert.AreEqual(this.startShotAction.Coords, effectResult.ResultActions[0].Coords);
             Assert.AreEqual(this.startShotAction.Direction, effectResult.ResultActions[0].Direction);
             Assert.AreEqual(this.startShotAction.RemainingRange, effectResult.ResultActions[0].RemainingRange);
             Assert.AreEqual(this.startShotAction.PlayerColor, effectResult.ResultActions[0].PlayerColor);
 
-            Assert.AreEqual(1, effectResult.TileMarks.Count);
-            Assert.AreEqual(this.startShotAction.BaseCoords, effectResult.TileMarks[0].Coords);
-            Assert.AreEqual(this.startShotAction.Direction, effectResult.TileMarks[0].Direction);
+            Assert.AreEqual(this.startShotAction.BaseCoords, effectResult.TileMark.Coords);
+            Assert.AreEqual(this.startShotAction.Direction, effectResult.TileMark.Direction);
         }
 
         [TestMethod]
@@ -62,18 +62,18 @@
             };
 
             // Act
-            var effectResult = ShotEffects.ContinuesAfterBlock(this.startShotAction, ShotBehaviorResult.Empty);
+            var effectResult = ShotEffects.ContinuesAfterBlock(this.startShotAction, null);
 
             // Assert
+            Assert.IsNotNull(effectResult);
             Assert.AreEqual(1, effectResult.ResultActions.Count);
             Assert.AreEqual(new(1,1, Sector.Up), effectResult.ResultActions[0].Coords);
             Assert.AreEqual(this.startShotAction.Direction, effectResult.ResultActions[0].Direction);
             Assert.AreEqual(this.startShotAction.RemainingRange, effectResult.ResultActions[0].RemainingRange);
             Assert.AreEqual(this.startShotAction.PlayerColor, effectResult.ResultActions[0].PlayerColor);
 
-            Assert.AreEqual(1, effectResult.TileMarks.Count);
-            Assert.AreEqual(this.startShotAction.BaseCoords, effectResult.TileMarks[0].Coords);
-            Assert.AreEqual(this.startShotAction.Direction, effectResult.TileMarks[0].Direction);
+            Assert.AreEqual(this.startShotAction.BaseCoords, effectResult.TileMark.Coords);
+            Assert.AreEqual(this.startShotAction.Direction, effectResult.TileMark.Direction);
         }
     }
 }

@@ -7,21 +7,12 @@
     {
         public readonly List<ShotAction> ResultActions;
 
-        public readonly List<TileMark> TileMarks;
+        public readonly TileMark TileMark;
 
-        public static readonly ShotBehaviorResult Empty = new();
-
-        private ShotBehaviorResult()
-        {
-            this.ResultActions = new();
-            this.TileMarks = new();
-        }
-
-        public ShotBehaviorResult(List<ShotAction> resultActions, TileMark mandatoryTileMark, params TileMark[] otherTileMarks)
+        public ShotBehaviorResult(List<ShotAction> resultActions, TileMark tileMark)
         {
             this.ResultActions = resultActions;
-            this.TileMarks = new() { mandatoryTileMark };
-            this.TileMarks.AddRange(otherTileMarks);
+            this.TileMark = tileMark;
         }
     }
 }

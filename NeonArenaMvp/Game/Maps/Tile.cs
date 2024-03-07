@@ -34,7 +34,7 @@
                 .MoveBehavior(this.Direction, currentMoveAction);
         }
 
-        public ShotBehaviorResult GetShotResult(ShotAction currentShotAction)
+        public ShotBehaviorResult? GetShotResult(ShotAction currentShotAction)
         {
             return this.SectorBehaviors[currentShotAction.Coords.Sector]
                 .ShotBehavior(this.Direction, currentShotAction);

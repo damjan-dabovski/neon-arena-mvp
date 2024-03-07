@@ -32,7 +32,7 @@
                     shotResult = currentShotAction.Effect(currentShotAction, shotResult);
                 }
 
-                if (shotResult.TileMarks.Count == 0)
+                if (shotResult is null)
                 {
                     continue;
                 }
@@ -43,16 +43,13 @@
 
                 if (currentShotAction.Coords.Sector == Sector.Center)
                 {
-                    foreach (var mark in shotResult.TileMarks)
+                    if (resultMarks.Contains(shotResult.TileMark))
                     {
-                        if (resultMarks.Contains(mark))
-                        {
-                            loopDetected = true;
-                        }
-                        else
-                        {
-                            resultMarks.Add(mark);
-                        }
+                        loopDetected = true;
+                    }
+                    else
+                    {
+                        resultMarks.Add(shotResult.TileMark);
                     }
                 }
 

@@ -2,10 +2,10 @@
 
 namespace ArenaMvpTests.Behaviors
 {
-    using NeonArenaMvp.Game.Behaviors.Effects;
     using NeonArenaMvp.Game.Behaviors.Tile;
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Maps.Coordinates;
+
     using static NeonArenaMvp.Game.Maps.Enums;
 
     [TestClass]

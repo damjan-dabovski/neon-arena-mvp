@@ -6,7 +6,7 @@
 
     public static class SectorShotBehaviors
     {
-        public delegate ShotBehaviorResult SectorShotBehavior(Direction tileDirection, ShotAction currentShotAction);
+        public delegate ShotBehaviorResult? SectorShotBehavior(Direction tileDirection, ShotAction currentShotAction);
 
         public static readonly SectorShotBehavior PassThrough = (_, currentShotAction) => new(
             resultActions: new() { currentShotAction with {
@@ -14,11 +14,11 @@
                 RemainingRange = Range.ReduceIfCenter(currentShotAction),
                 PreviousCoords = currentShotAction.Coords }
             },
-            mandatoryTileMark: new(
+            tileMark: new(
                 action: currentShotAction,
-                direction: currentShotAction.Direction)
+                directions: currentShotAction.Direction)
         );
 
-        public static readonly SectorShotBehavior Block = (_, currentShotAction) => ShotBehaviorResult.Empty;
+        public static readonly SectorShotBehavior Block = (_, currentShotAction) => null;
     }
 }
