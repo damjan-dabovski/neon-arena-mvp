@@ -53,10 +53,15 @@
 			>
 				<div class="flex flex-col gap-1">
 					<div class="flex gap-2 items-center">
+						{#if currentPlayers >= maxPlayers}
+							<div class="p-1 bg-red-700 rounded-full animate-ping"></div>
+						{:else}
+							<div class="p-1 bg-green-700 rounded-full animate-ping"></div>
+						{/if}
 						<div class="text-slate-700">
 							{currentPlayers}/{maxPlayers}
 						</div>
-						<div class="p-1 bg-slate-700 rounded-full"></div>
+
 						<div class="text-xl text-slate-700">{name}</div>
 						{#if currentPlayers >= maxPlayers}
 							<div class="text-red-400">FULL</div>
