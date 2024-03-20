@@ -1,1 +1,1 @@
-# neon-arena-mvp
+# Neon Arena
