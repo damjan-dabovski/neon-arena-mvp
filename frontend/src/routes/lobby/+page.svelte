@@ -43,13 +43,13 @@
 	];
 </script>
 
-<div class="flex flex-col m-5">
-	<h1 class="text-5xl text-bold text-slate-600">Welcome to the Lobby</h1>
+<div class="flex flex-col p-5 max-h-dvh min-h-dvh">
+	<h1 class="text-5xl text-bold text-slate-600">Neon Arena Lobbies</h1>
 	<p class="text-slate-600 text-xl">Pick and join a lobby bellow</p>
-	<ul class="flex flex-col gap-5 mt-10">
+	<ul class="flex flex-col gap-5 mt-10 w-full items-center">
 		{#each lobbies as { name, description, createdAt, currentPlayers, maxPlayers }}
 			<li
-				class="px-5 py-3 shadow-md bg-slate-50 hover:bg-slate-100 hover:cursor-pointer hover:shadow-lg w-fit rounded flex flex-row gap-4"
+				class="px-5 py-3 transition-all hover:scale-[102%] hover:cursor-pointer w-1/3 rounded flex flex-row gap-4"
 			>
 				<div class="flex flex-col gap-1">
 					<div class="flex gap-2 items-center">
@@ -68,7 +68,7 @@
 						{/if}
 					</div>
 					<div class="text-sm text-slate-500">{createdAt.toTimeString()}</div>
-					<div class="text-md text-slate-500 w-96">{description}</div>
+					<div class="text-md text-slate-500">{description}</div>
 				</div>
 			</li>
 		{/each}
