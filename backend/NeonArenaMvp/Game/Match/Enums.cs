@@ -11,7 +11,8 @@
             Green,
             Blue,
             Indigo,
-            Violet
+            Violet,
+            Pink
         }
     }
 }

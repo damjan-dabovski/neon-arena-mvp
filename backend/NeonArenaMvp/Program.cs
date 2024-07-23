@@ -1,6 +1,12 @@
 
 namespace NeonArenaMvp
 {
+    using NeonArenaMvp.Network.Services;
+    using NeonArenaMvp.Network.Services.Interfaces;
+    using NeonArenaMvp.Network.SignalR;
+    using NeonArenaMvp.Persistence;
+    using NeonArenaMvp.Persistence.Interfaces;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -11,6 +17,13 @@ namespace NeonArenaMvp
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddSignalR();
+
+            builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+            builder.Services.AddSingleton<ILobbyRepository, InMemoryLobbyRepository>();
+
+            builder.Services.AddSingleton<IUserService, UserService>();
+            builder.Services.AddSingleton<ICommService, SignalRCommService>();
+            builder.Services.AddSingleton<ILobbyService, LobbyService>();
             
             builder.Services.AddCors(options =>
             {
@@ -45,6 +58,8 @@ namespace NeonArenaMvp
                 pattern: "{controller}/{action=Index}/{id?}");
 
             app.MapFallbackToFile("index.html");
+
+            app.MapHub<GameHub>("/game");
 
             app.Run();
         }

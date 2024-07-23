@@ -6,9 +6,12 @@
     {
         public readonly PlayerColor Color;
 
-        public Player(PlayerColor color)
+        public readonly Guid UserId;
+
+        public Player(PlayerColor color, Guid userId)
         {
             this.Color = color;
+            this.UserId = userId;
         }
     }
 }
