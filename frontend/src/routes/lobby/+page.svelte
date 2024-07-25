@@ -1,4 +1,12 @@
 <script>
+	import { signalRConnection } from '$lib/stores/signalRStore';
+
+	signalRConnection.subscribe((v) => {
+		v.on('/something', (data) => console.log(data));
+		v.on('/something-else', (data) => console.log(data));
+		v.on('/error', (error) => console.error(error));
+	});
+
 	const lobbies = [
 		{
 			name: 'Some Lobby',
