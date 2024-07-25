@@ -28,6 +28,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@microsoft/signalr": "^8.0.7"
+		"@microsoft/signalr": "^8.0.7",
+		"unique-names-generator": "^4.7.1"
 	}
 }

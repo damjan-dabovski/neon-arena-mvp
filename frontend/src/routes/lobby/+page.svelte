@@ -51,7 +51,7 @@
 	];
 </script>
 
-<div class="flex flex-col p-5 max-h-dvh min-h-dvh bg-gradient-to-r from-slate-500 to-indigo-500">
+<div class="flex flex-col flex-grow p-5 bg-slate-800">
 	<ul class="flex flex-col gap-5 mt-10 w-full items-center">
 		{#each lobbies as { name, description, createdAt, currentPlayers, maxPlayers }}
 			<li
