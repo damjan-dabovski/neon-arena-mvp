@@ -3,7 +3,7 @@
     using NeonArenaMvp.Game.Maps;
     using NeonArenaMvp.Game.Maps.Actions;
     using NeonArenaMvp.Game.Match.Systems;
-    using NeonArenaMvp.Network.Comms;
+    using NeonArenaMvp.Network.Services.Interfaces;
     using static NeonArenaMvp.Game.Match.Enums;
 
     public class Match
