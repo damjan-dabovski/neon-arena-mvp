@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.SignalR;
     using NeonArenaMvp.Network.Services.Interfaces;
     using System.Threading.Tasks;
+    using static NeonArenaMvp.Game.Match.Enums;
 
     public class GameHub
         : Hub<IGameHubClient>
@@ -67,6 +68,46 @@
                     connectionId: this.Context.ConnectionId);
 
                 await this.lobbyService.JoinLobby(lobbyId, user);
+            }
+        }
+
+        public async Task LeaveLobby(Guid lobbyId)
+        {
+            var (userName, existingUserId) = this.ParseHeaders();
+
+            if (userName is not null)
+            {
+                var user = userService.GetOrCreateUser(
+                    name: userName,
+                    existingUserId: existingUserId,
+                    connectionId: this.Context.ConnectionId);
+                
+                await this.lobbyService.LeaveLobby(lobbyId, user);
+            }
+        }
+
+        public async Task JoinSeat(Guid lobbyId, PlayerColor seatColor)
+        {
+            var (userName, existingUserId) = this.ParseHeaders();
+
+            if (userName is not null)
+            {
+                var user = userService.GetOrCreateUser(
+                    name: userName,
+                    existingUserId: existingUserId,
+                    connectionId: this.Context.ConnectionId);
+
+                await this.lobbyService.JoinSeat(lobbyId, user, seatColor);
+            }
+        }
+
+        public async Task LeaveSeat(Guid lobbyId, PlayerColor seatColor)
+        {
+            var (userName, _) = this.ParseHeaders();
+
+            if (userName is not null)
+            {
+                await this.lobbyService.LeaveSeat(lobbyId, seatColor);
             }
         }
 

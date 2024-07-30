@@ -36,5 +36,32 @@
                 this.Users.Add(user);
             }
         }
+
+        public bool RemoveUser(User user)
+        {
+            return this.Users.Contains(user) && this.Users.Remove(user);
+        }
+
+        public bool JoinSeat(User user, PlayerColor seatColor)
+        {
+            if (this.Seats[seatColor] is null)
+            {
+                this.Seats[seatColor] = user;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool LeaveSeat(PlayerColor seatColor)
+        {
+            if (this.Seats[seatColor] is not null)
+            {
+                this.Seats[seatColor] = null;
+                return true;
+            }
+
+            return false;
+        }
     }
 }

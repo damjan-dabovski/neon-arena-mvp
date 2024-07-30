@@ -1,5 +1,6 @@
 ﻿namespace NeonArenaMvp.Network.Services
 {
+    using NeonArenaMvp.Game.Match;
     using NeonArenaMvp.Network.Models;
     using NeonArenaMvp.Network.Services.Interfaces;
     using NeonArenaMvp.Persistence.Interfaces;
@@ -32,6 +33,35 @@
             await this.JoinLobby(lobby.Id, host);
 
             return lobby;
+        }
+
+        public Task LeaveLobby(Guid lobbyId, User user)
+        {
+            var lobby = lobbyRepo.GetById(lobbyId);
+
+            lobby?.RemoveUser(user);
+
+            return Task.CompletedTask;
+        }
+
+        public Task JoinSeat(Guid lobbyId, User user, Enums.PlayerColor seatColor)
+        {
+            var lobby = lobbyRepo.GetById(lobbyId);
+
+            lobby?.JoinSeat(user, seatColor);
+
+            return Task.CompletedTask;
+        }
+
+        //TODO this is way too generic; potentially anyone can drop anyone
+        // stuff like this needs to be handled with any host/admin logic eventually
+        public Task LeaveSeat(Guid lobbyId, Enums.PlayerColor seatColor)
+        {
+            var lobby = lobbyRepo.GetById(lobbyId);
+
+            lobby?.LeaveSeat(seatColor);
+
+            return Task.CompletedTask;
         }
     }
 }
