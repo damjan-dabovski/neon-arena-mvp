@@ -28,6 +28,11 @@
             await this.hubContext.Clients.Client(this.userConnections[userId]).JoinLobby();
         }
 
+        public async Task SendLobbyStatus(Guid userId, string lobbyData)
+        {
+            await this.hubContext.Clients.Client(this.userConnections[userId]).ReceiveLobbyData(lobbyData);
+        }
+
         public void SendMessageToUser(System.Guid userId, string message)
         {
             this.hubContext.Clients.Client(this.userConnections[userId]).ReceiveMessage(message);

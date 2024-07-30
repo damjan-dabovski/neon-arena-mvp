@@ -4,6 +4,7 @@
     using NeonArenaMvp.Network.Models;
     using NeonArenaMvp.Network.Services.Interfaces;
     using NeonArenaMvp.Persistence.Interfaces;
+    using System.Text.Json;
 
     public class LobbyService
         : ILobbyService
@@ -24,6 +25,8 @@
             lobby?.AddUser(user);
 
             await this.commService.JoinedLobby(user.Id);
+
+            await this.commService.SendLobbyStatus(user.Id, JsonSerializer.Serialize(lobby));
         }
 
         public async Task<Lobby> Create(User host)

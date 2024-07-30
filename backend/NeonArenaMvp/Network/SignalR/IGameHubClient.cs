@@ -8,5 +8,7 @@
         public Task ReceiveLobbyList();
 
         public Task JoinLobby();
+
+        public Task ReceiveLobbyData(string lobbyData);
     }
 }

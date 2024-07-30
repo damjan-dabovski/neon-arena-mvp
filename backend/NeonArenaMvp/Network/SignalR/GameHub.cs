@@ -53,7 +53,7 @@
 
             await this.lobbyService.Create(user);
 
-            Clients.All.ReceiveLobbyList();
+            await Clients.All.ReceiveLobbyList();
         }
 
         public async Task JoinLobby(Guid lobbyId)

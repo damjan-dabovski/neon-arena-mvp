@@ -1,6 +1,7 @@
 ﻿namespace NeonArenaMvp.Network.Models
 {
     using NeonArenaMvp.Game.Match;
+    using System.Text.Json.Serialization;
     using static NeonArenaMvp.Game.Match.Enums;
 
     public class Lobby
@@ -13,6 +14,7 @@
 
         public readonly User Host;
 
+        [JsonIgnore]
         private Match? ActiveMatch;
 
         public Lobby(Guid id, User host)
@@ -39,6 +41,8 @@
 
         public bool RemoveUser(User user)
         {
+            this.KickUserFromSeat(user);
+
             return this.Users.Contains(user) && this.Users.Remove(user);
         }
 
@@ -59,6 +63,19 @@
             {
                 this.Seats[seatColor] = null;
                 return true;
+            }
+
+            return false;
+        }
+
+        public bool KickUserFromSeat(User user)
+        {
+            foreach (var kvp in this.Seats)
+            {
+                if (kvp.Value?.Id == user.Id)
+                {
+                    this.Seats[kvp.Key] = null;
+                }
             }
 
             return false;

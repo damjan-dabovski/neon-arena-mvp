@@ -7,5 +7,7 @@
         public void SendMessageToUser(Guid userId, string message);
 
         public Task JoinedLobby(Guid userId);
+
+        public Task SendLobbyStatus(Guid userId, string lobbyData);
     }
 }
